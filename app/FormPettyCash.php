@@ -4,21 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FormRequest extends Model
+class FormPettyCash extends Model
 {
-    protected $table = 'form_requests';
+    protected $table = 'form_petty_cashes';
 
     protected $fillable = [
         'user_id',
         'date',
-        'method',
         'allocation',
         'amount',
-        'attachment',
-        'notes',
         'is_confirmed_pic',
-        'is_confirmed_verificator',
-        'is_confirmed_head_dept',
+        'is_confirmed_manager_ops',
         'is_confirmed_cashier'
     ];
 
