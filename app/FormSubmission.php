@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FormSubmission extends Model
 {
     //
-    protected $table = 'form_sumbissions';
+    protected $table = 'form_submissions';
     protected $fillable=[
         'user_id',
         'date',
