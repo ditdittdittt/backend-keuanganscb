@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// v1
 
 Route::prefix('v1')->group(function () {
 
@@ -40,11 +41,12 @@ Route::prefix('v1')->group(function () {
                 Route::post('/update', 'FormRequestController@update')->name('updateFormRequest');
                 Route::post('/delete', 'FormRequestController@destroy')->name('deleteFormRequest');
             });
+            Route::prefix('submission')->group(function () {
+                Route::get('/', 'FormSubmissionController@index');
+                Route::post('/store', 'FormSubmissionController@store');
+                Route::post('/detail', 'FormSubmissionController@update');
+                Route::post('/delete', 'FormSubmissionController@delete');
+            });
         });
     });
-
-    Route::get('/', 'FormSubmissionController@index');
-    Route::post('/store', 'FormSubmissionController@store');
-    Route::post('/detail', 'FormSubmissionController@update');
-    Route::post('/delete', 'FormSubmissionController@destroy');
 });
