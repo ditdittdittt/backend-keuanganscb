@@ -9,21 +9,29 @@ use PDOException;
 
 class SeparateException
 {
-    public static function checkException(Exception $err, string $modelName)
+    protected $err_type = '';
+
+    public function __construct(Exception $err)
     {
+        $this->err_type = $err;
+    }
+
+    public function checkException(string $modelName)
+    {
+        $err = $this->err_type;
         if ($err instanceof ModelNotFoundException) {
             $err_type = 'not found';
-            $msg = $modelName . ' ' . $err_type;
+            $err_msg = $modelName . ' ' . $err_type;
         } else if ($err instanceof UnauthorizedException) {
             $err_type = 'forbidden';
-            $msg = $modelName . ' ' . $err_type;
+            $err_msg = $modelName . ' ' . $err_type;
         } else if ($err instanceof PDOException) {
             $err_type = 'error_database';
-            $msg = $err;
+            $err_msg = $err;
         } else {
             $err_type = 'unknown';
-            $msg = 'unknown error';
+            $err_msg = 'unknown error';
         }
-        return ReturnGoodWay::failedReturn($msg, $err_type);
+        return ReturnGoodWay::failedReturn($err_msg, $err_type);
     }
 }

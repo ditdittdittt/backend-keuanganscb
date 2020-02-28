@@ -28,13 +28,15 @@ Route::prefix('v1')->group(function () {
     // Authenticate First
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('logout', 'AuthController@logout')->name('logout');
+
+        // Form Request
         Route::prefix('form')->group(function () {
             Route::prefix('request')->group(function () {
                 Route::get('/', 'FormRequestController@index')->name('getAllFormRequests');
                 Route::post('/store', 'FormRequestController@store')->name('storeFormRequest');
                 Route::get('/detail', 'FormRequestController@detail')->name('getFormRequestDetail');
                 Route::post('/update', 'FormRequestController@update')->name('updateFormRequest');
-                Route::post('/delete', 'FormRequestController@delete')->name('deleteFormRequest');
+                Route::post('/delete', 'FormRequestController@destroy')->name('deleteFormRequest');
             });
         });
     });
