@@ -1,7 +1,8 @@
 <?php
 
 use Illuminate\Http\Request;
-use Symfony\Component\Routing\Route;
+use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
