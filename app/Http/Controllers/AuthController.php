@@ -35,7 +35,8 @@ class AuthController extends Controller
                 'created'
             );
         } catch (Exception $err) {
-            return SeparateException::checkException($err, $this->modelName);
+            $error = new SeparateException($err);
+            return $error->checkException($this->modelName);
         }
     }
 

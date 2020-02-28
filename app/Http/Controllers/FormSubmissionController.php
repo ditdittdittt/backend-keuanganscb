@@ -14,15 +14,15 @@ class FormSubmissionController extends Controller
     //
     public function index()
     {
-        try{
+        try {
             $form_submission = FormSubmission::all();
             return ReturnGoodWay::successReturn(
                 $form_submission,
                 $this->modelName,
-                "List of all ". $this->modelName,
+                "List of all " . $this->modelName,
                 'success'
             );
-        }catch(Exception $err){
+        } catch (Exception $err) {
             $error = new SeparateException($err);
             return $error->checkException($this->modelName);
         }
@@ -30,7 +30,7 @@ class FormSubmissionController extends Controller
 
     public function store(Request $request)
     {
-        try{
+        try {
             $form_submission = new FormSubmission();
             $form_submission['user_id'] = $request->input('user_id');
             $form_submission['date'] = $request->input('date');
@@ -49,7 +49,7 @@ class FormSubmissionController extends Controller
                 $this->modelName . " has been stored",
                 'created'
             );
-        }catch(Exception $err) {
+        } catch (Exception $err) {
             $error = new SeparateException($err);
             return $error->checkException($this->modelName);
         }
@@ -57,7 +57,7 @@ class FormSubmissionController extends Controller
 
     public function update(Request $request)
     {
-        try{
+        try {
             $form_submission = FormSubmission::find($request['form_submission_id']);
             $form_submission->user_id = $request['user_id'];
             $form_submission->date = $request['date'];
@@ -72,7 +72,7 @@ class FormSubmissionController extends Controller
                 $this->modelName . " with id " . $form_submission->id . " has been updated",
                 'success'
             );
-        }catch(Exception $err){
+        } catch (Exception $err) {
             $error = new SeparateException($err);
             return $error->checkException($this->modelName);
         }
@@ -80,7 +80,7 @@ class FormSubmissionController extends Controller
 
     public function delete(Request $request)
     {
-        try{
+        try {
             $form_submission = FormSubmission::find($request['form_submission_id']);
             $form_submission->delete();
             return ReturnGoodWay::successReturn(
@@ -89,7 +89,7 @@ class FormSubmissionController extends Controller
                 $this->modelName . " with id " . $form_submission->id . " has been deleted",
                 'success'
             );
-        }catch(Exception $err){
+        } catch (Exception $err) {
             $error = new SeparateException($err);
             return $error->checkException($this->modelName);
         }
