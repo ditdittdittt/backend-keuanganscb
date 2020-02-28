@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Symfony\Component\Routing\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,4 +41,9 @@ Route::prefix('v1')->group(function () {
             });
         });
     });
+
+    Route::get('/', 'FormSubmissionController@index');
+    Route::post('/store', 'FormSubmissionController@store');
+    Route::post('/detail', 'FormSubmissionController@update');
+    Route::post('/delete', 'FormSubmissionController@destroy');
 });
