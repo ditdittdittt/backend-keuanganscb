@@ -13,7 +13,9 @@ class ReturnGoodWay
         "error_database" => 400,
         "unknown" => 500
     );
-
+    /**
+     * Create a response blueprint for success query
+     */
     public static function successReturn(
         object $data,
         string $modelName,
@@ -32,6 +34,9 @@ class ReturnGoodWay
         }
     }
 
+    /**
+     * Create a response blueprint for failed query
+     */
     public static function failedReturn(
         string $messages,
         string $mode

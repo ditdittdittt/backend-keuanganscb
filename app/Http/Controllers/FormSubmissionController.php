@@ -33,16 +33,16 @@ class FormSubmissionController extends Controller
     {
         try {
             $form_submission = new FormSubmission();
-            $form_submission['user_id'] = $request->input('user_id');
-            $form_submission['date'] = $request->input('date');
-            $form_submission['used'] = $request->input('used');
-            $form_submission['balanced'] = $request->input('balanced');
-            $form_submission['allocation'] = $request->input('allocation');
-            $form_submission['notes'] = $request->input('notes');
-            $form_submission['is_confirmed_pic'] = false;
-            $form_submission['is_confirmed_verificator'] = false;
-            $form_submission['is_confirmed_head_dept'] = false;
-            $form_submission['is_confirmed_head_office'] = false;
+            $form_submission->user_id = $request->input('user_id');
+            $form_submission->date = $request->input('date');
+            $form_submission->used = $request->input('used');
+            $form_submission->balanced = $request->input('balanced');
+            $form_submission->allocation = $request->input('allocation');
+            $form_submission->notes = $request->input('notes');
+            $form_submission->is_confirmed_pic = false;
+            $form_submission->is_confirmed_verificator = false;
+            $form_submission->is_confirmed_head_dept = false;
+            $form_submission->is_confirmed_head_office = false;
             $form_submission->save();
             return ReturnGoodWay::successReturn(
                 $form_submission,

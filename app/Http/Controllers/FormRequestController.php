@@ -35,7 +35,7 @@ class FormRequestController extends Controller
     public function detail(Request $request)
     {
         try {
-            $form_request = FormRequest::findOrFail($request->id);
+            $form_request = FormRequest::findOrFail($request['form_request_id']);
             return ReturnGoodWay::successReturn(
                 $form_request,
                 $this->modelName,
@@ -82,15 +82,19 @@ class FormRequestController extends Controller
     {
 
         try {
-            $form_request = FormRequest::findOrFail($request->form_request_id);
+            $form_request = FormRequest::findOrFail($request['form_request_id']);
             $form_request->user_id = $request->user_id;
             $form_request->date = $request->date;
             $form_request->method = $request['method'];
             $form_request->allocation = $request->allocation;
             $form_request->amount = $request->amount;
             $form_request->attachment = $request->attachment;
-//            $form_request->attachment = UploadHelper::insertAttachment($request, 'proposal', 'kegiatan1');
+            //            $form_request->attachment = UploadHelper::insertAttachment($request, 'proposal', 'kegiatan1');
             $form_request->notes = $request->notes;
+            $form_request->is_confirmed_pic = $request->is_confirmed_pic;
+            $form_request->is_confirmed_verificator = $request->is_confirmed_verificator;
+            $form_request->is_confirmed_head_dept = $request->is_confirmed_head_dept;
+            $form_request->is_confirmed_cashier = $request->is_confirmed_cashier;
             $form_request->save();
             return ReturnGoodWay::successReturn(
                 $form_request,
@@ -110,7 +114,7 @@ class FormRequestController extends Controller
         $hidden = array('created_at', 'is_confirmed_pic', 'is_confirmed_verificator', 'is_confirmed_head_dept', 'is_confirmed_cashier', 'updated_at', 'user_id', 'method', 'attachment', 'notes');
 
         try {
-            $form_request = FormRequest::findOrFail($request->form_request_id);
+            $form_request = FormRequest::findOrFail($request['form_request_id']);
             $form_request->delete();
             return ReturnGoodWay::successReturn(
                 $form_request->makeHidden($hidden),

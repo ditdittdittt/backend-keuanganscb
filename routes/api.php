@@ -31,15 +31,15 @@ Route::prefix('v1')->group(function () {
             Route::post('getUser', 'AuthController@getUser')->name('getUser');
             Route::post('logout', 'AuthController@logout')->name('logout');
         });
-
     });
 
     // Authenticate First
     Route::group(['middleware' => 'auth:api'], function () {
         Route::post('logout', 'AuthController@logout')->name('logout');
 
-        // Form Request
         Route::prefix('form')->group(function () {
+
+            // Form Request
             Route::prefix('request')->group(function () {
                 Route::get('/', 'FormRequestController@index')->name('getAllFormRequests');
                 Route::post('/store', 'FormRequestController@store')->name('storeFormRequest');
@@ -47,12 +47,23 @@ Route::prefix('v1')->group(function () {
                 Route::post('/update', 'FormRequestController@update')->name('updateFormRequest');
                 Route::post('/delete', 'FormRequestController@destroy')->name('deleteFormRequest');
             });
+
+            // Form Submission
             Route::prefix('submission')->group(function () {
                 Route::get('/', 'FormSubmissionController@index')->name('getAllFormSubmission');
                 Route::post('/store', 'FormSubmissionController@store')->name('storeFormSubmission');
                 Route::get('/detail', 'FormSubmissionController@detail')->name('getFormSubmissionDetail');
                 Route::post('/update', 'FormSubmissionController@update')->name('updateFormSubmission');
                 Route::post('/delete', 'FormSubmissionController@delete')->name('deleteFormSubmission');
+            });
+
+            // Form PettyCash Header
+            Route::prefix('petty_cash')->group(function () {
+                Route::get('/', 'FormPettyCashController@index')->name('getAllFormSubmission');
+                Route::post('/store', 'FormPettyCashController@store')->name('storeFormSubmission');
+                Route::get('/detail', 'FormPettyCashController@detail')->name('getFormSubmissionDetail');
+                Route::post('/update', 'FormPettyCashController@update')->name('updateFormSubmission');
+                Route::post('/delete', 'FormPettyCashController@destroy')->name('deleteFormSubmission');
             });
         });
     });
