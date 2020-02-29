@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
     private $modelName = "User";
+    public $successStatus = 200;
 
     public function register(ValidateUser $request)
     {
@@ -54,5 +55,24 @@ class AuthController extends Controller
         } else {
             return response()->json(['error' => "The email or password you entered don't match our records. Please check and try again."], 401);
         }
+    }
+
+    public function getUser()
+    {
+        $user = auth()->user();
+//        $roles = User::find(auth()->user()->id)->getRoleNames();
+//        $user->roles = $roles;
+        // $user->roles;
+        // $user->permissions;
+        return response()->json(['success' => $user], $this->successStatus);
+    }
+
+    public function logout()
+    {
+        auth()->user()->tokens->each(function ($token, $key) {
+            $token->revoke();
+        });
+
+        return response()->json('Logged out', $this->successStatus);
     }
 }

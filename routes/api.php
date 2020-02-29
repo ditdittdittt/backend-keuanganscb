@@ -26,6 +26,12 @@ Route::prefix('v1')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('register', 'AuthController@register')->name('register');
         Route::post('login', 'AuthController@login')->name('login');
+
+        Route::group(['middleware' => 'auth:api'], function () {
+            Route::post('getUser', 'AuthController@getUser')->name('getUser');
+            Route::post('logout', 'AuthController@logout')->name('logout');
+        });
+
     });
 
     // Authenticate First
