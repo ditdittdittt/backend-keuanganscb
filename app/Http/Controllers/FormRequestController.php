@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
+use App\AdditionalHelper\UploadHelper;
 use App\FormRequest;
 use App\Http\Requests\ValidateFormRequest;
 use Exception;
@@ -88,6 +89,7 @@ class FormRequestController extends Controller
             $form_request->allocation = $request->allocation;
             $form_request->amount = $request->amount;
             $form_request->attachment = $request->attachment;
+//            $form_request->attachment = UploadHelper::insertAttachment($request, 'proposal', 'kegiatan1');
             $form_request->notes = $request->notes;
             $form_request->save();
             return ReturnGoodWay::successReturn(
