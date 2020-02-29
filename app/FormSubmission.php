@@ -20,4 +20,12 @@ class FormSubmission extends Model
         'is_confirmed_head_dept',
         'is_confirmed_head_office'
     ];
+    public function user()
+    {
+        return $this->belongsTo('App\User');
+    }
+
+    public function formRequest(){
+        return $this->belongsTo('App\FormRequest');
+    }
 }

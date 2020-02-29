@@ -54,7 +54,7 @@ class FormRequestController extends Controller
             $form_request = new FormRequest();
             $form_request->user_id = $request->user_id;
             $form_request->date = $request->date;
-            $form_request->method = $request->method;
+            $form_request->method = $request['method'];
             $form_request->allocation = $request->allocation;
             $form_request->amount = $request->amount;
             $form_request->attachment = $request->attachment;
@@ -84,7 +84,7 @@ class FormRequestController extends Controller
             $form_request = FormRequest::findOrFail($request->form_request_id);
             $form_request->user_id = $request->user_id;
             $form_request->date = $request->date;
-            $form_request->method = $request->method;
+            $form_request->method = $request['method'];
             $form_request->allocation = $request->allocation;
             $form_request->amount = $request->amount;
             $form_request->attachment = $request->attachment;

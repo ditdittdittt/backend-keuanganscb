@@ -16,6 +16,8 @@ class CreateFormSubmissionsTable extends Migration
         Schema::create('form_submissions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
+            $table->unsignedBigInteger('form_request_id');
+            $table->foreign('form_request_id')->references('id')->on('form_requests');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->date('date');

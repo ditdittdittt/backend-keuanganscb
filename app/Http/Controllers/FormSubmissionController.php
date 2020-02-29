@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
 use App\FormSubmission;
+use App\Http\Requests\ValidateFormSubmission;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -28,7 +29,7 @@ class FormSubmissionController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(ValidateFormSubmission $request)
     {
         try {
             $form_submission = new FormSubmission();
@@ -55,7 +56,22 @@ class FormSubmissionController extends Controller
         }
     }
 
-    public function update(Request $request)
+    public function detail(Request $request){
+        try {
+            $form_submission = FormSubmission::find($request['form_submission_id']);
+            return ReturnGoodWay::successReturn(
+                $form_submission,
+                $this->modelName,
+                $this->modelName . " with id " . $form_submission->id,
+                'success'
+            );
+        } catch (Exception $err) {
+            $error = new SeparateException($err);
+            return $error->checkException($this->modelName);
+        }
+    }
+
+    public function update(ValidateFormSubmission $request)
     {
         try {
             $form_submission = FormSubmission::find($request['form_submission_id']);

@@ -38,4 +38,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function formRequest(){
+        return $this->hasOne('App\FormRequest');
+    }
+
+    public function formSubmission(){
+        return $this->hasOne('App\FormSubmission');
+    }
 }

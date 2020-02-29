@@ -42,10 +42,11 @@ Route::prefix('v1')->group(function () {
                 Route::post('/delete', 'FormRequestController@destroy')->name('deleteFormRequest');
             });
             Route::prefix('submission')->group(function () {
-                Route::get('/', 'FormSubmissionController@index');
-                Route::post('/store', 'FormSubmissionController@store');
-                Route::post('/detail', 'FormSubmissionController@update');
-                Route::post('/delete', 'FormSubmissionController@delete');
+                Route::get('/', 'FormSubmissionController@index')->name('getAllFormSubmission');
+                Route::post('/store', 'FormSubmissionController@store')->name('storeFormSubmission');
+                Route::get('/detail', 'FormSubmissionController@detail')->name('getFormSubmissionDetail');
+                Route::post('/update', 'FormSubmissionController@update')->name('updateFormSubmission');
+                Route::post('/delete', 'FormSubmissionController@delete')->name('deleteFormSubmission');
             });
         });
     });
