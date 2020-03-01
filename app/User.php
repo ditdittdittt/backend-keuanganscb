@@ -46,4 +46,8 @@ class User extends Authenticatable
     public function formSubmission(){
         return $this->hasOne('App\FormSubmission');
     }
+
+    public function formPettyCash(){
+        return $this->hasMany('App\FormPettyCash');
+    }
 }

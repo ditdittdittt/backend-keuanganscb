@@ -59,12 +59,25 @@ Route::prefix('v1')->group(function () {
 
             // Form PettyCash Header
             Route::prefix('petty_cash')->group(function () {
-                Route::get('/', 'FormPettyCashController@index')->name('getAllFormSubmission');
-                Route::post('/store', 'FormPettyCashController@store')->name('storeFormSubmission');
-                Route::get('/detail', 'FormPettyCashController@detail')->name('getFormSubmissionDetail');
-                Route::post('/update', 'FormPettyCashController@update')->name('updateFormSubmission');
-                Route::post('/delete', 'FormPettyCashController@destroy')->name('deleteFormSubmission');
+                Route::get('/', 'FormPettyCashController@index')->name('getAllFormPettyCash');
+                Route::post('/store', 'FormPettyCashController@store')->name('storePettyCash');
+                Route::get('/detail', 'FormPettyCashController@detail')->name('getFormPettyCashDetail');
+                Route::post('/update', 'FormPettyCashController@update')->name('updateFormPettyCash');
+                Route::post('/delete', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');
+
+
             });
+
+            // Form PettyCash Detail
+            Route::prefix('petty_cash_detail')->group(function () {
+                Route::get('/', 'FormPettyCashDetailController@index')->name('getAllPettyCashDetail');
+                Route::post('/store', 'FormPettyCashDetailController@store')->name('storePettyCashDetail');
+                Route::get('/detail', 'FormPettyCashDetailController@detail')->name('getPettyCashDetail');
+                Route::post('/update', 'FormPettyCashDetailController@update')->name('updatePettyCashDetail');
+                Route::post('/delete', 'FormPettyCashDetailController@destroy')->name('deletePettyCashDetail');
+            });
+
+
         });
     });
 });
