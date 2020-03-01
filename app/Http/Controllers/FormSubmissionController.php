@@ -81,6 +81,18 @@ class FormSubmissionController extends Controller
             $form_submission->balanced = $request['balanced'];
             $form_submission->allocation = $request['allocation'];
             $form_submission->notes = $request['notes'];
+            if ($request['is_confirmed_pic']) {
+                $form_submission->is_confirmed_pic = $request['is_confirmed_pic'];
+            }
+            if ($request['is_confirmed_verificator']) {
+                $form_submission->is_confirmed_verificator = $request['is_confirmed_verificator'];
+            }
+            if ($request['is_confirmed_head_dept']) {
+                $form_submission->is_confirmed_head_dept = $request['is_confirmed_head_dept'];
+            }
+            if ($request['is_confirmed_head_office']) {
+                $form_submission->is_confirmed_head_office = $request['is_confirmed_head_office'];
+            }
             $form_submission->save();
             return ReturnGoodWay::successReturn(
                 $form_submission,
