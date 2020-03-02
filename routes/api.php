@@ -21,17 +21,20 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // v1
 
 Route::prefix('v1')->group(function () {
-
+    
     // No need authenticate first
     Route::prefix('auth')->group(function () {
         Route::post('register', 'AuthController@register')->name('register');
         Route::post('login', 'AuthController@login')->name('login');
-
+        
         Route::group(['middleware' => 'auth:api'], function () {
             Route::post('getUser', 'AuthController@getUser')->name('getUser');
             Route::post('logout', 'AuthController@logout')->name('logout');
         });
     });
+    
+    Route::get('/email/resend', 'VerificationController@resend')->name('verification.resend');
+    Route::get('/email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
 
     // Authenticate First
     Route::group(['middleware' => 'auth:api'], function () {

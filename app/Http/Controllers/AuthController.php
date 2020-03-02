@@ -26,9 +26,10 @@ class AuthController extends Controller
             $user->email = $request['email'];
             $user->password = $hashedPassword;
             $user->division = $request['division'];
-            $user->email_verified_at = Carbon::now();
+            $user->email_verified_at = null;
             $user->assignRole($request['role']);
             $user->save();
+            $user->access_token =  $user->createToken($user->email)->accessToken;
             return ReturnGoodWay::successReturn(
                 $user,
                 $this->modelName,

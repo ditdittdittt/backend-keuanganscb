@@ -9,7 +9,7 @@ class ReturnGoodWay
         "not found" => 404,
         "forbidden" => 403,
         "created" => 201,
-        "bad request" => 400,
+        "bad_request" => 400,
         "error_database" => 400,
         "unknown" => 500
     );
