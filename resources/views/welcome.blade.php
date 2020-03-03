@@ -81,7 +81,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Waalaikumsalam
+                    Assalamualaikum
                 </div>
 
                 <div class="links">
