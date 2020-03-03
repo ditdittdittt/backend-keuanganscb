@@ -2,8 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\AdditionalHelper\SeparateException;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 
 class Handler extends ExceptionHandler
 {
@@ -50,6 +52,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof UnauthorizedException) {
+            $err = new SeparateException($exception);
+            return $err->checkException("User");
+        }
+
         return parent::render($request, $exception);
     }
 }

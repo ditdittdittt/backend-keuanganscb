@@ -6,12 +6,13 @@ class ReturnGoodWay
 {
     private static $http_response_code = array(
         "success" => 200,
-        "not found" => 404,
+        "not_found" => 404,
         "forbidden" => 403,
         "created" => 201,
         "bad_request" => 400,
         "error_database" => 400,
-        "unknown" => 500
+        "unknown" => 500,
+        "conflict" => 409
     );
     /**
      * Create a response blueprint for success query
@@ -46,5 +47,25 @@ class ReturnGoodWay
                 'messages' => $messages,
             ]
         ], self::$http_response_code[$mode]);
+    }
+
+    /**
+     * Multiple object return
+     */
+    public static function multipleReturn(
+        array $data,
+        string $messages,
+        string $mode
+    ) {
+        if (!is_null($messages)) {
+            return response()->json([
+                'messages' => $messages,
+                'data' => $data
+            ], self::$http_response_code[$mode]);
+        } else {
+            return response()->json([
+                'data' => $data
+            ], self::$http_response_code[$mode]);
+        }
     }
 }

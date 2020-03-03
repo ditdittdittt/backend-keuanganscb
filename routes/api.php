@@ -21,24 +21,51 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // v1
 
 Route::prefix('v1')->group(function () {
-    
+
     // No need authenticate first
     Route::prefix('auth')->group(function () {
         Route::post('register', 'AuthController@register')->name('register');
         Route::post('login', 'AuthController@login')->name('login');
-        
         Route::group(['middleware' => 'auth:api'], function () {
             Route::post('getUser', 'AuthController@getUser')->name('getUser');
             Route::post('logout', 'AuthController@logout')->name('logout');
         });
     });
-    
+
     Route::get('/email/resend', 'VerificationController@resend')->name('verification.resend');
     Route::get('/email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
 
     // Authenticate First
     Route::group(['middleware' => 'auth:api'], function () {
-        Route::post('logout', 'AuthController@logout')->name('logout');
+
+        // Users
+        Route::group(['middleware' => ['role:admin']], function () {
+            Route::prefix('users')->group(function () {
+                Route::get('/', 'UserController@getAllUserWithAllTheirRolesAndPermissions')->name('getAllUserWithAllTheirRolesAndPermissions');
+                Route::post('/assign-role', 'UserController@assignRole')->name('assignRoleByUser');
+                Route::post('/change-role', 'UserController@changeRole')->name('changeUserRole');
+                Route::post('remove-role', 'UserController@removeRole')->name('removeUserRole');
+                Route::post('/give-permission', 'UserController@givePermission')->name('assignPermissionToUser');
+                Route::post('/revoke-permission', 'UserController@revokePermission')->name('revokeUserPermission');
+            });
+
+            Route::prefix('role-and-permission')->group(function () {
+                Route::get('/', 'RoleAndPermissionController@getAllRolesAndPermissions')->name('getAllRolesWithPermissions');
+            });
+
+            Route::prefix('roles')->group(function () {
+                Route::get('/', 'RoleAndPermissionController@getAllRoles')->name('getAllRoles');
+                Route::post('/store', 'RoleAndPermissionController@storeRole')->name('storeRole');
+            });
+
+            Route::prefix('permissions')->group(function () {
+                Route::get('/', 'RoleAndPermissionController@getAllPermissions')->name('getAllPermissions');
+                Route::post('/store', 'RoleAndPermissionController@storePermission')->name('storePermission');
+                Route::get('/by-role', 'RoleAndPermissionController@getPermissionsByRole')->name('getPermissionsByRole');
+                Route::post('/assign-to-role', 'RoleAndPermissionController@assignPermissionToRole')->name('assignPermissionToRole');
+                Route::post('/revoke-from-role', 'RoleAndPermissionController@revokePermissionFromRole')->name('revokePermissionFromRole');
+            });
+        });
 
         Route::prefix('form')->group(function () {
 
@@ -67,8 +94,6 @@ Route::prefix('v1')->group(function () {
                 Route::get('/detail', 'FormPettyCashController@detail')->name('getFormPettyCashDetail');
                 Route::post('/update', 'FormPettyCashController@update')->name('updateFormPettyCash');
                 Route::post('/delete', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');
-
-
             });
 
             // Form PettyCash Detail
@@ -79,8 +104,6 @@ Route::prefix('v1')->group(function () {
                 Route::post('/update', 'FormPettyCashDetailController@update')->name('updatePettyCashDetail');
                 Route::post('/delete', 'FormPettyCashDetailController@destroy')->name('deletePettyCashDetail');
             });
-
-
         });
     });
 });

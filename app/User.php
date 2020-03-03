@@ -39,15 +39,18 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
     ];
 
-    public function formRequest(){
+    public function formRequest()
+    {
         return $this->hasOne('App\FormRequest');
     }
 
-    public function formSubmission(){
+    public function formSubmission()
+    {
         return $this->hasOne('App\FormSubmission');
     }
 
-    public function formPettyCash(){
+    public function formPettyCash()
+    {
         return $this->hasMany('App\FormPettyCash');
     }
 }
