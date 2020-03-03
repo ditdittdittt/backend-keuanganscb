@@ -95,7 +95,7 @@ class RoleAndPermissionController extends Controller
     {
         try {
             $permission = Permission::create([
-                'name' => $request['permission']
+                'name' => $request['permission_name']
             ]);
             return ReturnGoodWay::successReturn(
                 $permission,
@@ -113,7 +113,7 @@ class RoleAndPermissionController extends Controller
     {
         try {
             $role = Role::findByName($request['role_name']);
-            $role->givePermissionTo($request['permission']);
+            $role->givePermissionTo($request['permission_name']);
             return ReturnGoodWay::successReturn(
                 $role,
                 'Role',
@@ -130,7 +130,7 @@ class RoleAndPermissionController extends Controller
     {
         try {
             $role = Role::findByName($request['role_name']);
-            $role->revokePermissionTo($request['permission']);
+            $role->revokePermissionTo($request['permission_name']);
             return ReturnGoodWay::successReturn(
                 $role,
                 'Role',

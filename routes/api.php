@@ -51,10 +51,6 @@ Route::prefix('v1')->group(function () {
                 Route::post('/revoke-permission', 'UserController@revokePermission')->name('revokeUserPermission');
             });
 
-            Route::prefix('role-and-permission')->group(function () {
-                Route::get('/', 'RoleAndPermissionController@getAllRolesAndPermissions')->name('getAllRolesWithPermissions');
-            });
-
             Route::prefix('roles')->group(function () {
                 Route::get('/', 'RoleAndPermissionController@getAllRoles')->name('getAllRoles');
                 Route::post('/store', 'RoleAndPermissionController@storeRole')->name('storeRole');

@@ -37,7 +37,7 @@ class UserController extends Controller
             $user = User::with('roles')->findOrFail($request['user_id']);
             $currentRole = $user->getRoleNames()['0'];
             $user->removeRole($currentRole);
-            $user->assignRole($request['role']);
+            $user->assignRole($request['role_name']);
             $user->save();
             return ReturnGoodWay::successReturn(
                 $user,
@@ -89,7 +89,7 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($request['user_id']);
-            $user->givePermissionTo($request['permission']);
+            $user->givePermissionTo($request['permission_name']);
             return ReturnGoodWay::successReturn(
                 $user,
                 $this->modelName,
@@ -106,7 +106,7 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($request['user_id']);
-            $user->revokePermissionTo($request['permission']);
+            $user->revokePermissionTo($request['permission_name']);
             return ReturnGoodWay::successReturn(
                 $user,
                 $this->modelName,
