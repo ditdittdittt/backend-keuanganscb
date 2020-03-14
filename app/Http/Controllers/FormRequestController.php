@@ -37,6 +37,7 @@ class FormRequestController extends Controller
     {
         try {
             $formRequest = FormRequest::findOrFail($id);
+            $formRequest->user;
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,
