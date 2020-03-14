@@ -42,12 +42,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function formRequest()
     {
-        return $this->hasOne('App\FormRequest');
+        return $this->hasMany('App\FormRequest');
     }
 
     public function formSubmission()
     {
-        return $this->hasOne('App\FormSubmission');
+        return $this->hasMany('App\FormSubmission');
     }
 
     public function formPettyCash()
