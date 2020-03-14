@@ -53,7 +53,7 @@ class FormRequestController extends Controller
     {
         try {
             $form_request = new FormRequest();
-            $form_request->user_id = $request->user_id;
+            $form_request->user_id = auth()->user()->id;
             $form_request->date = $request->date;
             $form_request->method = $request->method;
             $form_request->allocation = $request->allocation;
