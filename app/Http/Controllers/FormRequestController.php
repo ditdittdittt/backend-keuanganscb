@@ -19,6 +19,7 @@ class FormRequestController extends Controller
     {
         try {
             $formRequests = FormRequest::all();
+            $formRequests->load('user');
             return ReturnGoodWay::successReturn(
                 $formRequests,
                 $this->modelName,
