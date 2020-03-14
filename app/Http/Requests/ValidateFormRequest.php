@@ -24,7 +24,6 @@ class ValidateFormRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required',
             'date' => 'required',
             'method' => 'required',
             'allocation' => 'required',
