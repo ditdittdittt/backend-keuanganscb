@@ -31,14 +31,14 @@ class FormPettyCashController extends Controller
     }
 
     // Detail one model
-    public function detail(Request $request)
+    public function show($id)
     {
         try {
-            $form_request = FormPettyCash::findOrFail($request['form_petty_cash_id']);
+            $form_request = FormPettyCash::findOrFail($id);
             return ReturnGoodWay::successReturn(
                 $form_request,
                 $this->modelName,
-                $this->modelName . " with id " . $form_request->id,
+                null,
                 'success'
             );
         } catch (Exception $err) {
@@ -70,24 +70,35 @@ class FormPettyCashController extends Controller
     }
 
     // Update existing model
-    public function update(ValidateFormPettyCash $request)
+    public function update($id, ValidateFormPettyCash $request)
     {
 
         try {
-            $form_request = FormPettyCash::findOrFail($request['form_petty_cash_id']);
-            $form_request->user_id = $request['user_id'];
-            $form_request->date = $request['date'];
-            $form_request->allocation = $request['allocation'];
-            $form_request->amount = $request['amount'];
-            if ($request['is_confirmed_pic']) {
-                $form_request->is_confirmed_pic = $request['is_confirmed_pic'];
+            $form_request = FormPettyCash::findOrFail($id);
+            foreach ($request->input() as $key => $value) {
+                $form_request->$key = $value;
             }
-            if ($request['is_confirmed_manager_ops']) {
-                $form_request->is_confirmed_manager_ops = $request['is_confirmed_manager_ops'];
-            }
-            if ($request['is_confirmed_cashier']) {
-                $form_request->is_confirmed_cashier = $request['is_confirmed_cashier'];
-            }
+            // if ($request->input('user_id')) {
+            //     $form_request->user_id = $request->input('user_id');
+            // }
+            // if ($request->input('date')) {
+            //     $form_request->date = $request->input('date');
+            // }
+            // if ($request->input('allocation')) {
+            //     $form_request->allocation = $request->input('allocation');
+            // }
+            // if ($request->input('amount')) {
+            //     $form_request->amount = $request->input('amount');
+            // }
+            // if ($request->input('is_confirmed_pic')) {
+            //     $form_request->is_confirmed_pic = $request->input('is_confirmed_pic');
+            // }
+            // if ($request->input('is_confirmed_manager_ops')) {
+            //     $form_request->is_confirmed_manager_ops = $request->input('is_confirmed_manager_ops');
+            // }
+            // if ($request->input('is_confirmed_cashier')) {
+            //     $form_request->is_confirmed_cashier = $request->input('is_confirmed_cashier');
+            // }
             $form_request->save();
             return ReturnGoodWay::successReturn(
                 $form_request,
@@ -102,12 +113,12 @@ class FormPettyCashController extends Controller
     }
 
     // Delete one model
-    public function destroy(Request $request)
+    public function destroy($id, Request $request)
     {
-        $hidden = array('created_at', 'is_confirmed_pic', 'is_confirmed_manager_ops', 'is_confirmed_cashier', 'updated_at', 'user_id');
+        $hidden = array('is_confirmed_pic', 'is_confirmed_manager_ops', 'is_confirmed_cashier', 'user_id');
 
         try {
-            $form_request = FormPettyCash::findOrFail($request['form_petty_cash_id']);
+            $form_request = FormPettyCash::findOrFail($id);
             $form_request->delete();
             return ReturnGoodWay::successReturn(
                 $form_request->makeHidden($hidden),

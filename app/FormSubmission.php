@@ -8,11 +8,12 @@ class FormSubmission extends Model
 {
     //
     protected $table = 'form_submissions';
-    protected $fillable=[
+    protected $fillable = [
         'user_id',
+        'form_request_id',
         'date',
         'used',
-        'balanced',
+        'balance',
         'allocation',
         'notes',
         'is_confirmed_pic',
@@ -25,7 +26,8 @@ class FormSubmission extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function formRequest(){
+    public function formRequest()
+    {
         return $this->belongsTo('App\FormRequest');
     }
 }

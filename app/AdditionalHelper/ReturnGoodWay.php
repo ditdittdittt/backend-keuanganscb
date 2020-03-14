@@ -6,11 +6,11 @@ class ReturnGoodWay
 {
     private static $http_response_code = array(
         "success" => 200,
-        "not_found" => 404,
+        "not found" => 404,
         "forbidden" => 403,
         "created" => 201,
-        "bad_request" => 400,
-        "error_database" => 400,
+        "bad request" => 400,
+        "error database" => 400,
         "unknown" => 500,
         "conflict" => 409
     );
@@ -24,6 +24,7 @@ class ReturnGoodWay
         string $mode
     ) {
         if (!is_null($messages)) {
+            $messages = str_replace("_", " ", $messages);
             return response()->json([
                 'messages' => $messages,
                 strtolower($modelName) => $data
@@ -43,7 +44,7 @@ class ReturnGoodWay
         string $mode
     ) {
         return response()->json([
-            'failed' => [
+            'error' => [
                 'messages' => $messages,
             ]
         ], self::$http_response_code[$mode]);
@@ -57,6 +58,7 @@ class ReturnGoodWay
         string $messages,
         string $mode
     ) {
+        $messages = str_replace("_", " ", $messages);
         if (!is_null($messages)) {
             return response()->json([
                 'messages' => $messages,

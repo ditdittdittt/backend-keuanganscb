@@ -23,7 +23,8 @@ class FormPettyCash extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function pettyCashDetail(){
+    public function detail()
+    {
         return $this->hasMany('App\FormPettyCashDetail');
     }
 }

@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class FormRequest extends Model
 {
-    protected $table = 'form_request';
-
     protected $fillable = [
         'user_id',
         'date',

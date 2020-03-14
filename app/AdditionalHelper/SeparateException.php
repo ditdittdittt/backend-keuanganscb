@@ -23,21 +23,23 @@ class SeparateException
 
     public function checkException(string $modelName)
     {
+        $separatedModelName = explode("_", $modelName);
+        $modelName = implode(" ", $separatedModelName);
         $err = $this->err_type;
         if ($err instanceof ModelNotFoundException) {
-            $err_type = 'not_found';
+            $err_type = 'not found';
             $err_msg = $modelName . ' ' . $err_type;
         } else if ($err instanceof UnauthorizedException) {
             $err_type = 'forbidden';
             $err_msg = $modelName . ' ' . $err_type;
         } else if ($err instanceof PDOException) {
-            $err_type = 'error_database';
+            $err_type = 'error database';
             $err_msg = $err;
         } else if ($err instanceof RoleDoesNotExist) {
-            $err_type = 'not_found';
+            $err_type = 'not found';
             $err_msg = 'Role ' . $err_type;
         } else if ($err instanceof PermissionDoesNotExist) {
-            $err_type = 'not_found';
+            $err_type = 'not found';
             $err_msg = 'Permission ' . $err_type;
         } else if ($err instanceof RoleUnauthorized) {
             $err_type = 'forbidden';

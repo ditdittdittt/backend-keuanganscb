@@ -11,14 +11,14 @@ use Illuminate\Http\Request;
 
 class FormSubmissionController extends Controller
 {
-    private $modelName = 'Form Submission';
+    private $modelName = 'Form_Submission';
     //
     public function index()
     {
         try {
-            $form_submission = FormSubmission::all();
+            $form_submissions = FormSubmission::all();
             return ReturnGoodWay::successReturn(
-                $form_submission,
+                $form_submissions,
                 $this->modelName,
                 "List of all " . $this->modelName,
                 'success'
@@ -34,9 +34,10 @@ class FormSubmissionController extends Controller
         try {
             $form_submission = new FormSubmission();
             $form_submission->user_id = $request->input('user_id');
+            $form_submission->form_request_id = $request->input('form_request_id');
             $form_submission->date = $request->input('date');
             $form_submission->used = $request->input('used');
-            $form_submission->balanced = $request->input('balanced');
+            $form_submission->balance = $request->input('balance');
             $form_submission->allocation = $request->input('allocation');
             $form_submission->notes = $request->input('notes');
             $form_submission->is_confirmed_pic = false;
@@ -56,13 +57,14 @@ class FormSubmissionController extends Controller
         }
     }
 
-    public function detail(Request $request){
+    public function show($id, Request $request)
+    {
         try {
-            $form_submission = FormSubmission::find($request['form_submission_id']);
+            $form_submission = FormSubmission::findOrFail($id);
             return ReturnGoodWay::successReturn(
                 $form_submission,
                 $this->modelName,
-                $this->modelName . " with id " . $form_submission->id,
+                null,
                 'success'
             );
         } catch (Exception $err) {
@@ -71,27 +73,27 @@ class FormSubmissionController extends Controller
         }
     }
 
-    public function update(ValidateFormSubmission $request)
+    public function update($id, ValidateFormSubmission $request)
     {
         try {
-            $form_submission = FormSubmission::find($request['form_submission_id']);
-            $form_submission->user_id = $request['user_id'];
-            $form_submission->date = $request['date'];
-            $form_submission->used = $request['used'];
-            $form_submission->balanced = $request['balanced'];
-            $form_submission->allocation = $request['allocation'];
-            $form_submission->notes = $request['notes'];
-            if ($request['is_confirmed_pic']) {
-                $form_submission->is_confirmed_pic = $request['is_confirmed_pic'];
+            $form_submission = FormSubmission::findOrFail($id);
+            if ($request->input('user_id')) $form_submission->user_id = $request->input('user_id');
+            if ($request->input('date')) $form_submission->date = $request->input('date');
+            if ($request->input('used')) $form_submission->used = $request->input('used');
+            if ($request->input('balance')) $form_submission->balance = $request->input('balance');
+            if ($request->input('allocation')) $form_submission->allocation = $request->input('allocation');
+            if ($request->input('notes')) $form_submission->notes = $request->input('notes');
+            if ($request->input('is_confirmed_pic')) {
+                $form_submission->is_confirmed_pic = $request->input('is_confirmed_pic');
             }
-            if ($request['is_confirmed_verificator']) {
-                $form_submission->is_confirmed_verificator = $request['is_confirmed_verificator'];
+            if ($request->input('is_confirmed_verificator')) {
+                $form_submission->is_confirmed_verificator = $request->input('is_confirmed_verificator');
             }
-            if ($request['is_confirmed_head_dept']) {
-                $form_submission->is_confirmed_head_dept = $request['is_confirmed_head_dept'];
+            if ($request->input('is_confirmed_head_dept')) {
+                $form_submission->is_confirmed_head_dept = $request->input('is_confirmed_head_dept');
             }
-            if ($request['is_confirmed_head_office']) {
-                $form_submission->is_confirmed_head_office = $request['is_confirmed_head_office'];
+            if ($request->input('is_confirmed_head_office')) {
+                $form_submission->is_confirmed_head_office = $request->input('is_confirmed_head_office');
             }
             $form_submission->save();
             return ReturnGoodWay::successReturn(
@@ -106,13 +108,26 @@ class FormSubmissionController extends Controller
         }
     }
 
-    public function delete(Request $request)
+    public function delete($id)
     {
         try {
-            $form_submission = FormSubmission::find($request['form_submission_id']);
+            $hidden = array(
+                'user_id',
+                'form_request_id',
+                'date',
+                'used',
+                'balance',
+                'allocation',
+                'notes',
+                'is_confirmed_pic',
+                'is_confirmed_verificator',
+                'is_confirmed_head_dept',
+                'is_confirmed_head_office'
+            );
+            $form_submission = FormSubmission::findOrFail($id);
             $form_submission->delete();
             return ReturnGoodWay::successReturn(
-                $form_submission,
+                $form_submission->makeHidden($hidden),
                 $this->modelName,
                 $this->modelName . " with id " . $form_submission->id . " has been deleted",
                 'success'

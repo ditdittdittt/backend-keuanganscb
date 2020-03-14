@@ -39,9 +39,51 @@ Route::prefix('v1')->group(function () {
 
     // Authenticate First
     Route::group(['middleware' => 'auth:api'], function () {
+        // User Side
+        Route::prefix('form')->group(function () {
 
-        // Users
+            // Form Request
+            Route::prefix('request')->group(function () {
+                Route::get('/', 'FormRequestController@index')->name('getAllFormRequests');
+                Route::post('/', 'FormRequestController@store')->name('storeFormRequest');
+                Route::get('/{id}', 'FormRequestController@show')->where('id', '[0-9]+')->name('showFormRequest');
+                Route::post('/{id}', 'FormRequestController@update')->where('id', '[0-9]+')->name('updateFormRequest');
+                Route::delete('/{id}', 'FormRequestController@destroy')->where('id', '[0-9]+')->name('deleteFormRequest');
+            });
+
+            // Form Submission
+            Route::prefix('submission')->group(function () {
+                Route::get('/', 'FormSubmissionController@index')->name('getAllFormSubmission');
+                Route::post('/', 'FormSubmissionController@store')->name('storeFormSubmission');
+                Route::get('/{id}', 'FormSubmissionController@show')->where('id', '[0-9]+')->name('getFormSubmissionDetail');
+                Route::post('/{id}', 'FormSubmissionController@update')->where('id', '[0-9]+')->name('updateFormSubmission');
+                Route::delete('/{id}', 'FormSubmissionController@delete')->where('id', '[0-9]+')->name('deleteFormSubmission');
+            });
+
+            // Form PettyCash Header
+            Route::prefix('petty-cash')->group(function () {
+                Route::get('/', 'FormPettyCashController@index')->name('getAllFormPettyCash');
+                Route::post('/', 'FormPettyCashController@store')->name('storePettyCash');
+                Route::get('/{id}', 'FormPettyCashController@show')->name('getFormPettyCashDetail');
+                Route::post('/{id}', 'FormPettyCashController@update')->name('updateFormPettyCash');
+                Route::delete('/{id}', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');
+
+                // Form PettyCash Detail
+                Route::prefix('/{pettyCashId}/detail')->group(function () {
+                    Route::get('/', 'FormPettyCashDetailController@index')->name('getAllPettyCashDetail');
+                    Route::post('/', 'FormPettyCashDetailController@store')->name('storePettyCashDetail');
+                    Route::get('/{id}', 'FormPettyCashDetailController@show')->where('id', '[0-9]+')->name('getPettyCashDetail');
+                    Route::post('/{id}', 'FormPettyCashDetailController@update')->where('id', '[0-9]+')->name('updatePettyCashDetail');
+                    Route::delete('/{id}', 'FormPettyCashDetailController@destroy')->where('id', '[0-9]+')->name('deletePettyCashDetail');
+                });
+            });
+        });
+
+
+        // Admin Side
         Route::group(['middleware' => ['role:admin']], function () {
+
+            // Users
             Route::prefix('users')->group(function () {
                 Route::get('/', 'UserController@getAllUserWithAllTheirRolesAndPermissions')->name('getAllUserWithAllTheirRolesAndPermissions');
                 Route::post('/assign-role', 'UserController@assignRole')->name('assignRoleByUser');
@@ -51,56 +93,19 @@ Route::prefix('v1')->group(function () {
                 Route::post('/revoke-permission', 'UserController@revokePermission')->name('revokeUserPermission');
             });
 
+            // ROles
             Route::prefix('roles')->group(function () {
                 Route::get('/', 'RoleAndPermissionController@getAllRoles')->name('getAllRoles');
                 Route::post('/store', 'RoleAndPermissionController@storeRole')->name('storeRole');
             });
 
+            // Permissions
             Route::prefix('permissions')->group(function () {
                 Route::get('/', 'RoleAndPermissionController@getAllPermissions')->name('getAllPermissions');
                 Route::post('/store', 'RoleAndPermissionController@storePermission')->name('storePermission');
                 Route::get('/by-role', 'RoleAndPermissionController@getPermissionsByRole')->name('getPermissionsByRole');
                 Route::post('/assign-to-role', 'RoleAndPermissionController@assignPermissionToRole')->name('assignPermissionToRole');
                 Route::post('/revoke-from-role', 'RoleAndPermissionController@revokePermissionFromRole')->name('revokePermissionFromRole');
-            });
-        });
-
-        Route::prefix('form')->group(function () {
-
-            // Form Request
-            Route::prefix('request')->group(function () {
-                Route::get('/', 'FormRequestController@index')->name('getAllFormRequests');
-                Route::post('/store', 'FormRequestController@store')->name('storeFormRequest');
-                Route::get('/detail', 'FormRequestController@detail')->name('getFormRequestDetail');
-                Route::post('/update', 'FormRequestController@update')->name('updateFormRequest');
-                Route::post('/delete', 'FormRequestController@destroy')->name('deleteFormRequest');
-            });
-
-            // Form Submission
-            Route::prefix('submission')->group(function () {
-                Route::get('/', 'FormSubmissionController@index')->name('getAllFormSubmission');
-                Route::post('/store', 'FormSubmissionController@store')->name('storeFormSubmission');
-                Route::get('/detail', 'FormSubmissionController@detail')->name('getFormSubmissionDetail');
-                Route::post('/update', 'FormSubmissionController@update')->name('updateFormSubmission');
-                Route::post('/delete', 'FormSubmissionController@delete')->name('deleteFormSubmission');
-            });
-
-            // Form PettyCash Header
-            Route::prefix('petty_cash')->group(function () {
-                Route::get('/', 'FormPettyCashController@index')->name('getAllFormPettyCash');
-                Route::post('/store', 'FormPettyCashController@store')->name('storePettyCash');
-                Route::get('/detail', 'FormPettyCashController@detail')->name('getFormPettyCashDetail');
-                Route::post('/update', 'FormPettyCashController@update')->name('updateFormPettyCash');
-                Route::post('/delete', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');
-            });
-
-            // Form PettyCash Detail
-            Route::prefix('petty_cash_detail')->group(function () {
-                Route::get('/', 'FormPettyCashDetailController@index')->name('getAllPettyCashDetail');
-                Route::post('/store', 'FormPettyCashDetailController@store')->name('storePettyCashDetail');
-                Route::get('/detail', 'FormPettyCashDetailController@detail')->name('getPettyCashDetail');
-                Route::post('/update', 'FormPettyCashDetailController@update')->name('updatePettyCashDetail');
-                Route::post('/delete', 'FormPettyCashDetailController@destroy')->name('deletePettyCashDetail');
             });
         });
     });
