@@ -77,7 +77,8 @@ class RoleAndPermissionController extends Controller
     {
         try {
             $role = Role::create([
-                'name' => $request['role_name']
+                'name' => $request['role_name'],
+                'guard_name' => 'web'
             ]);
             return ReturnGoodWay::successReturn(
                 $role,
