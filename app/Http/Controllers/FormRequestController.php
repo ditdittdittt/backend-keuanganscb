@@ -86,8 +86,11 @@ class FormRequestController extends Controller
             if ($request->method) $formRequest->method = $request->method;
             if ($request->allocation) $formRequest->allocation = $request->allocation;
             if ($request->amount) $formRequest->amount = $request->amount;
-            if ($request->attachment) $formRequest->attachment = $request->attachment;
-            //            $formRequest->attachment = UploadHelper::insertAttachment($request, 'proposal', 'kegiatan1');
+            if ($request->attachment) {
+                $uploadHelper = new UploadHelper($this->modelName, $request->file('attachment'), uniqid(), 'proposal');
+                $filePath = $uploadHelper->insertAttachment();
+                $formRequest->attachment = $filePath;
+            }
             if ($request->notes) $formRequest->notes = $request->notes;
             if ($request->is_confirmed_pic) $formRequest->is_confirmed_pic = $request->is_confirmed_pic;
             if ($request->is_confirmed_verificator) $formRequest->is_confirmed_verificator = $request->is_confirmed_verificator;
