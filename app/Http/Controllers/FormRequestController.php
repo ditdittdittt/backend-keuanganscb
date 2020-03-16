@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
 use App\AdditionalHelper\UploadHelper;
+use App\Exceptions\FileNotSupportedException;
 use App\FormRequest;
 use App\Http\Requests\ValidateFormRequest;
 use Exception;

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
+use App\AdditionalHelper\SeparateException;
 use App\FormPettyCash;
 use App\FormPettyCashDetail;
 use App\Http\Requests\ValidateFormPettyCashDetail;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 

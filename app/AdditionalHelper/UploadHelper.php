@@ -34,7 +34,7 @@ class UploadHelper
                 break;
 
             default:
-                throw new ErrorException("file type not supported");
+                throw new FileNotSupportedException("These Files are not supported");
                 break;
         }
 
