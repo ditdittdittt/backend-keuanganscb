@@ -3,7 +3,7 @@
 
 namespace App\AdditionalHelper;
 
-
+use App\Exceptions\FileNotSupportedException;
 use Carbon\Carbon;
 use ErrorException;
 
