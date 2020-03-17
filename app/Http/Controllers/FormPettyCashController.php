@@ -18,6 +18,7 @@ class FormPettyCashController extends Controller
     {
         try {
             $form_requests = FormPettyCash::all();
+            $form_requests->load('user');
             return ReturnGoodWay::successReturn(
                 $form_requests,
                 $this->modelName,
