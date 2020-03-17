@@ -18,6 +18,7 @@ class FormPettyCashController extends Controller
     {
         try {
             $form_requests = FormPettyCash::all();
+            $form_requests->load('user');
             return ReturnGoodWay::successReturn(
                 $form_requests,
                 $this->modelName,
@@ -35,6 +36,7 @@ class FormPettyCashController extends Controller
     {
         try {
             $form_request = FormPettyCash::findOrFail($id);
+            $form_request->load('user');
             return ReturnGoodWay::successReturn(
                 $form_request,
                 $this->modelName,
@@ -52,7 +54,7 @@ class FormPettyCashController extends Controller
     {
         try {
             $form_request = new FormPettyCash();
-            $form_request->user_id = $request['user_id'];
+            $form_request->user_id = auth()->user()->id;
             $form_request->date = $request['date'];
             $form_request->allocation = $request['allocation'];
             $form_request->amount = $request['amount'];
