@@ -61,7 +61,11 @@ class FormRequestController extends Controller
             $form_request->method = $request->method;
             $form_request->allocation = $request->allocation;
             $form_request->amount = $request->amount;
-            $form_request->attachment = $request->attachment;
+            if ($request->attachment) {
+                $uploadHelper = new UploadHelper($this->modelName, $request->file('attachment'), uniqid(), 'proposal');
+                $filePath = $uploadHelper->insertAttachment();
+                $form_request->attachment = $filePath;
+            }
             $form_request->notes = $request->notes;
             $form_request->save();
             return ReturnGoodWay::successReturn(
