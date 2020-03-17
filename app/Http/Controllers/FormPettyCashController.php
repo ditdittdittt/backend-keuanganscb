@@ -36,6 +36,7 @@ class FormPettyCashController extends Controller
     {
         try {
             $form_request = FormPettyCash::findOrFail($id);
+            $form_request->load('user');
             return ReturnGoodWay::successReturn(
                 $form_request,
                 $this->modelName,
