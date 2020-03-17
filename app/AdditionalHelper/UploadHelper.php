@@ -25,7 +25,7 @@ class UploadHelper
 
     public function insertAttachment()
     {
-        $guessExtension = $this->file->getOriginalClientExtension();
+        $guessExtension = $this->file->guessExtension();
         switch ($guessExtension) {
             case 'jpeg':
             case 'jpg':
