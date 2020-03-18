@@ -32,6 +32,9 @@ class UploadHelper
             case 'png':
                 $this->fileType = 'images';
                 break;
+            case 'pdf':
+                $this->fileType = 'pdf';
+                break;
 
             default:
                 throw new FileNotSupportedException("These Files are not supported");
