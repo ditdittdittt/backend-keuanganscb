@@ -17,8 +17,8 @@ class FormSubmissionController extends Controller
     {
         try {
             $form_submissions = FormSubmission::all();
-            $form_submissions->user;
-            $form_submissions->formRequest;
+            $form_submissions->load('user');
+            $form_submissions->load('formRequest');
             return ReturnGoodWay::successReturn(
                 $form_submissions,
                 $this->modelName,
@@ -63,8 +63,8 @@ class FormSubmissionController extends Controller
     {
         try {
             $form_submission = FormSubmission::findOrFail($id);
-            $form_submission->user;
-            $form_submission->formRequest;
+            $form_submission->load('user');
+            $form_submission->load('formRequest');
             return ReturnGoodWay::successReturn(
                 $form_submission,
                 $this->modelName,
