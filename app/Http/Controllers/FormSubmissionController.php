@@ -77,7 +77,7 @@ class FormSubmissionController extends Controller
         }
     }
 
-    public function update($id, ValidateFormSubmission $request)
+    public function update($id, Request $request)
     {
         try {
             $form_submission = FormSubmission::findOrFail($id);
