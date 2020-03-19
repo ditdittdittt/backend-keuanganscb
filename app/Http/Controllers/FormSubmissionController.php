@@ -17,6 +17,8 @@ class FormSubmissionController extends Controller
     {
         try {
             $form_submissions = FormSubmission::all();
+            $form_submissions->user;
+            $form_submissions->formRequest;
             return ReturnGoodWay::successReturn(
                 $form_submissions,
                 $this->modelName,
@@ -33,7 +35,7 @@ class FormSubmissionController extends Controller
     {
         try {
             $form_submission = new FormSubmission();
-            $form_submission->user_id = $request->input('user_id');
+            $form_submission->user_id = auth()->user()->id;
             $form_submission->form_request_id = $request->input('form_request_id');
             $form_submission->date = $request->input('date');
             $form_submission->used = $request->input('used');
@@ -61,6 +63,8 @@ class FormSubmissionController extends Controller
     {
         try {
             $form_submission = FormSubmission::findOrFail($id);
+            $form_submission->user;
+            $form_submission->formRequest;
             return ReturnGoodWay::successReturn(
                 $form_submission,
                 $this->modelName,
@@ -77,7 +81,7 @@ class FormSubmissionController extends Controller
     {
         try {
             $form_submission = FormSubmission::findOrFail($id);
-            if ($request->input('user_id')) $form_submission->user_id = $request->input('user_id');
+            $form_submission->user_id = auth()->user()->id;
             if ($request->input('date')) $form_submission->date = $request->input('date');
             if ($request->input('used')) $form_submission->used = $request->input('used');
             if ($request->input('balance')) $form_submission->balance = $request->input('balance');
