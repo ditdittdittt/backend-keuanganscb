@@ -69,7 +69,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('/{id}', 'FormPettyCashController@show')->name('getFormPettyCashDetail');
                 Route::post('/{id}', 'FormPettyCashController@update')->name('updateFormPettyCash');
                 Route::delete('/{id}', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');
-                Route::get('/count','FormPettyCashController@countPettyCashForm')->name('getCountFormPettyCash');
+                Route::get('/count', 'FormPettyCashController@countPettyCashForm')->name('getCountFormPettyCash');
 
                 // Form PettyCash Detail
                 Route::prefix('/{pettyCashId}/detail')->group(function () {
