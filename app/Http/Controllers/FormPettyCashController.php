@@ -133,4 +133,10 @@ class FormPettyCashController extends Controller
             return $error->checkException($this->modelName);
         }
     }
+
+    // Return count of petty cash
+    public function countPettyCashForm(){
+        $count = FormPettyCash::all()->count();
+        return response()->json(['jumlah_petty_cash_form' => $count]);
+    }
 }

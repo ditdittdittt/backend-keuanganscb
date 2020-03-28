@@ -141,4 +141,10 @@ class FormSubmissionController extends Controller
             return $error->checkException($this->modelName);
         }
     }
+
+    //Return count of submission form
+    public function countSubmissionForm(){
+        $count = FormSubmission::all()->count();
+        return response()->json(['jumlah_form_submission' => $count]);
+    }
 }

@@ -138,4 +138,10 @@ class FormRequestController extends Controller
             return $error->checkException($this->modelName);
         }
     }
+
+    // Return count of request form
+    public function countRequestForm(){
+        $count = FormRequest::all()->count();
+        return response()->json(['jumlah_request_form' => $count]);
+    }
 }
