@@ -145,6 +145,6 @@ class FormSubmissionController extends Controller
     //Return count of submission form
     public function countSubmissionForm(){
         $count = FormSubmission::all()->count();
-        return response()->json(['jumlah_form_submission' => $count]);
+        return response()->json(['jumlah_submission_form' => $count]);
     }
 }
