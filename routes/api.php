@@ -64,6 +64,7 @@ Route::prefix('v1')->group(function () {
             Route::prefix('petty-cash')->group(function () {
                 Route::get('/', 'FormPettyCashController@index')->name('getAllFormPettyCash');
                 Route::post('/', 'FormPettyCashController@store')->name('storePettyCash');
+                Route::get('/count', 'FormPettyCashController@countPettyCash')->name('countPettyCash');
                 Route::get('/{id}', 'FormPettyCashController@show')->name('getFormPettyCashDetail');
                 Route::post('/{id}', 'FormPettyCashController@update')->name('updateFormPettyCash');
                 Route::delete('/{id}', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');

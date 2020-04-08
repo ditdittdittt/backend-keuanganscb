@@ -41,7 +41,7 @@ class UploadHelper
                 break;
         }
 
-        $filePath = $this->file->storeAs($this->fileType . '/' . $this->docType . strval(Carbon::now()->year) . '/' . strval(Carbon::now()->month), $this->fileName . '.' . $guessExtension, 'custom');
+        $filePath = $this->file->storeAs($this->fileType . '/' . $this->docType . '/' . strval(Carbon::now()->year) . '/' . strval(Carbon::now()->month), $this->fileName . '.' . $guessExtension, 'custom');
         $filePath = env('APP_URL') . 'uploads/' . $filePath;
 
         return $filePath;

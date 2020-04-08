@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
 use App\FormPettyCash;
+use App\FormPettyCashDetail;
 use App\Http\Requests\ValidateFormPettyCash;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,10 +18,10 @@ class FormPettyCashController extends Controller
     public function index()
     {
         try {
-            $form_requests = FormPettyCash::all();
-            $form_requests->load('user');
+            $formPettyCashes = FormPettyCash::all();
+            $formPettyCashes->load('user');
             return ReturnGoodWay::successReturn(
-                $form_requests,
+                $formPettyCashes,
                 $this->modelName,
                 "List of all form petty cash",
                 'success'
@@ -35,10 +36,10 @@ class FormPettyCashController extends Controller
     public function show($id)
     {
         try {
-            $form_request = FormPettyCash::findOrFail($id);
-            $form_request->load('user');
+            $formPettyCash = FormPettyCash::findOrFail($id);
+            $formPettyCash->load('user');
             return ReturnGoodWay::successReturn(
-                $form_request,
+                $formPettyCash,
                 $this->modelName,
                 null,
                 'success'
@@ -53,14 +54,23 @@ class FormPettyCashController extends Controller
     public function store(ValidateFormPettyCash $request)
     {
         try {
-            $form_request = new FormPettyCash();
-            $form_request->user_id = auth()->user()->id;
-            $form_request->date = $request['date'];
-            $form_request->allocation = $request['allocation'];
-            $form_request->amount = $request['amount'];
-            $form_request->save();
+            $arrayOfDetails = $request->details;
+            $formPettyCash = new FormPettyCash();
+            $formPettyCash->user_id = auth()->user()->id;
+            $formPettyCash->date = $request['date'];
+            $formPettyCash->allocation = $request['allocation'];
+            $formPettyCash->amount = $request['amount'];
+            $formPettyCash->save();
+            foreach ($arrayOfDetails as $detail) {
+                $formPettyCashDetail = new FormPettyCashDetail();
+                $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
+                $formPettyCashDetail->budget_code = $detail['budget_code'];
+                $formPettyCashDetail->budget_name = $detail['budget_name'];
+                $formPettyCashDetail->nominal = $detail['nominal'];
+                $formPettyCashDetail->save();
+            }
             return ReturnGoodWay::successReturn(
-                $form_request,
+                $formPettyCash,
                 $this->modelName,
                 $this->modelName . " has been stored",
                 'created'
@@ -76,36 +86,36 @@ class FormPettyCashController extends Controller
     {
 
         try {
-            $form_request = FormPettyCash::findOrFail($id);
+            $formPettyCash = FormPettyCash::findOrFail($id);
             foreach ($request->input() as $key => $value) {
-                $form_request->$key = $value;
+                $formPettyCash->$key = $value;
             }
             // if ($request->input('user_id')) {
-            //     $form_request->user_id = $request->input('user_id');
+            //     $formPettyCash->user_id = $request->input('user_id');
             // }
             // if ($request->input('date')) {
-            //     $form_request->date = $request->input('date');
+            //     $formPettyCash->date = $request->input('date');
             // }
             // if ($request->input('allocation')) {
-            //     $form_request->allocation = $request->input('allocation');
+            //     $formPettyCash->allocation = $request->input('allocation');
             // }
             // if ($request->input('amount')) {
-            //     $form_request->amount = $request->input('amount');
+            //     $formPettyCash->amount = $request->input('amount');
             // }
             // if ($request->input('is_confirmed_pic')) {
-            //     $form_request->is_confirmed_pic = $request->input('is_confirmed_pic');
+            //     $formPettyCash->is_confirmed_pic = $request->input('is_confirmed_pic');
             // }
             // if ($request->input('is_confirmed_manager_ops')) {
-            //     $form_request->is_confirmed_manager_ops = $request->input('is_confirmed_manager_ops');
+            //     $formPettyCash->is_confirmed_manager_ops = $request->input('is_confirmed_manager_ops');
             // }
             // if ($request->input('is_confirmed_cashier')) {
-            //     $form_request->is_confirmed_cashier = $request->input('is_confirmed_cashier');
+            //     $formPettyCash->is_confirmed_cashier = $request->input('is_confirmed_cashier');
             // }
-            $form_request->save();
+            $formPettyCash->save();
             return ReturnGoodWay::successReturn(
-                $form_request,
+                $formPettyCash,
                 $this->modelName,
-                $this->modelName . " with id " . $form_request->id . " has been updated",
+                $this->modelName . " with id " . $formPettyCash->id . " has been updated",
                 'success'
             );
         } catch (Exception $err) {
@@ -120,14 +130,48 @@ class FormPettyCashController extends Controller
         $hidden = array('is_confirmed_pic', 'is_confirmed_manager_ops', 'is_confirmed_cashier', 'user_id');
 
         try {
-            $form_request = FormPettyCash::findOrFail($id);
-            $form_request->delete();
+            $formPettyCash = FormPettyCash::findOrFail($id);
+            $formPettyCash->delete();
             return ReturnGoodWay::successReturn(
-                $form_request->makeHidden($hidden),
+                $formPettyCash->makeHidden($hidden),
                 $this->modelName,
-                $this->modelName . " with id " . $form_request->id . " has been deleted",
+                $this->modelName . " with id " . $formPettyCash->id . " has been deleted",
                 'success'
             );
+        } catch (Exception $err) {
+            $error = new SeparateException($err);
+            return $error->checkException($this->modelName);
+        }
+    }
+
+    // Count Petty Cash
+    public function countPettyCash(Request $request)
+    {
+        try {
+            $condition = $request->condition;
+            switch ($condition) {
+                case 'daily':
+                    $date = $request->date;
+                    $totalFormPettyCashes = FormPettyCash::whereDate('created_at', $date)->count();
+                    break;
+                case 'monthly':
+                    $month = $request->month;
+                    $year = $request->year;
+                    $date = $month . '-' . $year;
+                    $totalFormPettyCashes = FormPettyCash::whereYear('created_at', $year)->whereMonth('created_at', $month)->count();
+                    break;
+                default:
+                    $totalFormPettyCashes = FormPettyCash::all()->count();
+                    return response()->json([
+                        'total' => $totalFormPettyCashes
+                    ], 200);
+                    break;
+            }
+            return response()->json([
+                'condition' => $condition,
+                'date' => $date,
+                'total' => $totalFormPettyCashes
+            ], 200);
         } catch (Exception $err) {
             $error = new SeparateException($err);
             return $error->checkException($this->modelName);

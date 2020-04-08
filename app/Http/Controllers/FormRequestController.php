@@ -61,12 +61,16 @@ class FormRequestController extends Controller
             $form_request->method = $request->method;
             $form_request->allocation = $request->allocation;
             $form_request->amount = $request->amount;
-            if ($request->file('attachment') != null) {
-                $uploadHelper = new UploadHelper($this->modelName, $request->file('attachment'), uniqid(), 'proposal');
+            if ($request->hasFile('attachment')) {
+                $uploadHelper = new UploadHelper(
+                    $this->modelName,
+                    $request->file('attachment'),
+                    uniqid(),
+                    'proposal'
+                );
                 $filePath = $uploadHelper->insertAttachment();
                 $form_request->attachment = $filePath;
-            }
-            else {
+            } else {
                 $form_request->attachment = null;
             }
             $form_request->notes = $request->notes;
