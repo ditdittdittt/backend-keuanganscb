@@ -61,6 +61,7 @@ class FormPettyCashController extends Controller
             $formPettyCash->allocation = $request['allocation'];
             $formPettyCash->amount = $request['amount'];
             $formPettyCash->save();
+            dd($arrayOfDetails);
             foreach ( $arrayOfDetails as $detail) {
                 $formPettyCashDetail = new FormPettyCashDetail();
                 $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
