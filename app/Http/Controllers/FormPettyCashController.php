@@ -145,7 +145,7 @@ class FormPettyCashController extends Controller
     }
 
     // Count Petty Cash
-    public function countPettyCash(Request $request)
+    public function countFormPettyCash(Request $request)
     {
         try {
             $condition = $request->condition;
