@@ -17,6 +17,8 @@ class FormSubmissionController extends Controller
     {
         try {
             $form_submissions = FormSubmission::all();
+            $form_submissions->load('user');
+            $form_submissions->load('formRequest');
             return ReturnGoodWay::successReturn(
                 $form_submissions,
                 $this->modelName,
@@ -33,7 +35,7 @@ class FormSubmissionController extends Controller
     {
         try {
             $form_submission = new FormSubmission();
-            $form_submission->user_id = $request->input('user_id');
+            $form_submission->user_id = auth()->user()->id;
             $form_submission->form_request_id = $request->input('form_request_id');
             $form_submission->date = $request->input('date');
             $form_submission->used = $request->input('used');
@@ -61,6 +63,8 @@ class FormSubmissionController extends Controller
     {
         try {
             $form_submission = FormSubmission::findOrFail($id);
+            $form_submission->load('user');
+            $form_submission->load('formRequest');
             return ReturnGoodWay::successReturn(
                 $form_submission,
                 $this->modelName,
@@ -73,11 +77,11 @@ class FormSubmissionController extends Controller
         }
     }
 
-    public function update($id, ValidateFormSubmission $request)
+    public function update($id, Request $request)
     {
         try {
             $form_submission = FormSubmission::findOrFail($id);
-            if ($request->input('user_id')) $form_submission->user_id = $request->input('user_id');
+            $form_submission->user_id = auth()->user()->id;
             if ($request->input('date')) $form_submission->date = $request->input('date');
             if ($request->input('used')) $form_submission->used = $request->input('used');
             if ($request->input('balance')) $form_submission->balance = $request->input('balance');
@@ -136,5 +140,11 @@ class FormSubmissionController extends Controller
             $error = new SeparateException($err);
             return $error->checkException($this->modelName);
         }
+    }
+
+    //Return count of submission form
+    public function countSubmissionForm(){
+        $count = FormSubmission::all()->count();
+        return response()->json(['jumlah_submission_form' => $count]);
     }
 }

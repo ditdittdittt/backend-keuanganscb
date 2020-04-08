@@ -49,6 +49,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('/{id}', 'FormRequestController@show')->where('id', '[0-9]+')->name('showFormRequest');
                 Route::post('/{id}', 'FormRequestController@update')->where('id', '[0-9]+')->name('updateFormRequest');
                 Route::delete('/{id}', 'FormRequestController@destroy')->where('id', '[0-9]+')->name('deleteFormRequest');
+                Route::get('/count', 'FormRequestController@countRequestForm')->name('getCountFormRequests');
             });
 
             // Form Submission
@@ -58,6 +59,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('/{id}', 'FormSubmissionController@show')->where('id', '[0-9]+')->name('getFormSubmissionDetail');
                 Route::post('/{id}', 'FormSubmissionController@update')->where('id', '[0-9]+')->name('updateFormSubmission');
                 Route::delete('/{id}', 'FormSubmissionController@delete')->where('id', '[0-9]+')->name('deleteFormSubmission');
+                Route::get('/count','FormSubmissionController@countSubmissionForm')->name('getCountFormSubmission');
             });
 
             // Form PettyCash Header
@@ -68,6 +70,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('/{id}', 'FormPettyCashController@show')->name('getFormPettyCashDetail');
                 Route::post('/{id}', 'FormPettyCashController@update')->name('updateFormPettyCash');
                 Route::delete('/{id}', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');
+                Route::get('/count', 'FormPettyCashController@countPettyCashForm')->name('getCountFormPettyCash');
 
                 // Form PettyCash Detail
                 Route::prefix('/{pettyCashId}/detail')->group(function () {

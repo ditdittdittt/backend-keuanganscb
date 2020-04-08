@@ -38,7 +38,7 @@ class FormRequestController extends Controller
     {
         try {
             $formRequest = FormRequest::findOrFail($id);
-            $formRequest->user;
+            $formRequest->load('user');
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,
@@ -141,5 +141,11 @@ class FormRequestController extends Controller
             $error = new SeparateException($err);
             return $error->checkException($this->modelName);
         }
+    }
+
+    // Return count of request form
+    public function countRequestForm(){
+        $count = FormRequest::all()->count();
+        return response()->json(['jumlah_request_form' => $count]);
     }
 }
