@@ -61,7 +61,7 @@ class FormPettyCashController extends Controller
             $formPettyCash->allocation = $request['allocation'];
             $formPettyCash->amount = $request['amount'];
             $formPettyCash->save();
-            foreach ($arrayOfDetails as $detail) {
+            foreach ((array) $arrayOfDetails as $detail) {
                 $detailDecode = json_decode($detail);
                 foreach ($detailDecode as $decoded){
                     $formPettyCashDetail = new FormPettyCashDetail();
