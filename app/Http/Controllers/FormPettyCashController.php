@@ -63,7 +63,7 @@ class FormPettyCashController extends Controller
             $formPettyCash->save();
             foreach ((array) $arrayOfDetails as $detail) {
                 $detailDecode = json_decode($detail);
-                foreach ($detailDecode as $decoded){
+                foreach ((array) $detailDecode as $decoded){
                     $formPettyCashDetail = new FormPettyCashDetail();
                     $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
                     $formPettyCashDetail->budget_code = $decoded->budget_code;
