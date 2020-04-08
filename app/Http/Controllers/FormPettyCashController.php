@@ -61,14 +61,16 @@ class FormPettyCashController extends Controller
             $formPettyCash->allocation = $request['allocation'];
             $formPettyCash->amount = $request['amount'];
             $formPettyCash->save();
-            dd($arrayOfDetails);
-            foreach ( $arrayOfDetails as $detail) {
-                $formPettyCashDetail = new FormPettyCashDetail();
-                $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
-                $formPettyCashDetail->budget_code = $detail->budget_code;
-                $formPettyCashDetail->budget_name = $detail->budget_name;
-                $formPettyCashDetail->nominal = $detail->nominal;
-                $formPettyCashDetail->save();
+            foreach ((array) $arrayOfDetails as $detail) {
+                $detailDecode = json_decode($detail);
+                foreach ((array) $detailDecode as $decoded){
+                    $formPettyCashDetail = new FormPettyCashDetail();
+                    $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
+                    $formPettyCashDetail->budget_code = $decoded->budget_code;
+                    $formPettyCashDetail->budget_name = $decoded->budget_name;
+                    $formPettyCashDetail->nominal = $decoded->nominal;
+                    $formPettyCashDetail->save();
+                }
             }
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
