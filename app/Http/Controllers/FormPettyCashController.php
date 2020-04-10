@@ -87,30 +87,33 @@ class FormPettyCashController extends Controller
 
         try {
             $formPettyCash = FormPettyCash::findOrFail($id);
-            foreach ($request->input() as $key => $value) {
-                $formPettyCash->$key = $value;
+            // foreach ($request->input() as $key => $value) {
+            //     $formPettyCash->$key = $value;
+            // }
+            if ($request->input('user_id')) {
+                $formPettyCash->user_id = $request->input('user_id');
             }
-            // if ($request->input('user_id')) {
-            //     $formPettyCash->user_id = $request->input('user_id');
-            // }
-            // if ($request->input('date')) {
-            //     $formPettyCash->date = $request->input('date');
-            // }
-            // if ($request->input('allocation')) {
-            //     $formPettyCash->allocation = $request->input('allocation');
-            // }
-            // if ($request->input('amount')) {
-            //     $formPettyCash->amount = $request->input('amount');
-            // }
-            // if ($request->input('is_confirmed_pic')) {
-            //     $formPettyCash->is_confirmed_pic = $request->input('is_confirmed_pic');
-            // }
-            // if ($request->input('is_confirmed_manager_ops')) {
-            //     $formPettyCash->is_confirmed_manager_ops = $request->input('is_confirmed_manager_ops');
-            // }
-            // if ($request->input('is_confirmed_cashier')) {
-            //     $formPettyCash->is_confirmed_cashier = $request->input('is_confirmed_cashier');
-            // }
+            if ($request->input('date')) {
+                $formPettyCash->date = $request->input('date');
+            }
+            if ($request->input('allocation')) {
+                $formPettyCash->allocation = $request->input('allocation');
+            }
+            if ($request->input('amount')) {
+                $formPettyCash->amount = $request->input('amount');
+            }
+            if ($request->input('is_confirmed_pic')) {
+                $formPettyCash->is_confirmed_pic = $request->input('is_confirmed_pic');
+            }
+            if ($request->input('is_confirmed_manager_ops')) {
+                $formPettyCash->is_confirmed_manager_ops = $request->input('is_confirmed_manager_ops');
+            }
+            if ($request->input('is_confirmed_cashier')) {
+                $formPettyCash->is_confirmed_cashier = $request->input('is_confirmed_cashier');
+            }
+            if ($request->input('is_paid')) {
+                $formPettyCash->is_paid = $request->input('is_paid');
+            }
             $formPettyCash->save();
             return ReturnGoodWay::successReturn(
                 $formPettyCash,

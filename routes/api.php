@@ -82,6 +82,19 @@ Route::prefix('v1')->group(function () {
             });
         });
 
+        Route::prefix('budget-code')->group(function () {
+            Route::get('/', 'BudgetCodeController@index')->name('getAllBudgetCode');
+            Route::post('/', 'BudgetCodeController@store')->name('storeBudgetCode');
+            Route::group([
+                'prefix' => '{budgetCode}',
+                'where' => ['budgetCode' => '[0-9]+']
+            ], function () {
+                Route::get('/', 'BudgetCodeController@show');
+                Route::post('/', 'BudgetCodeController@update');
+                Route::delete('/', 'BudgetCodeController@destroy');
+            });
+        });
+
 
         // Admin Side
         Route::group(['middleware' => ['role:admin']], function () {

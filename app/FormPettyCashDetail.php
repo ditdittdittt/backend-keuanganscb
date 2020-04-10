@@ -12,7 +12,8 @@ class FormPettyCashDetail extends Model
         'form_petty_cash_id',
         'budget_code',
         'budget_name',
-        'nominal'
+        'nominal',
+        'budget_code_id'
     ];
 
     public function pettyCash()

@@ -55,12 +55,12 @@ class FormRequestController extends Controller
     public function store(ValidateFormRequest $request)
     {
         try {
-            $form_request = new FormRequest();
-            $form_request->user_id = auth()->user()->id;
-            $form_request->date = $request->date;
-            $form_request->method = $request->method;
-            $form_request->allocation = $request->allocation;
-            $form_request->amount = $request->amount;
+            $formRequest = new FormRequest();
+            $formRequest->user_id = auth()->user()->id;
+            $formRequest->date = $request->date;
+            $formRequest->method = $request->method;
+            $formRequest->allocation = $request->allocation;
+            $formRequest->amount = $request->amount;
             if ($request->hasFile('attachment')) {
                 $uploadHelper = new UploadHelper(
                     $this->modelName,
@@ -69,14 +69,18 @@ class FormRequestController extends Controller
                     'proposal'
                 );
                 $filePath = $uploadHelper->insertAttachment();
-                $form_request->attachment = $filePath;
+                $formRequest->attachment = $filePath;
             } else {
-                $form_request->attachment = null;
+                $formRequest->attachment = null;
             }
-            $form_request->notes = $request->notes;
-            $form_request->save();
+            $formRequest->notes = $request->notes;
+            if ($request->bank_name) $formRequest->bank_name = $request->bank_name;
+            if ($request->bank_code) $formRequest->bank_code = $request->bank_code;
+            if ($request->account_number) $formRequest->account_number = $request->account_number;
+            if ($request->account_owner) $formRequest->account_owner = $request->account_owner;
+            $formRequest->save();
             return ReturnGoodWay::successReturn(
-                $form_request,
+                $formRequest,
                 $this->modelName,
                 $this->modelName . " has been stored",
                 'created'
@@ -110,6 +114,11 @@ class FormRequestController extends Controller
             if ($request->is_confirmed_verificator) $formRequest->is_confirmed_verificator = $request->is_confirmed_verificator;
             if ($request->is_confirmed_head_dept) $formRequest->is_confirmed_head_dept = $request->is_confirmed_head_dept;
             if ($request->is_confirmed_cashier) $formRequest->is_confirmed_cashier = $request->is_confirmed_cashier;
+            if ($request->bank_name) $formRequest->bank_name = $request->bank_name;
+            if ($request->bank_code) $formRequest->bank_code = $request->bank_code;
+            if ($request->account_number) $formRequest->account_number = $request->account_number;
+            if ($request->account_owner) $formRequest->account_owner = $request->account_owner;
+            if ($request->is_paid) $formRequest->is_paid = $request->is_paid;
             $formRequest->save();
             return ReturnGoodWay::successReturn(
                 $formRequest,
@@ -144,7 +153,8 @@ class FormRequestController extends Controller
     }
 
     // Return count of request form
-    public function countRequestForm(){
+    public function countRequestForm()
+    {
         $count = FormRequest::all()->count();
         return response()->json(['jumlah_request_form' => $count]);
     }

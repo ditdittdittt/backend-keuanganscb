@@ -15,7 +15,8 @@ class FormPettyCash extends Model
         'amount',
         'is_confirmed_pic',
         'is_confirmed_manager_ops',
-        'is_confirmed_cashier'
+        'is_confirmed_cashier',
+        'is_paid',
     ];
 
     public function user()

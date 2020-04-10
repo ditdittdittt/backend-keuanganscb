@@ -4,6 +4,7 @@ namespace App\Exceptions;
 
 use App\AdditionalHelper\SeparateException;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Spatie\Permission\Exceptions\UnauthorizedException;
 
@@ -55,6 +56,9 @@ class Handler extends ExceptionHandler
         if ($exception instanceof UnauthorizedException) {
             $err = new SeparateException($exception);
             return $err->checkException("User");
+        } elseif ($exception instanceof ModelNotFoundException) {
+            $err = new SeparateException($exception);
+            return $err->checkException("Model");
         }
 
         return parent::render($request, $exception);
