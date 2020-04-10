@@ -36,7 +36,7 @@ class FormPettyCashController extends Controller
     public function show($id)
     {
         try {
-            $formPettyCash = FormPettyCash::findOrFail($id);
+            $formPettyCash = FormPettyCash::with('detail')->findOrFail($id);
             $formPettyCash->load('user');
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
@@ -69,6 +69,17 @@ class FormPettyCashController extends Controller
                 $formPettyCashDetail->nominal = $detail['nominal'];
                 $formPettyCashDetail->save();
             }
+//            foreach ((array) $arrayOfDetails as $detail) {
+//                $detailDecode = json_decode($detail);
+//                foreach ((array) $detailDecode as $decoded){
+//                    $formPettyCashDetail = new FormPettyCashDetail();
+//                    $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
+//                    $formPettyCashDetail->budget_code = $decoded->budget_code;
+//                    $formPettyCashDetail->budget_name = $decoded->budget_name;
+//                    $formPettyCashDetail->nominal = $decoded->nominal;
+//                    $formPettyCashDetail->save();
+//                }
+//            }
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
                 $this->modelName,
