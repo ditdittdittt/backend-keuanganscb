@@ -36,7 +36,7 @@ class FormPettyCashController extends Controller
     public function show($id)
     {
         try {
-            $formPettyCash = FormPettyCash::with('pettyCash')->findOrFail($id);
+            $formPettyCash = FormPettyCash::with('detail')->findOrFail($id);
             $formPettyCash->load('user');
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
