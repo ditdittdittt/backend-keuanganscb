@@ -20,4 +20,9 @@ class FormPettyCashDetail extends Model
     {
         return $this->belongsTo('App\FormPettyCash');
     }
+
+    public function budgetCode()
+    {
+        return $this->belongsTo(BudgetCode::class);
+    }
 }

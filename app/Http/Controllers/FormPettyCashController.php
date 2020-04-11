@@ -19,7 +19,7 @@ class FormPettyCashController extends Controller
     {
         try {
             $formPettyCashes = FormPettyCash::all();
-            $formPettyCashes->load('user');
+            $formPettyCashes->load(['user', 'details', 'details.budgetCode']);
             return ReturnGoodWay::successReturn(
                 $formPettyCashes,
                 $this->modelName,
@@ -36,8 +36,7 @@ class FormPettyCashController extends Controller
     public function show($id)
     {
         try {
-            $formPettyCash = FormPettyCash::with('detail')->findOrFail($id);
-            $formPettyCash->load('user');
+            $formPettyCash = FormPettyCash::with(['details', 'user', 'details.budgetCode'])->findOrFail($id);
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
                 $this->modelName,
@@ -68,17 +67,17 @@ class FormPettyCashController extends Controller
                 $formPettyCashDetail->nominal = $detail['nominal'];
                 $formPettyCashDetail->save();
             }
-//            foreach ((array) $arrayOfDetails as $detail) {
-//                $detailDecode = json_decode($detail);
-//                foreach ((array) $detailDecode as $decoded){
-//                    $formPettyCashDetail = new FormPettyCashDetail();
-//                    $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
-//                    $formPettyCashDetail->budget_code = $decoded->budget_code;
-//                    $formPettyCashDetail->budget_name = $decoded->budget_name;
-//                    $formPettyCashDetail->nominal = $decoded->nominal;
-//                    $formPettyCashDetail->save();
-//                }
-//            }
+            //            foreach ((array) $arrayOfDetails as $detail) {
+            //                $detailDecode = json_decode($detail);
+            //                foreach ((array) $detailDecode as $decoded){
+            //                    $formPettyCashDetail = new FormPettyCashDetail();
+            //                    $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
+            //                    $formPettyCashDetail->budget_code = $decoded->budget_code;
+            //                    $formPettyCashDetail->budget_name = $decoded->budget_name;
+            //                    $formPettyCashDetail->nominal = $decoded->nominal;
+            //                    $formPettyCashDetail->save();
+            //                }
+            //            }
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
                 $this->modelName,
