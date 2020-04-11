@@ -64,7 +64,7 @@ class FormPettyCashController extends Controller
             foreach ($arrayOfDetails as $detail) {
                 $formPettyCashDetail = new FormPettyCashDetail();
                 $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
-                $formPettyCashDetail->budget_code = $detail['budget_code_id'];
+                $formPettyCashDetail->budget_code_id = $detail['budget_code_id'];
                 $formPettyCashDetail->nominal = $detail['nominal'];
                 $formPettyCashDetail->save();
             }
