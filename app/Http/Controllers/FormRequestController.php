@@ -8,6 +8,7 @@ use App\AdditionalHelper\UploadHelper;
 use App\Exceptions\FileNotSupportedException;
 use App\FormRequest;
 use App\Http\Requests\ValidateFormRequest;
+use PDF;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -157,5 +158,15 @@ class FormRequestController extends Controller
     {
         $count = FormRequest::all()->count();
         return response()->json(['jumlah_request_form' => $count]);
+    }
+
+    // Print PDF
+    public function printPdf()
+    {
+        $formRequests = FormRequest::orderBy('date', 'DESC')->get();
+        $formRequests->load('user');
+        // return response()->json($formRequests);
+        $pdf = PDF::loadview('pdf.form_requests', ['formRequests' => $formRequests])->setPaper('a4', 'landscape');;
+        return $pdf->stream();
     }
 }

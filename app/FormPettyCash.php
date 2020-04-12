@@ -28,4 +28,9 @@ class FormPettyCash extends Model
     {
         return $this->hasMany('App\FormPettyCashDetail');
     }
+
+    public function status()
+    {
+        return $this->belongsTo(FormStatus::class);
+    }
 }

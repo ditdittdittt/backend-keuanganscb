@@ -126,3 +126,8 @@ Route::prefix('v1')->group(function () {
         });
     });
 });
+
+Route::prefix('print-pdf/form')->group(function () {
+    Route::get('/request', 'FormRequestController@printPdf')->name('printPdfFormRequest');
+    Route::get('/petty-cash', 'FormPettyCashController@printPdf')->name('printPdfFormPettyCash');
+});

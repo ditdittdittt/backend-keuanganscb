@@ -124,6 +124,10 @@ class FormPettyCashController extends Controller
                 $formPettyCash->is_paid = $request->input('is_paid');
             }
             $formPettyCash->save();
+            if ($formPettyCash->is_confirmed_pic && $formPettyCash->is_confirmed_manager_ops && $formPettyCash->is_confirmed_cashier) {
+                $formPettyCash->status_id = 2;
+                $formPettyCash->save();
+            }
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
                 $this->modelName,
