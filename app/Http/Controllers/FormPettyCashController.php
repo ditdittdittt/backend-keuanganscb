@@ -108,7 +108,7 @@ class FormPettyCashController extends Controller
             if ($request->input('allocation')) {
                 $formPettyCash->allocation = $request->input('allocation');
             }
-            if ($request->input('amount')) {
+            if (!is_null($request->input('amount'))) {
                 $formPettyCash->amount = $request->input('amount');
             }
             if ($request->input('is_confirmed_pic')) {
