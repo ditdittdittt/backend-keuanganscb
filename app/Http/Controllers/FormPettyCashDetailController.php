@@ -103,12 +103,11 @@ class FormPettyCashDetailController extends Controller
     }
 
     // Delete one model
-    public function destroy(Request $request)
+    public function destroy($pettyCashId, $id, Request $request)
     {
         $hidden = array('created_at', 'form_petty_cash_id', 'updated_at', 'user_id');
-
         try {
-            $form_petty_cash_detail = FormPettyCashDetail::findOrFail($request['form_petty_cash_detail_id']);
+            $form_petty_cash_detail = FormPettyCashDetail::findOrFail($id);
             $form_petty_cash_detail->delete();
             return ReturnGoodWay::successReturn(
                 $form_petty_cash_detail->makeHidden($hidden),
