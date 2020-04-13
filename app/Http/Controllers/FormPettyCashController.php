@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
+use App\Exports\FormPettyCashExport;
 use App\FormPettyCash;
 use App\FormPettyCashDetail;
 use App\Http\Requests\ValidateFormPettyCash;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FormPettyCashController extends Controller
 {
@@ -192,5 +194,10 @@ class FormPettyCashController extends Controller
             $error = new SeparateException($err);
             return $error->checkException($this->modelName);
         }
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new FormPettyCashExport, 'formpettycash.xlsx');
     }
 }

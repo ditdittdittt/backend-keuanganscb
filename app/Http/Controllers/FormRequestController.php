@@ -6,11 +6,13 @@ use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
 use App\AdditionalHelper\UploadHelper;
 use App\Exceptions\FileNotSupportedException;
+use App\Exports\FormRequestExport;
 use App\FormRequest;
 use App\Http\Requests\ValidateFormRequest;
 use PDF;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FormRequestController extends Controller
 {
@@ -168,5 +170,10 @@ class FormRequestController extends Controller
         // return response()->json($formRequests);
         $pdf = PDF::loadview('pdf.form_requests', ['formRequests' => $formRequests])->setPaper('a4', 'landscape');;
         return $pdf->stream();
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new FormRequestExport, 'formrequest.xlsx');
     }
 }

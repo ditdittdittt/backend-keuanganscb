@@ -19,7 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 // v1
-
 Route::prefix('v1')->group(function () {
 
     // No need authenticate first
@@ -36,6 +35,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
     Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail');
     Route::post('/password/reset', 'ResetPasswordController@reset');
+    
 
     // Authenticate First
     Route::group(['middleware' => 'auth:api'], function () {
@@ -50,8 +50,9 @@ Route::prefix('v1')->group(function () {
                 Route::post('/{id}', 'FormRequestController@update')->where('id', '[0-9]+')->name('updateFormRequest');
                 Route::delete('/{id}', 'FormRequestController@destroy')->where('id', '[0-9]+')->name('deleteFormRequest');
                 Route::get('/count', 'FormRequestController@countRequestForm')->name('getCountFormRequests');
+                Route::get('/export', 'FormRequestController@exportExcel');
             });
-
+    
             // Form Submission
             Route::prefix('submission')->group(function () {
                 Route::get('/', 'FormSubmissionController@index')->name('getAllFormSubmission');
@@ -61,16 +62,17 @@ Route::prefix('v1')->group(function () {
                 Route::delete('/{id}', 'FormSubmissionController@delete')->where('id', '[0-9]+')->name('deleteFormSubmission');
                 Route::get('/count', 'FormSubmissionController@countSubmissionForm')->name('getCountFormSubmission');
             });
-
+    
             // Form PettyCash Header
             Route::prefix('petty-cash')->group(function () {
                 Route::get('/', 'FormPettyCashController@index')->name('getAllFormPettyCash');
                 Route::post('/', 'FormPettyCashController@store')->name('storePettyCash');
                 Route::get('/count', 'FormPettyCashController@countFormPettyCash')->name('countFormPettyCash');
-                Route::get('/{id}', 'FormPettyCashController@show')->name('getFormPettyCashDetail');
-                Route::post('/{id}', 'FormPettyCashController@update')->name('updateFormPettyCash');
-                Route::delete('/{id}', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');
-
+                Route::get('/{id}', 'FormPettyCashController@show')->where('id', '[0-9]+')->name('getFormPettyCashDetail');
+                Route::post('/{id}', 'FormPettyCashController@update')->where('id', '[0-9]+')->name('updateFormPettyCash');
+                Route::delete('/{id}', 'FormPettyCashController@destroy')->where('id', '[0-9]+')->name('deleteFormPettyCash');
+                Route::get('/export', 'FormPettyCashController@exportExcel');
+    
                 // Form PettyCash Detail
                 Route::prefix('/{pettyCashId}/detail')->group(function () {
                     Route::get('/', 'FormPettyCashDetailController@index')->name('getAllPettyCashDetail');
@@ -81,7 +83,7 @@ Route::prefix('v1')->group(function () {
                 });
             });
         });
-
+    
         Route::prefix('budget-code')->group(function () {
             Route::get('/', 'BudgetCodeController@index')->name('getAllBudgetCode');
             Route::post('/', 'BudgetCodeController@store')->name('storeBudgetCode');
@@ -94,7 +96,6 @@ Route::prefix('v1')->group(function () {
                 Route::delete('/', 'BudgetCodeController@destroy');
             });
         });
-
 
         // Admin Side
         Route::group(['middleware' => ['role:admin']], function () {
