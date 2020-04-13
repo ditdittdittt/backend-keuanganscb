@@ -21,7 +21,7 @@ class FormRequestController extends Controller
     {
         try {
             $formRequests = FormRequest::all();
-            $formRequests->load('user');
+            $formRequests->load('user', 'status');
             return ReturnGoodWay::successReturn(
                 $formRequests,
                 $this->modelName,
@@ -39,7 +39,7 @@ class FormRequestController extends Controller
     {
         try {
             $formRequest = FormRequest::findOrFail($id);
-            $formRequest->load('user');
+            $formRequest->load('user', 'status');
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,

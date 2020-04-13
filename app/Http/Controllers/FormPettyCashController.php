@@ -19,7 +19,7 @@ class FormPettyCashController extends Controller
     {
         try {
             $formPettyCashes = FormPettyCash::all();
-            $formPettyCashes->load(['user', 'details', 'details.budgetCode']);
+            $formPettyCashes->load(['user', 'details', 'details.budgetCode', 'status']);
             return ReturnGoodWay::successReturn(
                 $formPettyCashes,
                 $this->modelName,
@@ -36,7 +36,7 @@ class FormPettyCashController extends Controller
     public function show($id)
     {
         try {
-            $formPettyCash = FormPettyCash::with(['details', 'user', 'details.budgetCode'])->findOrFail($id);
+            $formPettyCash = FormPettyCash::with(['details', 'user', 'details.budgetCode', 'status'])->findOrFail($id);
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
                 $this->modelName,
