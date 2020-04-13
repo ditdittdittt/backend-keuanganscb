@@ -21,7 +21,7 @@ class FormPettyCashDetailController extends Controller
         try {
             $formPettyCash = FormPettyCash::findOrFail($pettyCashId);
             return ReturnGoodWay::successReturn(
-                $formPettyCash->detail,
+                $formPettyCash->details,
                 $this->modelName,
                 "List of all form petty cash " . $pettyCashId . " detail",
                 'success'
@@ -37,7 +37,7 @@ class FormPettyCashDetailController extends Controller
     {
         try {
             $formPettyCash = FormPettyCash::findOrFail($pettyCashId);
-            $formPettyCashDetail = $formPettyCash->detail->where('id', $id)->first();
+            $formPettyCashDetail = $formPettyCash->details->where('id', $id)->first();
             $formPettyCashDetail->load('budgetCode');
             return ReturnGoodWay::successReturn(
                 $formPettyCashDetail,
