@@ -120,9 +120,12 @@ class FormRequestController extends Controller
             if ($request->bank_code) $formRequest->bank_code = $request->bank_code;
             if ($request->account_number) $formRequest->account_number = $request->account_number;
             if ($request->account_owner) $formRequest->account_owner = $request->account_owner;
-            if ($request->is_paid) $formRequest->is_paid = $request->is_paid;
+            if ($request->status_id) $formRequest->status_id = $request->status_id;
             if ($request->budget_code_id) $formRequest->budget_code_id = $request->budget_code_id;
             $formRequest->save();
+            if ($formRequest->is_confirmed_verificator && $formRequest->is_confirmed_head_dept && $formRequest->is_confirmed_pic && $formRequest->is_confirmed_cashier) {
+                $formRequest->status_id = 2;
+            }
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,
