@@ -29,4 +29,9 @@ class FormRequest extends Model
     {
         return $this->belongsTo(FormStatus::class);
     }
+
+    public function budgetCode()
+    {
+        return $this->belongsTo(BudgetCode::class);
+    }
 }

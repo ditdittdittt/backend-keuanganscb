@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
+use App\Exceptions\RelationDoesntMatchParentException;
 use App\FormPettyCash;
 use App\FormPettyCashDetail;
 use App\Http\Requests\ValidateFormPettyCashDetail;
@@ -16,14 +17,13 @@ class FormPettyCashDetailController extends Controller
     private $modelName = 'Form_Petty_Cash_Detail';
 
     // Get All
-    public function index($pettyCashId)
+    public function index(FormPettyCash $formPettyCash)
     {
         try {
-            $formPettyCash = FormPettyCash::findOrFail($pettyCashId);
             return ReturnGoodWay::successReturn(
                 $formPettyCash->details,
                 $this->modelName,
-                "List of all form petty cash " . $pettyCashId . " detail",
+                "List of all form petty cash " . $formPettyCash->id . " details",
                 'success'
             );
         } catch (Exception $err) {
@@ -33,11 +33,12 @@ class FormPettyCashDetailController extends Controller
     }
 
     // Detail one model
-    public function show($pettyCashId, $id)
+    public function show(FormPettyCash $formPettyCash, FormPettyCashDetail $formPettyCashDetail)
     {
         try {
-            $formPettyCash = FormPettyCash::findOrFail($pettyCashId);
-            $formPettyCashDetail = $formPettyCash->details->where('id', $id)->first();
+            if ($formPettyCashDetail->form_petty_cash_id != $formPettyCash->id) {
+                throw new ModelNotFoundException();
+            };
             $formPettyCashDetail->load('budgetCode');
             return ReturnGoodWay::successReturn(
                 $formPettyCashDetail,
@@ -52,17 +53,14 @@ class FormPettyCashDetailController extends Controller
     }
 
     // Create new
-    public function store($pettyCashId, ValidateFormPettyCashDetail $request)
+    public function store(FormPettyCash $formPettyCash, ValidateFormPettyCashDetail $request)
     {
         try {
             $formPettyCashDetail = new FormPettyCashDetail();
-            $formPettyCashDetail->form_petty_cash_id = $pettyCashId;
-            foreach ($request->input() as $key => $value) {
-                $formPettyCashDetail->$key = $value;
-            }
-            // $formPettyCashDetail->budget_code = $request->input('budget_code');
-            // $formPettyCashDetail->budget_name = $request->input('budget_name');
-            // $formPettyCashDetail->nominal = $request->input('nominal');
+            $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
+            $formPettyCashDetail->budget_code = $request->input('budget_code');
+            $formPettyCashDetail->budget_name = $request->input('budget_name');
+            $formPettyCashDetail->nominal = $request->input('nominal');
             $formPettyCashDetail->save();
             return ReturnGoodWay::successReturn(
                 $formPettyCashDetail,
@@ -77,23 +75,17 @@ class FormPettyCashDetailController extends Controller
     }
 
     // Update existing model
-    public function update($pettyCashId, $id, ValidateFormPettyCashDetail $request)
+    public function update(FormPettyCash $formPettyCash, FormPettyCashDetail $formPettyCashDetail, ValidateFormPettyCashDetail $request)
     {
-
         try {
-            $form_petty_cash_detail = FormPettyCashDetail::findOrFail($id);
-            foreach ($request->input() as $key => $value) {
-                $form_petty_cash_detail->$key = $value;
-            }
-            // $form_petty_cash_detail->form_petty_cash_id = $request['form_petty_cash_id'];
-            // $form_petty_cash_detail->budget_code = $request['budget_code'];
-            // $form_petty_cash_detail->budget_name = $request['budget_name'];
-            // $form_petty_cash_detail->nominal = $request['nominal'];
-            $form_petty_cash_detail->save();
+            $formPettyCashDetail->budget_code = $request['budget_code'];
+            $formPettyCashDetail->budget_name = $request['budget_name'];
+            $formPettyCashDetail->nominal = $request['nominal'];
+            $formPettyCashDetail->save();
             return ReturnGoodWay::successReturn(
-                $form_petty_cash_detail,
+                $formPettyCashDetail,
                 $this->modelName,
-                $this->modelName . " with id " . $form_petty_cash_detail->id . " has been updated",
+                $this->modelName . " with id " . $formPettyCashDetail->id . " has been updated",
                 'success'
             );
         } catch (Exception $err) {
@@ -103,16 +95,15 @@ class FormPettyCashDetailController extends Controller
     }
 
     // Delete one model
-    public function destroy($pettyCashId, $id, Request $request)
+    public function destroy(FormPettyCash $formPettyCash, FormPettyCashDetail $formPettyCashDetail, Request $request)
     {
         $hidden = array('created_at', 'form_petty_cash_id', 'updated_at', 'user_id');
         try {
-            $form_petty_cash_detail = FormPettyCashDetail::findOrFail($id);
-            $form_petty_cash_detail->delete();
+            $formPettyCashDetail->delete();
             return ReturnGoodWay::successReturn(
-                $form_petty_cash_detail->makeHidden($hidden),
+                $formPettyCashDetail->makeHidden($hidden),
                 $this->modelName,
-                $this->modelName . " with id " . $form_petty_cash_detail->id . " has been deleted",
+                $this->modelName . " with id " . $formPettyCashDetail->id . " has been deleted",
                 'success'
             );
         } catch (Exception $err) {

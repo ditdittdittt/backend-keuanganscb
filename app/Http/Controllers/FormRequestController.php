@@ -23,7 +23,7 @@ class FormRequestController extends Controller
     {
         try {
             $formRequests = FormRequest::all();
-            $formRequests->load('user', 'status');
+            $formRequests->load('user', 'status', 'budgetCode');
             return ReturnGoodWay::successReturn(
                 $formRequests,
                 $this->modelName,
@@ -37,11 +37,10 @@ class FormRequestController extends Controller
     }
 
     // Detail one model
-    public function show($id)
+    public function show(FormRequest $formRequest)
     {
         try {
-            $formRequest = FormRequest::findOrFail($id);
-            $formRequest->load('user', 'status');
+            $formRequest->load('user', 'status', 'budgetCode');
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,
@@ -64,6 +63,7 @@ class FormRequestController extends Controller
             $formRequest->method = $request->method;
             $formRequest->allocation = $request->allocation;
             $formRequest->amount = $request->amount;
+            $formRequest->budget_code_id = $request->budget_code_id;
             if ($request->hasFile('attachment')) {
                 $uploadHelper = new UploadHelper(
                     $this->modelName,
@@ -95,11 +95,10 @@ class FormRequestController extends Controller
     }
 
     // Update existing model
-    public function update($id, Request $request)
+    public function update(FormRequest $formRequest, Request $request)
     {
 
         try {
-            $formRequest = FormRequest::findOrFail($id);
             if ($request->user_id) $formRequest->user_id = $request->user_id;
             if ($request->date) $formRequest->date = $request->date;
             if ($request->method) $formRequest->method = $request->method;
@@ -122,6 +121,7 @@ class FormRequestController extends Controller
             if ($request->account_number) $formRequest->account_number = $request->account_number;
             if ($request->account_owner) $formRequest->account_owner = $request->account_owner;
             if ($request->is_paid) $formRequest->is_paid = $request->is_paid;
+            if ($request->budget_code_id) $formRequest->budget_code_id = $request->budget_code_id;
             $formRequest->save();
             return ReturnGoodWay::successReturn(
                 $formRequest,
@@ -136,12 +136,11 @@ class FormRequestController extends Controller
     }
 
     // Delete one model
-    public function destroy($id)
+    public function destroy(FormRequest $formRequest)
     {
         $hidden = array('is_confirmed_pic', 'is_confirmed_verificator', 'is_confirmed_head_dept', 'is_confirmed_cashier', 'user_id', 'method', 'attachment', 'notes');
 
         try {
-            $formRequest = FormRequest::findOrFail($id);
             $formRequest->delete();
             return ReturnGoodWay::successReturn(
                 $formRequest->makeHidden($hidden),

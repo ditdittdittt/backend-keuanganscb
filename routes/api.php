@@ -35,7 +35,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/email/verify/{id}/{hash}', 'VerificationController@verify')->name('verification.verify');
     Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail');
     Route::post('/password/reset', 'ResetPasswordController@reset');
-    
+
 
     // Authenticate First
     Route::group(['middleware' => 'auth:api'], function () {
@@ -46,44 +46,64 @@ Route::prefix('v1')->group(function () {
             Route::prefix('request')->group(function () {
                 Route::get('/', 'FormRequestController@index')->name('getAllFormRequests');
                 Route::post('/', 'FormRequestController@store')->name('storeFormRequest');
-                Route::get('/{id}', 'FormRequestController@show')->where('id', '[0-9]+')->name('showFormRequest');
-                Route::post('/{id}', 'FormRequestController@update')->where('id', '[0-9]+')->name('updateFormRequest');
-                Route::delete('/{id}', 'FormRequestController@destroy')->where('id', '[0-9]+')->name('deleteFormRequest');
+                Route::group([
+                    'prefix' => '{formRequest}',
+                    'where' => ['{formRequest}' => '[0-9]+']
+                ], function () {
+                    Route::get('/', 'FormRequestController@show')->name('showFormRequest');
+                    Route::post('/', 'FormRequestController@update')->name('updateFormRequest');
+                    Route::delete('/', 'FormRequestController@destroy')->name('deleteFormRequest');
+                });
                 Route::get('/count', 'FormRequestController@countRequestForm')->name('getCountFormRequests');
                 Route::get('/export', 'FormRequestController@exportExcel');
             });
-    
+
             // Form Submission
             Route::prefix('submission')->group(function () {
                 Route::get('/', 'FormSubmissionController@index')->name('getAllFormSubmission');
                 Route::post('/', 'FormSubmissionController@store')->name('storeFormSubmission');
-                Route::get('/{id}', 'FormSubmissionController@show')->where('id', '[0-9]+')->name('getFormSubmissionDetail');
-                Route::post('/{id}', 'FormSubmissionController@update')->where('id', '[0-9]+')->name('updateFormSubmission');
-                Route::delete('/{id}', 'FormSubmissionController@delete')->where('id', '[0-9]+')->name('deleteFormSubmission');
+                Route::group([
+                    'prefix' => '{formSubmission}',
+                    'where' => ['{formSubmission}' => '[0-9]+']
+                ], function () {
+                    Route::get('/', 'FormSubmissionController@show')->name('getFormSubmissionDetail');
+                    Route::post('/', 'FormSubmissionController@update')->name('updateFormSubmission');
+                    Route::delete('/', 'FormSubmissionController@delete')->name('deleteFormSubmission');
+                });
                 Route::get('/count', 'FormSubmissionController@countSubmissionForm')->name('getCountFormSubmission');
             });
-    
+
             // Form PettyCash Header
             Route::prefix('petty-cash')->group(function () {
-                Route::get('/', 'FormPettyCashController@index')->name('getAllFormPettyCash');
+                Route::get('/', 'FormPettyCashController@index')->name('getAllFormPettyCashes');
                 Route::post('/', 'FormPettyCashController@store')->name('storePettyCash');
                 Route::get('/count', 'FormPettyCashController@countFormPettyCash')->name('countFormPettyCash');
-                Route::get('/{id}', 'FormPettyCashController@show')->where('id', '[0-9]+')->name('getFormPettyCashDetail');
-                Route::post('/{id}', 'FormPettyCashController@update')->where('id', '[0-9]+')->name('updateFormPettyCash');
-                Route::delete('/{id}', 'FormPettyCashController@destroy')->where('id', '[0-9]+')->name('deleteFormPettyCash');
-                Route::get('/export', 'FormPettyCashController@exportExcel');
-    
-                // Form PettyCash Detail
-                Route::prefix('/{pettyCashId}/detail')->group(function () {
-                    Route::get('/', 'FormPettyCashDetailController@index')->name('getAllPettyCashDetail');
-                    Route::post('/', 'FormPettyCashDetailController@store')->name('storePettyCashDetail');
-                    Route::get('/{id}', 'FormPettyCashDetailController@show')->where('id', '[0-9]+')->name('getPettyCashDetail');
-                    Route::post('/{id}', 'FormPettyCashDetailController@update')->where('id', '[0-9]+')->name('updatePettyCashDetail');
-                    Route::delete('/{id}', 'FormPettyCashDetailController@destroy')->where('id', '[0-9]+')->name('deletePettyCashDetail');
+                Route::group([
+                    'prefix' => '{formPettyCash}',
+                    'where' => ['{formPettyCash}' => '[0-9]+']
+                ], function () {
+                    Route::get('/', 'FormPettyCashController@show')->name('getFormPettyCash');
+                    Route::post('/', 'FormPettyCashController@update')->name('updateFormPettyCash');
+                    Route::delete('/', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');
+
+                    // Form PettyCash Detail
+                    Route::prefix('/detail')->group(function () {
+                        Route::get('/', 'FormPettyCashDetailController@index')->name('getAllPettyCashDetails');
+                        Route::post('/', 'FormPettyCashDetailController@store')->name('storePettyCashDetail');
+                        Route::group([
+                            'prefix' => '{formPettyCashDetail}',
+                            'where' => ['{formPettyCashDetail}' => '[0-9]+']
+                        ], function () {
+                            Route::get('/', 'FormPettyCashDetailController@show')->name('getPettyCashDetail');
+                            Route::post('/', 'FormPettyCashDetailController@update')->name('updatePettyCashDetail');
+                            Route::delete('/', 'FormPettyCashDetailController@destroy')->name('deletePettyCashDetail');
+                        });
+                    });
                 });
+                Route::get('/export', 'FormPettyCashController@exportExcel');
             });
         });
-    
+
         Route::prefix('budget-code')->group(function () {
             Route::get('/', 'BudgetCodeController@index')->name('getAllBudgetCode');
             Route::post('/', 'BudgetCodeController@store')->name('storeBudgetCode');

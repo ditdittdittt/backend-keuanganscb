@@ -35,10 +35,10 @@ class FormPettyCashController extends Controller
     }
 
     // Detail one model
-    public function show($id)
+    public function show(FormPettyCash $formPettyCash)
     {
         try {
-            $formPettyCash = FormPettyCash::with(['details', 'user', 'details.budgetCode', 'status'])->findOrFail($id);
+            $formPettyCash->load(['details', 'user', 'details.budgetCode', 'status']);
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
                 $this->modelName,
@@ -93,14 +93,9 @@ class FormPettyCashController extends Controller
     }
 
     // Update existing model
-    public function update($id, ValidateFormPettyCash $request)
+    public function update(FormPettyCash $formPettyCash, ValidateFormPettyCash $request)
     {
-
         try {
-            $formPettyCash = FormPettyCash::findOrFail($id);
-            // foreach ($request->input() as $key => $value) {
-            //     $formPettyCash->$key = $value;
-            // }
             if ($request->input('user_id')) {
                 $formPettyCash->user_id = $request->input('user_id');
             }
@@ -143,12 +138,11 @@ class FormPettyCashController extends Controller
     }
 
     // Delete one model
-    public function destroy($id, Request $request)
+    public function destroy(FormPettyCash $formPettyCash, Request $request)
     {
         $hidden = array('is_confirmed_pic', 'is_confirmed_manager_ops', 'is_confirmed_cashier', 'user_id');
 
         try {
-            $formPettyCash = FormPettyCash::findOrFail($id);
             $formPettyCash->delete();
             return ReturnGoodWay::successReturn(
                 $formPettyCash->makeHidden($hidden),
