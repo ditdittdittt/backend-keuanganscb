@@ -120,6 +120,9 @@ class FormPettyCashController extends Controller
             if ($request->input('is_paid')) {
                 $formPettyCash->is_paid = $request->input('is_paid');
             }
+            if ($request->input('status_id')) {
+                $formPettyCash->status_id = $request->input('status_id');
+            }
             $formPettyCash->save();
             if (
                 $formPettyCash->is_confirmed_pic && $formPettyCash->is_confirmed_manager_ops && $formPettyCash->is_confirmed_cashier &&

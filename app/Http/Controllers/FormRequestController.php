@@ -130,7 +130,6 @@ class FormRequestController extends Controller
             if (!is_null($request->is_confirmed_cashier)) $formRequest->is_confirmed_cashier = $request->is_confirmed_cashier;
             if ($request->status_id) $formRequest->status_id = $request->status_id;
             if ($request->budget_code_id) $formRequest->budget_code_id = $request->budget_code_id;
-
             $formRequest->save();
             if (
                 $formRequest->is_confirmed_verificator && $formRequest->is_confirmed_head_dept &&
@@ -139,8 +138,6 @@ class FormRequestController extends Controller
                 ($formRequest->status_id == 1)
             ) {
                 $formRequest->status_id = 2;
-            } else {
-                $formRequest->status_id = 1;
             }
             $formRequest->save();
             return ReturnGoodWay::successReturn(
