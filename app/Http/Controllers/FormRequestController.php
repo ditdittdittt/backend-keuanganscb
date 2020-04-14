@@ -124,17 +124,20 @@ class FormRequestController extends Controller
                 $formRequest->attachment = null;
             }
             if ($request->notes) $formRequest->notes = $request->notes;
-            if ($request->is_confirmed_pic) $formRequest->is_confirmed_pic = $request->is_confirmed_pic;
-            if ($request->is_confirmed_verificator) $formRequest->is_confirmed_verificator = $request->is_confirmed_verificator;
-            if ($request->is_confirmed_head_dept) $formRequest->is_confirmed_head_dept = $request->is_confirmed_head_dept;
-            if ($request->is_confirmed_cashier) $formRequest->is_confirmed_cashier = $request->is_confirmed_cashier;
+            if (!is_null($request->is_confirmed_pic)) $formRequest->is_confirmed_pic = $request->is_confirmed_pic;
+            if (!is_null($request->is_confirmed_verificator)) $formRequest->is_confirmed_verificator = $request->is_confirmed_verificator;
+            if (!is_null($request->is_confirmed_head_dept)) $formRequest->is_confirmed_head_dept = $request->is_confirmed_head_dept;
+            if (!is_null($request->is_confirmed_cashier)) $formRequest->is_confirmed_cashier = $request->is_confirmed_cashier;
             if ($request->status_id) $formRequest->status_id = $request->status_id;
             if ($request->budget_code_id) $formRequest->budget_code_id = $request->budget_code_id;
 
             $formRequest->save();
             if ($formRequest->is_confirmed_verificator && $formRequest->is_confirmed_head_dept && $formRequest->is_confirmed_pic && $formRequest->is_confirmed_cashier) {
                 $formRequest->status_id = 2;
+            } else {
+                $formRequest->status_id = 1;
             }
+            $formRequest->save();
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,
