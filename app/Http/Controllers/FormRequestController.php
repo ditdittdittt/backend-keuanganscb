@@ -132,7 +132,12 @@ class FormRequestController extends Controller
             if ($request->budget_code_id) $formRequest->budget_code_id = $request->budget_code_id;
 
             $formRequest->save();
-            if ($formRequest->is_confirmed_verificator && $formRequest->is_confirmed_head_dept && $formRequest->is_confirmed_pic && $formRequest->is_confirmed_cashier) {
+            if (
+                $formRequest->is_confirmed_verificator && $formRequest->is_confirmed_head_dept &&
+                $formRequest->is_confirmed_pic &&
+                $formRequest->is_confirmed_cashier &&
+                ($formRequest->status_id == 1)
+            ) {
                 $formRequest->status_id = 2;
             } else {
                 $formRequest->status_id = 1;
@@ -177,12 +182,30 @@ class FormRequestController extends Controller
     }
 
     // Print PDF
-    public function printPdf()
+    public function exportPdf(Request $request)
     {
-        $formRequests = FormRequest::orderBy('date', 'DESC')->get();
+        switch ($request->frequency) {
+            case 'monthly':
+                $formRequests = FormRequest::whereYear('date', $request->year)->whereMonth('date', $request->month)->orderBy('date', 'DESC')->get();
+                break;
+
+            case 'daily':
+                $formRequests = FormRequest::whereDate('date', $request->date)->orderBy('date', 'DESC')->get();
+                break;
+
+            default:
+                $formRequests = FormRequest::orderBy('date', 'DESC')->get();
+                break;
+        }
         $formRequests->load('user');
-        // return response()->json($formRequests);
-        $pdf = PDF::loadview('pdf.form_requests', ['formRequests' => $formRequests])->setPaper('a4', 'landscape');;
+        $pdf = PDF::loadview('pdf.form_requests', ['formRequests' => $formRequests])->setPaper('a4', 'landscape');
+        return $pdf->stream();
+    }
+
+    public function exportSinglePdf(FormRequest $formRequest)
+    {
+        $formRequest->with('user', 'budgetCode');
+        $pdf = PDF::loadview('pdf.form_request_single', ['formRequest' => $formRequest])->setPaper('a4', 'landscape');
         return $pdf->stream();
     }
 
