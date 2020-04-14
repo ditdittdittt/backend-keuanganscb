@@ -102,6 +102,18 @@ class FormRequestController extends Controller
             if ($request->user_id) $formRequest->user_id = $request->user_id;
             if ($request->date) $formRequest->date = $request->date;
             if ($request->method) $formRequest->method = $request->method;
+            // Based on method
+            if ($request->method == "Transfer") {
+                $formRequest->bank_name = $request->bank_name;
+                $formRequest->bank_code = $request->bank_code;
+                $formRequest->account_number = $request->account_number;
+                $formRequest->account_owner = $request->account_owner;
+            } else {
+                $formRequest->bank_name = null;
+                $formRequest->bank_code = null;
+                $formRequest->account_number = null;
+                $formRequest->account_owner = null;
+            }
             if ($request->allocation) $formRequest->allocation = $request->allocation;
             if ($request->amount) $formRequest->amount = $request->amount;
             if ($request->file('attachment') != null) {
@@ -116,12 +128,9 @@ class FormRequestController extends Controller
             if ($request->is_confirmed_verificator) $formRequest->is_confirmed_verificator = $request->is_confirmed_verificator;
             if ($request->is_confirmed_head_dept) $formRequest->is_confirmed_head_dept = $request->is_confirmed_head_dept;
             if ($request->is_confirmed_cashier) $formRequest->is_confirmed_cashier = $request->is_confirmed_cashier;
-            if ($request->bank_name) $formRequest->bank_name = $request->bank_name;
-            if ($request->bank_code) $formRequest->bank_code = $request->bank_code;
-            if ($request->account_number) $formRequest->account_number = $request->account_number;
-            if ($request->account_owner) $formRequest->account_owner = $request->account_owner;
             if ($request->status_id) $formRequest->status_id = $request->status_id;
             if ($request->budget_code_id) $formRequest->budget_code_id = $request->budget_code_id;
+
             $formRequest->save();
             if ($formRequest->is_confirmed_verificator && $formRequest->is_confirmed_head_dept && $formRequest->is_confirmed_pic && $formRequest->is_confirmed_cashier) {
                 $formRequest->status_id = 2;
