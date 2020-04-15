@@ -108,7 +108,7 @@ class FormRequestController extends Controller
                 $formRequest->bank_code = $request->bank_code;
                 $formRequest->account_number = $request->account_number;
                 $formRequest->account_owner = $request->account_owner;
-            } else {
+            } else if ($request->method == "cash") {
                 $formRequest->bank_name = null;
                 $formRequest->bank_code = null;
                 $formRequest->account_number = null;
