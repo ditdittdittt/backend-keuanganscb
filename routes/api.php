@@ -36,6 +36,14 @@ Route::prefix('v1')->group(function () {
     Route::post('/password/email', 'ForgotPasswordController@sendResetLinkEmail');
     Route::post('/password/reset', 'ResetPasswordController@reset');
 
+    Route::prefix('form')->group(function () {
+        Route::prefix('request')->group(function () {
+            Route::prefix('/export')->group(function () {
+                Route::get('/excel', 'FormRequestController@exportExcel');
+                Route::get('/pdf', 'FormRequestController@exportPdf');
+            });
+        });
+    });
 
     // Authenticate First
     Route::group(['middleware' => 'auth:api'], function () {
@@ -56,10 +64,10 @@ Route::prefix('v1')->group(function () {
                     Route::get('/pdf', 'FormRequestController@exportSinglePdf')->name('exportSingleFormRequestPdf');
                 });
                 Route::get('/count', 'FormRequestController@countRequestForm')->name('getCountFormRequests');
-                Route::prefix('/export', function () {
-                    Route::get('/excel', 'FormRequestController@exportExcel');
-                    Route::get('/pdf', 'FormRequestController@exportPdf');
-                });
+//                Route::prefix('/export', function () {
+//                    Route::get('/excel', 'FormRequestController@exportExcel');
+//                    Route::get('/pdf', 'FormRequestController@exportPdf');
+//                });
             });
 
             // Form Submission
