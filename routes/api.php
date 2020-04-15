@@ -161,5 +161,8 @@ Route::prefix('print-pdf/form')->group(function () {
         Route::get('/', 'FormRequestController@exportPdf')->name('printPdfFormRequest');
         Route::get('/{formRequest}', 'FormRequestController@exportSinglePdf')->name('exportSingleFormRequestPdf');
     });
-    Route::get('/petty-cash', 'FormPettyCashController@printPdf')->name('printPdfFormPettyCash');
+    Route::prefix('/petty-cash')->group(function () {
+        Route::get('/', 'FormPettyCashController@exportPdf')->name('printPdfFormPettyCash');
+        Route::get('/{formRequest}', 'FormPettyCashController@exportSinglePdf')->name('exportSingleFormPettyCashPdf');
+    });
 });

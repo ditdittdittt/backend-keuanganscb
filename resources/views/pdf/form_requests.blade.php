@@ -22,11 +22,12 @@
         <thead>
             <tr class='table-success'>
                 <th>No</th>
-                <th>Nama</th>
+                <th>Nama PIC</th>
                 <th>Alokasi</th>
                 <th>Jumlah</th>
                 <th>Tanggal</th>
                 <th>Catatan</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
@@ -36,9 +37,10 @@
                 <td>{{ $i++ }}</td>
                 <td>{{$formRequest->user->name}}</td>
                 <td>{{$formRequest->allocation}}</td>
-                <td>{{$formRequest->amount}}</td>
+                <td>{{"Rp. " . number_format($formRequest->amount, 2)}}</td>
                 <td>{{$formRequest->date}}</td>
                 <td>{{$formRequest->notes}}</td>
+                <td>{{$formRequest->status->status}}</td>
             </tr>
             @endforeach
         </tbody>

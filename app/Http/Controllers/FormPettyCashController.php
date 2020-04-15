@@ -8,6 +8,7 @@ use App\Exports\FormPettyCashExport;
 use App\FormPettyCash;
 use App\FormPettyCashDetail;
 use App\Http\Requests\ValidateFormPettyCash;
+use PDF;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -199,5 +200,26 @@ class FormPettyCashController extends Controller
     public function exportExcel()
     {
         return Excel::download(new FormPettyCashExport, 'formpettycash.xlsx');
+    }
+
+    public function exportPdf(Request $request)
+    {
+        switch ($request->frequency) {
+            case 'monthly':
+                $formPettyCashes = FormPettyCash::whereYear('date', $request->year)->whereMonth('date', $request->month)->orderBy('date', 'DESC')->get();
+                break;
+
+            case 'daily':
+                $formPettyCashes = FormPettyCash::whereDate('date', $request->date)->orderBy('date', 'DESC')->get();
+                break;
+
+            default:
+                $formPettyCashes = FormPettyCash::orderBy('date', 'DESC')->get();
+                break;
+        }
+        $formPettyCashes->load('user', 'details', 'status');
+        // return response()->json($formPettyCashes);
+        $pdf = PDF::loadview('pdf.form_petty_cashes', ['formPettyCashes' => $formPettyCashes])->setPaper('a4', 'landscape');
+        return $pdf->stream();
     }
 }
