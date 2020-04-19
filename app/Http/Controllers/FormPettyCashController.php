@@ -222,4 +222,16 @@ class FormPettyCashController extends Controller
         $pdf = PDF::loadview('pdf.form_petty_cashes', ['formPettyCashes' => $formPettyCashes])->setPaper('a4', 'landscape');
         return $pdf->stream();
     }
+
+    public function exportSinglePdf(FormPettyCash $formPettyCash)
+    {
+        $formPettyCash->load('user', 'details', 'details.budgetCode');
+        $pdf = PDF::loadview(
+            'pdf.form_petty_cash_single',
+            [
+                'formPettyCash' => $formPettyCash
+            ]
+        )->setPaper('a4', 'portrait');
+        return $pdf->stream();
+    }
 }

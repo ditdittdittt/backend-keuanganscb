@@ -9,6 +9,7 @@ use App\Exceptions\FileNotSupportedException;
 use App\Exports\FormRequestExport;
 use App\FormRequest;
 use App\Http\Requests\ValidateFormRequest;
+use Carbon\Carbon;
 use PDF;
 use Exception;
 use Illuminate\Http\Request;
@@ -182,6 +183,9 @@ class FormRequestController extends Controller
     public function exportPdf(Request $request)
     {
         switch ($request->frequency) {
+            case 'yearly':
+                $formRequests = FormRequest::whereYear('date', $request->year)->orderBy('date', 'DESC')->get();
+                break;
             case 'monthly':
                 $formRequests = FormRequest::whereYear('date', $request->year)->whereMonth('date', $request->month)->orderBy('date', 'DESC')->get();
                 break;
@@ -195,14 +199,23 @@ class FormRequestController extends Controller
                 break;
         }
         $formRequests->load('user');
-        $pdf = PDF::loadview('pdf.form_requests', ['formRequests' => $formRequests])->setPaper('a4', 'landscape');
+        if ($request->date) {
+            $request->date =  Carbon::parse($request->date)->translatedFormat('d F Y');
+        }
+        if ($request->frequency == 'monthly') {
+            $request->month = Carbon::createFromDate($request->year, $request->month, 1)->translatedFormat('F');
+        }
+        $pdf = PDF::loadview('pdf.form_requests', [
+            'formRequests' => $formRequests,
+            'request' => $request
+        ])->setPaper('a4', 'landscape');
         return $pdf->stream();
     }
 
     public function exportSinglePdf(FormRequest $formRequest)
     {
         $formRequest->with('user', 'budgetCode');
-        $pdf = PDF::loadview('pdf.form_request_single', ['formRequest' => $formRequest])->setPaper('a4', 'landscape');
+        $pdf = PDF::loadview('pdf.form_request_single', ['formRequest' => $formRequest])->setPaper('a4', 'portrait');
         return $pdf->stream();
     }
 
