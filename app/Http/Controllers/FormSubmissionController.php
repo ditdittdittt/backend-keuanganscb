@@ -19,6 +19,7 @@ class FormSubmissionController extends Controller
             $formSubmissions = FormSubmission::all();
             $formSubmissions->load('user');
             $formSubmissions->load('formRequest');
+            $formSubmissions->load('status');
             return ReturnGoodWay::successReturn(
                 $formSubmissions,
                 $this->modelName,
@@ -59,6 +60,7 @@ class FormSubmissionController extends Controller
         try {
             $formSubmission->load('user');
             $formSubmission->load('formRequest');
+            $formSubmission->load('status');
             return ReturnGoodWay::successReturn(
                 $formSubmission,
                 $this->modelName,
