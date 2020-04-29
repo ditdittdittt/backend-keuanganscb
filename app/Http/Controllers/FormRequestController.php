@@ -4,11 +4,9 @@ namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
-use App\AdditionalHelper\UploadHelper;
-use App\Exceptions\FileNotSupportedException;
 use App\Exports\FormRequestExport;
 use App\FormRequest;
-use App\Http\Requests\ValidateFormRequest;
+use App\Http\Requests\FormRequestRequest;
 use Carbon\Carbon;
 use PDF;
 use Exception;
@@ -55,33 +53,16 @@ class FormRequestController extends Controller
     }
 
     // Create new
-    public function store(ValidateFormRequest $request)
+    public function store(FormRequestRequest $request)
     {
         try {
             $formRequest = new FormRequest();
-            $formRequest->user_id = auth()->user()->id;
             $formRequest->date = $request->date;
             $formRequest->method = $request->method;
             $formRequest->allocation = $request->allocation;
             $formRequest->amount = $request->amount;
             $formRequest->budget_code_id = $request->budget_code_id;
-            if ($request->hasFile('attachment')) {
-                $uploadHelper = new UploadHelper(
-                    $this->modelName,
-                    $request->file('attachment'),
-                    uniqid(),
-                    'proposal'
-                );
-                $filePath = $uploadHelper->insertAttachment();
-                $formRequest->attachment = $filePath;
-            } else {
-                $formRequest->attachment = null;
-            }
             $formRequest->notes = $request->notes;
-            if ($request->bank_name) $formRequest->bank_name = $request->bank_name;
-            if ($request->bank_code) $formRequest->bank_code = $request->bank_code;
-            if ($request->account_number) $formRequest->account_number = $request->account_number;
-            if ($request->account_owner) $formRequest->account_owner = $request->account_owner;
             $formRequest->save();
             return ReturnGoodWay::successReturn(
                 $formRequest,
@@ -100,47 +81,7 @@ class FormRequestController extends Controller
     {
 
         try {
-            if ($request->user_id) $formRequest->user_id = $request->user_id;
-            if ($request->date) $formRequest->date = $request->date;
-            if ($request->method) $formRequest->method = $request->method;
-            // Based on method
-            if ($request->method == "Transfer") {
-                $formRequest->bank_name = $request->bank_name;
-                $formRequest->bank_code = $request->bank_code;
-                $formRequest->account_number = $request->account_number;
-                $formRequest->account_owner = $request->account_owner;
-            } else if ($request->method == "cash") {
-                $formRequest->bank_name = null;
-                $formRequest->bank_code = null;
-                $formRequest->account_number = null;
-                $formRequest->account_owner = null;
-            }
-            if ($request->allocation) $formRequest->allocation = $request->allocation;
-            if ($request->amount) $formRequest->amount = $request->amount;
-            if ($request->file('attachment') != null) {
-                $uploadHelper = new UploadHelper($this->modelName, $request->file('attachment'), uniqid(), 'proposal');
-                $filePath = $uploadHelper->insertAttachment();
-                $formRequest->attachment = $filePath;
-            } else {
-                $formRequest->attachment = null;
-            }
-            if ($request->notes) $formRequest->notes = $request->notes;
-            if (!is_null($request->is_confirmed_pic)) $formRequest->is_confirmed_pic = $request->is_confirmed_pic;
-            if (!is_null($request->is_confirmed_verificator)) $formRequest->is_confirmed_verificator = $request->is_confirmed_verificator;
-            if (!is_null($request->is_confirmed_head_dept)) $formRequest->is_confirmed_head_dept = $request->is_confirmed_head_dept;
-            if (!is_null($request->is_confirmed_cashier)) $formRequest->is_confirmed_cashier = $request->is_confirmed_cashier;
-            if ($request->status_id) $formRequest->status_id = $request->status_id;
-            if ($request->budget_code_id) $formRequest->budget_code_id = $request->budget_code_id;
-            $formRequest->save();
-            if (
-                $formRequest->is_confirmed_verificator && $formRequest->is_confirmed_head_dept &&
-                $formRequest->is_confirmed_pic &&
-                $formRequest->is_confirmed_cashier &&
-                ($formRequest->status_id == 1)
-            ) {
-                $formRequest->status_id = 2;
-            }
-            $formRequest->save();
+            $formRequest->update($request->all());
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,
@@ -176,7 +117,7 @@ class FormRequestController extends Controller
     public function countRequestForm()
     {
         $count = FormRequest::all()->count();
-        return response()->json(['jumlah_request_form' => $count]);
+        return response()->json(['form_request_count' => $count]);
     }
 
     // Print PDF
@@ -205,9 +146,13 @@ class FormRequestController extends Controller
         if ($request->frequency == 'monthly') {
             $request->month = Carbon::createFromDate($request->year, $request->month, 1)->translatedFormat('F');
         }
+
+        $totalAmount = $formRequests->sum('amount');
+
         $pdf = PDF::loadview('pdf.form_requests', [
             'formRequests' => $formRequests,
-            'request' => $request
+            'request' => $request,
+            'totalAmount' => $totalAmount
         ])->setPaper('a4', 'landscape');
         return $pdf->stream();
     }

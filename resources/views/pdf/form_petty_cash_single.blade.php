@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Form Petty Cash {{ $formPettyCash->id }}</title>
+    <title>Form Petty Cash {{ $formPettyCash->number }}</title>
     <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
     <style>
         .table th,
@@ -49,7 +49,7 @@
                     {{ $formPettyCash->date }}
                 </td>
                 <td class="align-middle">
-                    {{ $formPettyCash->id }}
+                    {{ $formPettyCash->number }}
                 </td>
             </tr>
         </tbody>

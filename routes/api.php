@@ -56,7 +56,6 @@ Route::prefix('v1')->group(function () {
                 Route::post('/', 'FormRequestController@store')->name('storeFormRequest');
                 Route::group([
                     'prefix' => '{formRequest}',
-                    'where' => ['{formRequest}' => '[0-9]+']
                 ], function () {
                     Route::get('/', 'FormRequestController@show')->name('showFormRequest');
                     Route::post('/', 'FormRequestController@update')->name('updateFormRequest');
@@ -64,10 +63,10 @@ Route::prefix('v1')->group(function () {
                     Route::get('/pdf', 'FormRequestController@exportSinglePdf')->name('exportSingleFormRequestPdf');
                 });
                 Route::get('/count', 'FormRequestController@countRequestForm')->name('getCountFormRequests');
-//                Route::prefix('/export', function () {
-//                    Route::get('/excel', 'FormRequestController@exportExcel');
-//                    Route::get('/pdf', 'FormRequestController@exportPdf');
-//                });
+                Route::prefix('/export', function () {
+                    Route::get('/excel', 'FormRequestController@exportExcel');
+                    Route::get('/pdf', 'FormRequestController@exportPdf');
+                });
             });
 
             // Form Submission
@@ -76,7 +75,6 @@ Route::prefix('v1')->group(function () {
                 Route::post('/', 'FormSubmissionController@store')->name('storeFormSubmission');
                 Route::group([
                     'prefix' => '{formSubmission}',
-                    'where' => ['{formSubmission}' => '[0-9]+']
                 ], function () {
                     Route::get('/', 'FormSubmissionController@show')->name('getFormSubmissionDetail');
                     Route::post('/', 'FormSubmissionController@update')->name('updateFormSubmission');
@@ -92,7 +90,6 @@ Route::prefix('v1')->group(function () {
                 Route::get('/count', 'FormPettyCashController@countFormPettyCash')->name('countFormPettyCash');
                 Route::group([
                     'prefix' => '{formPettyCash}',
-                    'where' => ['{formPettyCash}' => '[0-9]+']
                 ], function () {
                     Route::get('/', 'FormPettyCashController@show')->name('getFormPettyCash');
                     Route::post('/', 'FormPettyCashController@update')->name('updateFormPettyCash');
@@ -105,7 +102,6 @@ Route::prefix('v1')->group(function () {
                         Route::post('/', 'FormPettyCashDetailController@store')->name('storePettyCashDetail');
                         Route::group([
                             'prefix' => '{formPettyCashDetail}',
-                            'where' => ['{formPettyCashDetail}' => '[0-9]+']
                         ], function () {
                             Route::get('/', 'FormPettyCashDetailController@show')->name('getPettyCashDetail');
                             Route::post('/', 'FormPettyCashDetailController@update')->name('updatePettyCashDetail');

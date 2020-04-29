@@ -6,8 +6,8 @@ use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
 use App\Exports\FormPettyCashExport;
 use App\FormPettyCash;
-use App\FormPettyCashDetail;
-use App\Http\Requests\ValidateFormPettyCash;
+use App\Http\Requests\FormPettyCashRequest;
+use Carbon\Carbon;
 use PDF;
 use Exception;
 use Illuminate\Http\Request;
@@ -53,34 +53,14 @@ class FormPettyCashController extends Controller
     }
 
     // Create new
-    public function store(ValidateFormPettyCash $request)
+    public function store(FormPettyCashRequest $request)
     {
         try {
-            $arrayOfDetails = $request->details;
             $formPettyCash = new FormPettyCash();
-            $formPettyCash->user_id = auth()->user()->id;
             $formPettyCash->date = $request['date'];
             $formPettyCash->allocation = $request['allocation'];
             $formPettyCash->amount = $request['amount'];
             $formPettyCash->save();
-            foreach ($arrayOfDetails as $detail) {
-                $formPettyCashDetail = new FormPettyCashDetail();
-                $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
-                $formPettyCashDetail->budget_code_id = $detail['budget_code_id'];
-                $formPettyCashDetail->nominal = $detail['nominal'];
-                $formPettyCashDetail->save();
-            }
-            //            foreach ((array) $arrayOfDetails as $detail) {
-            //                $detailDecode = json_decode($detail);
-            //                foreach ((array) $detailDecode as $decoded){
-            //                    $formPettyCashDetail = new FormPettyCashDetail();
-            //                    $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
-            //                    $formPettyCashDetail->budget_code = $decoded->budget_code;
-            //                    $formPettyCashDetail->budget_name = $decoded->budget_name;
-            //                    $formPettyCashDetail->nominal = $decoded->nominal;
-            //                    $formPettyCashDetail->save();
-            //                }
-            //            }
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
                 $this->modelName,
@@ -94,44 +74,10 @@ class FormPettyCashController extends Controller
     }
 
     // Update existing model
-    public function update(FormPettyCash $formPettyCash, ValidateFormPettyCash $request)
+    public function update(FormPettyCash $formPettyCash, FormPettyCashRequest $request)
     {
         try {
-            if ($request->input('user_id')) {
-                $formPettyCash->user_id = $request->input('user_id');
-            }
-            if ($request->input('date')) {
-                $formPettyCash->date = $request->input('date');
-            }
-            if ($request->input('allocation')) {
-                $formPettyCash->allocation = $request->input('allocation');
-            }
-            if (!is_null($request->input('amount'))) {
-                $formPettyCash->amount = $request->input('amount');
-            }
-            if ($request->input('is_confirmed_pic')) {
-                $formPettyCash->is_confirmed_pic = $request->input('is_confirmed_pic');
-            }
-            if ($request->input('is_confirmed_manager_ops')) {
-                $formPettyCash->is_confirmed_manager_ops = $request->input('is_confirmed_manager_ops');
-            }
-            if ($request->input('is_confirmed_cashier')) {
-                $formPettyCash->is_confirmed_cashier = $request->input('is_confirmed_cashier');
-            }
-            if ($request->input('is_paid')) {
-                $formPettyCash->is_paid = $request->input('is_paid');
-            }
-            if ($request->input('status_id')) {
-                $formPettyCash->status_id = $request->input('status_id');
-            }
-            $formPettyCash->save();
-            if (
-                $formPettyCash->is_confirmed_pic && $formPettyCash->is_confirmed_manager_ops && $formPettyCash->is_confirmed_cashier &&
-                ($formPettyCash->status_id == 1)
-            ) {
-                $formPettyCash->status_id = 2;
-                $formPettyCash->save();
-            }
+            $formPettyCash->update($request->all());
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
                 $this->modelName,
@@ -182,14 +128,14 @@ class FormPettyCashController extends Controller
                 default:
                     $totalFormPettyCashes = FormPettyCash::all()->count();
                     return response()->json([
-                        'total' => $totalFormPettyCashes
+                        'form_petty_cash_count' => $totalFormPettyCashes
                     ], 200);
                     break;
             }
             return response()->json([
                 'condition' => $condition,
                 'date' => $date,
-                'total' => $totalFormPettyCashes
+                'form_petty_cash_count' => $totalFormPettyCashes
             ], 200);
         } catch (Exception $err) {
             $error = new SeparateException($err);
@@ -205,6 +151,10 @@ class FormPettyCashController extends Controller
     public function exportPdf(Request $request)
     {
         switch ($request->frequency) {
+            case 'yearly':
+                $formPettyCashes = FormPettyCash::whereYear('date', $request->year)->orderBy('date', 'DESC')->get();
+                break;
+
             case 'monthly':
                 $formPettyCashes = FormPettyCash::whereYear('date', $request->year)->whereMonth('date', $request->month)->orderBy('date', 'DESC')->get();
                 break;
@@ -217,9 +167,22 @@ class FormPettyCashController extends Controller
                 $formPettyCashes = FormPettyCash::orderBy('date', 'DESC')->get();
                 break;
         }
+
+        if ($request->date) {
+            $request->date =  Carbon::parse($request->date)->translatedFormat('d F Y');
+        }
+        if ($request->frequency == 'monthly') {
+            $request->month = Carbon::createFromDate($request->year, $request->month, 1)->translatedFormat('F');
+        }
+
         $formPettyCashes->load('user', 'details', 'status');
+        $total = $formPettyCashes->sum('amount');
         // return response()->json($formPettyCashes);
-        $pdf = PDF::loadview('pdf.form_petty_cashes', ['formPettyCashes' => $formPettyCashes])->setPaper('a4', 'landscape');
+        $pdf = PDF::loadview('pdf.form_petty_cashes', [
+            'formPettyCashes' => $formPettyCashes,
+            'request' => $request,
+            'total' => $total
+        ])->setPaper('a4', 'landscape');
         return $pdf->stream();
     }
 

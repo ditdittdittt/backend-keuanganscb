@@ -35,17 +35,12 @@ class FormSubmissionController extends Controller
     {
         try {
             $formSubmission = new FormSubmission();
-            $formSubmission->user_id = auth()->user()->id;
             $formSubmission->form_request_id = $request->input('form_request_id');
             $formSubmission->date = $request->input('date');
             $formSubmission->used = $request->input('used');
             $formSubmission->balance = $request->input('balance');
             $formSubmission->allocation = $request->input('allocation');
             $formSubmission->notes = $request->input('notes');
-            $formSubmission->is_confirmed_pic = false;
-            $formSubmission->is_confirmed_verificator = false;
-            $formSubmission->is_confirmed_head_dept = false;
-            $formSubmission->is_confirmed_head_office = false;
             $formSubmission->save();
             return ReturnGoodWay::successReturn(
                 $formSubmission,
@@ -79,25 +74,7 @@ class FormSubmissionController extends Controller
     public function update(FormSubmission $formSubmission, Request $request)
     {
         try {
-            $formSubmission->user_id = auth()->user()->id;
-            if ($request->input('date')) $formSubmission->date = $request->input('date');
-            if ($request->input('used')) $formSubmission->used = $request->input('used');
-            if ($request->input('balance')) $formSubmission->balance = $request->input('balance');
-            if ($request->input('allocation')) $formSubmission->allocation = $request->input('allocation');
-            if ($request->input('notes')) $formSubmission->notes = $request->input('notes');
-            if ($request->input('is_confirmed_pic')) {
-                $formSubmission->is_confirmed_pic = $request->input('is_confirmed_pic');
-            }
-            if ($request->input('is_confirmed_verificator')) {
-                $formSubmission->is_confirmed_verificator = $request->input('is_confirmed_verificator');
-            }
-            if ($request->input('is_confirmed_head_dept')) {
-                $formSubmission->is_confirmed_head_dept = $request->input('is_confirmed_head_dept');
-            }
-            if ($request->input('is_confirmed_head_office')) {
-                $formSubmission->is_confirmed_head_office = $request->input('is_confirmed_head_office');
-            }
-            $formSubmission->save();
+            $formSubmission->update($request->all());
             return ReturnGoodWay::successReturn(
                 $formSubmission,
                 $this->modelName,
@@ -143,6 +120,6 @@ class FormSubmissionController extends Controller
     public function countSubmissionForm()
     {
         $count = FormSubmission::all()->count();
-        return response()->json(['jumlah_submission_form' => $count]);
+        return response()->json(['form_submission_count' => $count]);
     }
 }

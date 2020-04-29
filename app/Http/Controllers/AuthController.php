@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
-use App\Http\Requests\ValidateUser;
+use App\Http\Requests\UserRequest;
 use App\User;
 use Carbon\Carbon;
 use Exception;
@@ -17,7 +17,7 @@ class AuthController extends Controller
     private $modelName = "User";
     public $successStatus = 200;
 
-    public function register(ValidateUser $request)
+    public function register(UserRequest $request)
     {
         try {
             $hashedPassword = Hash::make($request['password']);
@@ -61,8 +61,8 @@ class AuthController extends Controller
     public function getUser()
     {
         $user = auth()->user();
-//        $roles = User::find(auth()->user()->id)->getRoleNames();
-//        $user->roles = $roles;
+        //        $roles = User::find(auth()->user()->id)->getRoleNames();
+        //        $user->roles = $roles;
         // $user->roles;
         // $user->permissions;
         return response()->json(['success' => $user], $this->successStatus);

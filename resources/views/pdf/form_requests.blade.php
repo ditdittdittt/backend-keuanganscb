@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Daftar Form Pengajuan</title>
+    <title>Daftar Form Fund Request</title>
     <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
 </head>
 
@@ -14,7 +14,7 @@
                     <img src="{{ public_path('images/logo.png') }}" alt="" width="100">
                 </td>
                 <td class="text-center align-middle" style="padding : 0">
-                    <h1>Daftar Pengajuan Dana</h1>
+                    <h1>Daftar Form Fund Request</h1>
                     <h5>SMP Cendekia BAZNAS</h5>
                 </td>
                 <td width="200" class="text-center align-middle" style="padding : 0">
@@ -59,29 +59,25 @@
                 <th>No</th>
                 <th>Nama</th>
                 <th>Alokasi</th>
-                <th>Jumlah</th>
-                <th>Tanggal</th>
                 <th>Budget Code</th>
                 <th>Budget Name</th>
+                <th>Tanggal</th>
+                <th>Jumlah</th>
             </tr>
         </thead>
         <tbody>
             @php
             $i=1;
-            $total = 0;
             @endphp
             @foreach($formRequests as $formRequest)
-            @php
-            $total += $formRequest->amount;
-            @endphp
             <tr>
                 <td>{{ $i++ }}</td>
                 <td>{{$formRequest->user->name}}</td>
                 <td>{{$formRequest->allocation}}</td>
-                <td>{{"Rp. " . number_format($formRequest->amount, 2)}}</td>
-                <td>{{$formRequest->date}}</td>
                 <td>{{$formRequest->budgetCode->code}}</td>
                 <td>{{$formRequest->budgetCode->name}}</td>
+                <td>{{$formRequest->date}}</td>
+                <td>{{"Rp. " . number_format($formRequest->amount, 2)}}</td>
             </tr>
             @endforeach
             <tr>
@@ -89,7 +85,7 @@
                     Total
                 </td>
                 <td>
-                    {{"Rp. " . number_format($total, 2)}}
+                    {{"Rp. " . number_format($totalAmount, 2)}}
                 </td>
             </tr>
         </tbody>
