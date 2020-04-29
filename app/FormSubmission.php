@@ -30,4 +30,8 @@ class FormSubmission extends Model
     {
         return $this->belongsTo('App\FormRequest');
     }
+    public function status()
+    {
+        return $this->belongsTo(FormStatus::class);
+    }
 }
