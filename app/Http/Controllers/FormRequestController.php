@@ -63,7 +63,6 @@ class FormRequestController extends Controller
             $formRequest->amount = $request->amount;
             $formRequest->budget_code_id = $request->budget_code_id;
             $formRequest->notes = $request->notes;
-            $formRequest->user_id = auth()->user()->id;
             $formRequest->save();
             return ReturnGoodWay::successReturn(
                 $formRequest,

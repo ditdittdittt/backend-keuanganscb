@@ -16,16 +16,16 @@ class FormRequestObserver
         $this->request = $request;
     }
 
-    /** 
+    /**
      * Handle the form request "creating" event.
-     * 
+     *
      * @param \App\FormRequest $formRequest
      * @return void
      */
     public function creating(FormRequest $formRequest)
     {
         // User Id based on who's login
-        // $formRequest->user_id = auth()->user()->id;
+         $formRequest->user_id = auth()->user()->id;
 
         // Attachment file
         if ($this->request->hasFile('attachment')) {
