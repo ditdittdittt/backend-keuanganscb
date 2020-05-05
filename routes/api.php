@@ -149,6 +149,8 @@ Route::prefix('v1')->group(function () {
             });
         });
     });
+    Route::get('/roles', 'RoleAndPermissionController@getAllRoles')->name('getAllRoles');
+
 
     Route::prefix('export')->group(function () {
         Route::prefix('form-request')->group(function () {
