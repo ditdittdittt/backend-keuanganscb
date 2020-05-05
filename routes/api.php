@@ -45,6 +45,12 @@ Route::prefix('v1')->group(function () {
         });
     });
 
+    // ROles
+    Route::prefix('roles')->group(function () {
+        Route::get('/', 'RoleAndPermissionController@getAllRoles')->name('getAllRoles');
+        Route::post('/store', 'RoleAndPermissionController@storeRole')->name('storeRole');
+    });
+
     // Authenticate First
     Route::group(['middleware' => 'auth:api'], function () {
         // User Side
@@ -133,11 +139,6 @@ Route::prefix('v1')->group(function () {
                 Route::post('/revoke-permission', 'UserController@revokePermission')->name('revokeUserPermission');
             });
 
-            // ROles
-            Route::prefix('roles')->group(function () {
-                Route::get('/', 'RoleAndPermissionController@getAllRoles')->name('getAllRoles');
-                Route::post('/store', 'RoleAndPermissionController@storeRole')->name('storeRole');
-            });
 
             // Permissions
             Route::prefix('permissions')->group(function () {
