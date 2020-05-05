@@ -159,17 +159,17 @@ Route::prefix('v1')->group(function () {
             });
         });
     });
-});
 
-Route::prefix('export')->group(function () {
-    Route::prefix('form-request')->group(function () {
-        Route::get('{formRequest}/pdf', 'FormRequestController@exportSinglePdf')->name('exportSingleFormRequestPdf');
-        Route::get('/excel', 'FormRequestController@exportExcel');
-        Route::get('/pdf', 'FormRequestController@exportPdf');
-    });
-    Route::prefix('form-petty-cash')->group(function () {
-        Route::get('{formPettyCash}/pdf', 'FormPettyCashController@exportSinglePdf')->name('exportSingleFormRequestPdf');
-        Route::get('/excel', 'FormPettyCashController@exportExcel');
-        Route::get('/pdf', 'FormPettyCashController@exportPdf');
+    Route::prefix('export')->group(function () {
+        Route::prefix('form-request')->group(function () {
+            Route::get('{formRequest}/pdf', 'FormRequestController@exportSinglePdf')->name('exportSingleFormRequestPdf');
+            Route::get('/excel', 'FormRequestController@exportExcel');
+            Route::get('/pdf', 'FormRequestController@exportPdf');
+        });
+        Route::prefix('form-petty-cash')->group(function () {
+            Route::get('{formPettyCash}/pdf', 'FormPettyCashController@exportSinglePdf')->name('exportSingleFormRequestPdf');
+            Route::get('/excel', 'FormPettyCashController@exportExcel');
+            Route::get('/pdf', 'FormPettyCashController@exportPdf');
+        });
     });
 });
