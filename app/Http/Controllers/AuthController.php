@@ -44,8 +44,12 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-        if (Auth::guard('web')->attempt($credentials)) {
+        $credentialsWithEmail = $request->only('email', 'password');
+        $credentialsWithUsername = $request->only(['username', 'password']);
+        if (
+            Auth::attempt($credentialsWithEmail) ||
+            Auth::attempt($credentialsWithUsername)
+        ) {
             $user = Auth::user();
             if ($user->email_verified_at != NULL) {
                 $success['token'] =  $user->createToken($user->email)->accessToken;

@@ -3,47 +3,38 @@
 
 namespace App\AdditionalHelper;
 
+use App\AdditionalHelper\Uploader\DocumentUploader;
+use App\AdditionalHelper\Uploader\ImageUploader;
 use App\Exceptions\FileNotSupportedException;
-use Carbon\Carbon;
-use ErrorException;
 
 class UploadHelper
 {
-    protected $modelName = '';
-    protected $file = '';
-    protected $fileName = '';
-    protected $fileType = '';
-    protected $docType = '';
+    protected $uploader = null;
 
-    public function __construct(string $modelName, $file, string $fileName, string $docType)
+    public function __construct($file, string $docType)
     {
-        $this->modelName = $modelName;
-        $this->file = $file;
-        $this->fileName = $fileName;
-        $this->docType = $docType;
-    }
-
-    public function insertAttachment()
-    {
-        $guessExtension = $this->file->guessExtension();
-        switch ($guessExtension) {
+        $extension = $file->guessExtension();
+        switch ($extension) {
             case 'jpeg':
             case 'jpg':
             case 'png':
-                $this->fileType = 'images';
+                $this->uploader = new ImageUploader($file, $extension, $docType);
                 break;
+
             case 'pdf':
-                $this->fileType = 'pdf';
+                $this->uploader = new DocumentUploader($file, $extension, $docType);
                 break;
 
             default:
                 throw new FileNotSupportedException("These Files are not supported");
                 break;
         }
+    }
 
-        $filePath = $this->file->storeAs($this->fileType . '/' . $this->docType . '/' . strval(Carbon::now()->year) . '/' . strval(Carbon::now()->month), $this->fileName . '.' . $guessExtension, 'custom');
-        $filePath = env('APP_URL') . 'uploads/' . $filePath;
-
+    public function insertAttachment()
+    {
+        $filePath = $this->uploader->insert();
+        $filePath = env('APP_URL') . '/uploads/' . $filePath;
         return $filePath;
     }
 }

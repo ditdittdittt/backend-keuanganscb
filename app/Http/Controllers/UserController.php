@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
+use App\Http\Requests\UserRequest;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,6 +12,24 @@ use Illuminate\Http\Request;
 class UserController extends Controller
 {
     private $modelName = 'User';
+
+    public function update(Request $request, User $user)
+    {
+        try {
+            if (auth()->user->id == $user->id || auth()->user->hasRole('admin')) {
+                $user->update($request->all());
+                return ReturnGoodWay::successReturn(
+                    $user,
+                    $this->modelName,
+                    $this->modelName . " has been updated",
+                    "success"
+                );
+            }
+        } catch (Exception $err) {
+            $error = new SeparateException($err);
+            return $error->checkException($this->modelName);
+        }
+    }
 
     public function getAllUserWithAllTheirRolesAndPermissions()
     {

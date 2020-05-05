@@ -25,14 +25,12 @@ class FormRequestObserver
     public function creating(FormRequest $formRequest)
     {
         // User Id based on who's login
-         $formRequest->user_id = auth()->user()->id;
+        $formRequest->user_id = auth()->user()->id;
 
         // Attachment file
         if ($this->request->hasFile('attachment')) {
             $uploadHelper = new UploadHelper(
-                $this->modelName,
                 $this->request->file('attachment'),
-                uniqid(),
                 'proposal'
             );
             $filePath = $uploadHelper->insertAttachment();
@@ -77,7 +75,10 @@ class FormRequestObserver
     public function updating(FormRequest $formRequest)
     {
         if ($this->request->file('attachment') != null) {
-            $uploadHelper = new UploadHelper($this->modelName, $this->request->file('attachment'), uniqid(), 'proposal');
+            $uploadHelper = new UploadHelper(
+                $this->request->file('attachment'),
+                'proposal'
+            );
             $filePath = $uploadHelper->insertAttachment();
             $formRequest->attachment = $filePath;
         } else {
