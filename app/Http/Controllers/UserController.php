@@ -17,14 +17,13 @@ class UserController extends Controller
     public function update(User $user, Request $request)
     {
         try {
+            $fieldArray = $request->except('password');
             if (auth()->user()->id == $user->id || auth()->user()->hasRole('admin')) {
                 if ($request->has('password')) {
                     $hashedPassword = Hash::make($request->password);
+                    $fieldArray['password'] = $hashedPassword;
                 }
-                $user->update([
-                    $request->all(),
-                    "password" => $hashedPassword
-                ]);
+                $user->update($fieldArray);
                 return ReturnGoodWay::successReturn(
                     $user,
                     $this->modelName,
