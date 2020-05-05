@@ -76,10 +76,6 @@ Route::prefix('v1')->group(function () {
                     Route::delete('/', 'FormSubmissionController@delete')->name('deleteFormSubmission');
                 });
                 Route::get('/count', 'FormSubmissionController@countSubmissionForm')->name('getCountFormSubmission');
-                Route::prefix('/export')->group(function () {
-                    Route::get('/excel', 'FormSubmissionController@exportExcel');
-                    Route::get('/pdf', 'FormSubmissionController@exportPdf');
-                });
             });
 
             // Form PettyCash Header
@@ -93,8 +89,6 @@ Route::prefix('v1')->group(function () {
                     Route::get('/', 'FormPettyCashController@show')->name('getFormPettyCash');
                     Route::post('/', 'FormPettyCashController@update')->name('updateFormPettyCash');
                     Route::delete('/', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');
-                    Route::get('/pdf', 'FormPettyCashController@exportSinglePdf')->name('exportSingleFormPettyCashPdf');
-
                     // Form PettyCash Detail
                     Route::prefix('/detail')->group(function () {
                         Route::get('/', 'FormPettyCashDetailController@index')->name('getAllPettyCashDetails');
@@ -107,10 +101,6 @@ Route::prefix('v1')->group(function () {
                             Route::delete('/', 'FormPettyCashDetailController@destroy')->name('deletePettyCashDetail');
                         });
                     });
-                });
-                Route::prefix('/export')->group(function () {
-                    Route::get('/excel', 'FormPettyCashController@exportExcel');
-                    Route::get('/pdf', 'FormPettyCashController@exportPdf');
                 });
             });
         });
@@ -167,9 +157,14 @@ Route::prefix('v1')->group(function () {
             Route::get('/pdf', 'FormRequestController@exportPdf');
         });
         Route::prefix('form-petty-cash')->group(function () {
-            Route::get('{formPettyCash}/pdf', 'FormPettyCashController@exportSinglePdf')->name('exportSingleFormRequestPdf');
+            Route::get('{formPettyCash}/pdf', 'FormPettyCashController@exportSinglePdf')->name('exportSingleFormPettyCashPdf');
             Route::get('/excel', 'FormPettyCashController@exportExcel');
             Route::get('/pdf', 'FormPettyCashController@exportPdf');
+        });
+        Route::prefix('form-submission')->group(function () {
+            Route::get('{formSubmission}/pdf', 'FormSubmissionController@exportSinglePdf')->name('exportSingleFormSubmissionPdf');
+            Route::get('/excel', 'FormSubmissionController@exportExcel');
+            Route::get('/pdf', 'FormSubmissionController@exportPdf');
         });
     });
 });

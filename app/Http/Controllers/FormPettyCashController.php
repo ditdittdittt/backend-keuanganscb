@@ -195,6 +195,6 @@ class FormPettyCashController extends Controller
                 'formPettyCash' => $formPettyCash
             ]
         )->setPaper('a4', 'portrait');
-        return $pdf->stream('Form Petty Cash ' . $formPettyCash->number . '.pdf');
+        return $pdf->download('Form Petty Cash ' . $formPettyCash->number . '.pdf');
     }
 }
