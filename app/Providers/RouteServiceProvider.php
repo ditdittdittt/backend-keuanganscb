@@ -34,7 +34,7 @@ class RouteServiceProvider extends ServiceProvider
         Route::pattern('formRequest', '[0-9]+');
         Route::pattern('formPettyCash', '[0-9]+');
         Route::pattern('formSubmission', '[0-9]+');
-        Route::pattern('userId', '[0-9]+');
+        Route::pattern('user', '[0-9]+');
 
         parent::boot();
     }

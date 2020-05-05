@@ -8,16 +8,23 @@ use App\Http\Requests\UserRequest;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     private $modelName = 'User';
 
-    public function update(Request $request, User $user)
+    public function update(User $user, Request $request)
     {
         try {
-            if (auth()->user->id == $user->id || auth()->user->hasRole('admin')) {
-                $user->update($request->all());
+            if (auth()->user()->id == $user->id || auth()->user()->hasRole('admin')) {
+                if ($request->has('password')) {
+                    $hashedPassword = Hash::make($request->password);
+                }
+                $user->update([
+                    $request->all(),
+                    "password" => $hashedPassword
+                ]);
                 return ReturnGoodWay::successReturn(
                     $user,
                     $this->modelName,
@@ -132,6 +139,19 @@ class UserController extends Controller
                 "The User " . $user->id . " has been revoked permission to " . $request['permission'],
                 'success'
             );
+        } catch (Exception $err) {
+            $error = new SeparateException($err);
+            return $error->checkException($this->modelName);
+        }
+    }
+
+    public function count()
+    {
+        try {
+            $usersCount = User::all()->count();
+            return response()->json([
+                'total_users' => $usersCount
+            ], 200);
         } catch (Exception $err) {
             $error = new SeparateException($err);
             return $error->checkException($this->modelName);

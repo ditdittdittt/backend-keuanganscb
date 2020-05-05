@@ -135,7 +135,8 @@ Route::prefix('v1')->group(function () {
             // Users
             Route::prefix('users')->group(function () {
                 Route::get('/', 'UserController@getAllUserWithAllTheirRolesAndPermissions')->name('getAllUserWithAllTheirRolesAndPermissions');
-                Route::post('/{userId}', 'UserController@update')->name('updateUser');
+                Route::post('/{user}', 'UserController@update')->name('updateUser');
+                Route::get('/count', 'UserController@count')->name('countUser');
                 Route::post('/assign-role', 'UserController@assignRole')->name('assignRoleByUser');
                 Route::post('/change-role', 'UserController@changeRole')->name('changeUserRole');
                 Route::post('/remove-role', 'UserController@removeRole')->name('removeUserRole');
