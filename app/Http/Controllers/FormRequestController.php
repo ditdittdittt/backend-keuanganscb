@@ -154,14 +154,14 @@ class FormRequestController extends Controller
             'request' => $request,
             'totalAmount' => $totalAmount
         ])->setPaper('a4', 'landscape');
-        return $pdf->stream();
+        return $pdf->download('Semua Form Request.pdf');
     }
 
     public function exportSinglePdf(FormRequest $formRequest)
     {
         $formRequest->with('user', 'budgetCode');
         $pdf = PDF::loadview('pdf.form_request_single', ['formRequest' => $formRequest])->setPaper('a4', 'portrait');
-        return $pdf->stream();
+        return $pdf->download('Form Request ' . $formRequest->number . ".pdf");
     }
 
     public function exportExcel()

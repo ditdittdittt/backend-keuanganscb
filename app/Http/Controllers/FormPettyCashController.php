@@ -183,7 +183,7 @@ class FormPettyCashController extends Controller
             'request' => $request,
             'total' => $total
         ])->setPaper('a4', 'landscape');
-        return $pdf->stream();
+        return $pdf->download('Semua Form Petty Cash.pdf');
     }
 
     public function exportSinglePdf(FormPettyCash $formPettyCash)
@@ -195,6 +195,6 @@ class FormPettyCashController extends Controller
                 'formPettyCash' => $formPettyCash
             ]
         )->setPaper('a4', 'portrait');
-        return $pdf->stream();
+        return $pdf->stream('Form Petty Cash ' . $formPettyCash->number . '.pdf');
     }
 }
