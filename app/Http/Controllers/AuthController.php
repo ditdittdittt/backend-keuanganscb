@@ -22,12 +22,13 @@ class AuthController extends Controller
         try {
             $hashedPassword = Hash::make($request['password']);
             $user = new User();
-            $user->name = $request['name'];
-            $user->email = $request['email'];
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->username = $request->username;
             $user->password = $hashedPassword;
-            $user->division = $request['division'];
-            $user->email_verified_at = null;
-            $user->assignRole($request['role']);
+            $user->division = $request->division;
+            $user->email_verified_at = Carbon::now();
+            $user->assignRole($request->role);
             $user->save();
             $user->access_token =  $user->createToken($user->email)->accessToken;
             return ReturnGoodWay::successReturn(
