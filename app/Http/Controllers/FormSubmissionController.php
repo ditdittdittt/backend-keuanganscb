@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
+use App\Exports\FormSubmissionExport;
 use App\FormSubmission;
 use App\Http\Requests\ValidateFormSubmission;
 use Exception;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FormSubmissionController extends Controller
 {
@@ -124,4 +126,9 @@ class FormSubmissionController extends Controller
         $count = FormSubmission::all()->count();
         return response()->json(['form_submission_count' => $count]);
     }
+
+    public function exportExcel()
+	{
+		return Excel::download(new FormSubmissionExport, 'form_submission.xlsx');
+	}
 }

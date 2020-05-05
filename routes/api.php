@@ -81,6 +81,7 @@ Route::prefix('v1')->group(function () {
                     Route::delete('/', 'FormSubmissionController@delete')->name('deleteFormSubmission');
                 });
                 Route::get('/count', 'FormSubmissionController@countSubmissionForm')->name('getCountFormSubmission');
+                Route::get('/export/excel', 'FormSubmissionController@exportExcel');
             });
 
             // Form PettyCash Header
