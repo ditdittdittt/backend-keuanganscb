@@ -63,7 +63,7 @@ Route::prefix('v1')->group(function () {
                     Route::get('/pdf', 'FormRequestController@exportSinglePdf')->name('exportSingleFormRequestPdf');
                 });
                 Route::get('/count', 'FormRequestController@countRequestForm')->name('getCountFormRequests');
-                Route::prefix('/export', function () {
+                Route::prefix('/export')->group(function () {
                     Route::get('/excel', 'FormRequestController@exportExcel');
                     Route::get('/pdf', 'FormRequestController@exportPdf');
                 });
@@ -81,7 +81,10 @@ Route::prefix('v1')->group(function () {
                     Route::delete('/', 'FormSubmissionController@delete')->name('deleteFormSubmission');
                 });
                 Route::get('/count', 'FormSubmissionController@countSubmissionForm')->name('getCountFormSubmission');
-                Route::get('/export/excel', 'FormSubmissionController@exportExcel');
+                Route::prefix('/export')->group(function () {
+                    Route::get('/excel', 'FormSubmissionController@exportExcel');
+                    Route::get('/pdf', 'FormSubmissionController@exportPdf');
+                });
             });
 
             // Form PettyCash Header
@@ -110,7 +113,7 @@ Route::prefix('v1')->group(function () {
                         });
                     });
                 });
-                Route::prefix('/export', function () {
+                Route::prefix('/export')->group(function () {
                     Route::get('/excel', 'FormPettyCashController@exportExcel');
                     Route::get('/pdf', 'FormPettyCashController@exportPdf');
                 });
