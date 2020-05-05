@@ -60,13 +60,8 @@ Route::prefix('v1')->group(function () {
                     Route::get('/', 'FormRequestController@show')->name('showFormRequest');
                     Route::post('/', 'FormRequestController@update')->name('updateFormRequest');
                     Route::delete('/', 'FormRequestController@destroy')->name('deleteFormRequest');
-                    Route::get('/pdf', 'FormRequestController@exportSinglePdf')->name('exportSingleFormRequestPdf');
                 });
                 Route::get('/count', 'FormRequestController@countRequestForm')->name('getCountFormRequests');
-                Route::prefix('/export')->group(function () {
-                    Route::get('/excel', 'FormRequestController@exportExcel');
-                    Route::get('/pdf', 'FormRequestController@exportPdf');
-                });
             });
 
             // Form Submission
@@ -166,13 +161,15 @@ Route::prefix('v1')->group(function () {
     });
 });
 
-Route::prefix('print-pdf/form')->group(function () {
-    Route::prefix('/request')->group(function () {
-        Route::get('/', 'FormRequestController@exportPdf')->name('printPdfFormRequest');
-        Route::get('/{formRequest}', 'FormRequestController@exportSinglePdf')->name('exportSingleFormRequestPdf');
+Route::prefix('export')->group(function () {
+    Route::prefix('form-request')->group(function () {
+        Route::get('{formRequest}/pdf', 'FormRequestController@exportSinglePdf')->name('exportSingleFormRequestPdf');
+        Route::get('/excel', 'FormRequestController@exportExcel');
+        Route::get('/pdf', 'FormRequestController@exportPdf');
     });
-    Route::prefix('/petty-cash')->group(function () {
-        Route::get('/', 'FormPettyCashController@exportPdf')->name('printPdfFormPettyCash');
-        Route::get('/{formPettyCash}', 'FormPettyCashController@exportSinglePdf')->name('exportSingleFormPettyCashPdf');
+    Route::prefix('form-petty-cash')->group(function () {
+        Route::get('{formPettyCash}/pdf', 'FormPettyCashController@exportSinglePdf')->name('exportSingleFormRequestPdf');
+        Route::get('/excel', 'FormPettyCashController@exportExcel');
+        Route::get('/pdf', 'FormPettyCashController@exportPdf');
     });
 });

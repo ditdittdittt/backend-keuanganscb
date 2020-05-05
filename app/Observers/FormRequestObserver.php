@@ -46,7 +46,7 @@ class FormRequestObserver
         }
 
         // Form Number
-        $day = Carbon::now()->day;
+        $day = str_pad(Carbon::now()->day, 2, '0', STR_PAD_LEFT);
         $month = str_pad(Carbon::now()->month, 2, '0', STR_PAD_LEFT);
         $year = Carbon::now()->year;
         $count = FormRequest::whereDate('created_at', Carbon::now()->toDate())->count() + 1;
