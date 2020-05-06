@@ -6,6 +6,7 @@ use App\AdditionalHelper\UploadHelper;
 use App\FormRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use App\Notifications\FormCreated;
 
 class FormRequestObserver
 {
@@ -64,6 +65,7 @@ class FormRequestObserver
      */
     public function created(FormRequest $formRequest)
     {
+        $formRequest->notify(new FormCreated($formRequest));
     }
 
     /**
