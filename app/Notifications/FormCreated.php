@@ -73,7 +73,7 @@ class FormCreated extends Notification
             // Markdown supported.
             ->content("Hello there!\nSomeone has created a form")
             // (Optional) Inline Buttons
-            ->button('View Form', 'kiplikipli.my.id/detail/request/'.$this->form->id)
+            ->button('View Form', 'http://kiplikipli.my.id/detail/request/'.$this->form->id)
             ->button('Download Form', 'http://54.169.75.0/api/v1/export/form-request/'.$this->form->id.'/pdf');
     }
 }
