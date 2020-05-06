@@ -81,7 +81,25 @@ class FormRequestController extends Controller
     {
 
         try {
-            $formRequest->update($request->all());
+            $formRequest->update($request->except(['status_id', 'budget_code_id']));
+            if ($request->status_id) {
+                $formRequest->status_id = $request->status_id;
+            }
+            if ($request->budget_code_id) {
+                $formRequest->budget_code_id = $request->budget_code_id;
+            }
+            if ($formRequest->method == "Transfer") {
+                $formRequest->bank_name = $request->bank_name;
+                $formRequest->bank_code = $request->bank_code;
+                $formRequest->account_number = $request->account_number;
+                $formRequest->account_owner = $request->account_owner;
+            } else if ($formRequest->method == "Cash") {
+                $formRequest->bank_name = null;
+                $formRequest->bank_code = null;
+                $formRequest->account_number = null;
+                $formRequest->account_owner = null;
+            }
+            $formRequest->save();
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,

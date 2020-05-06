@@ -81,19 +81,6 @@ class FormRequestObserver
             );
             $filePath = $uploadHelper->insertAttachment();
             $formRequest->attachment = $filePath;
-        } else {
-            $formRequest->attachment = null;
-        }
-        if ($this->request->method == "Transfer") {
-            $formRequest->bank_name = $this->request->bank_name;
-            $formRequest->bank_code = $this->request->bank_code;
-            $formRequest->account_number = $this->request->account_number;
-            $formRequest->account_owner = $this->request->account_owner;
-        } else if ($this->request->method == "Cash") {
-            $formRequest->bank_name = null;
-            $formRequest->bank_code = null;
-            $formRequest->account_number = null;
-            $formRequest->account_owner = null;
         }
     }
 
