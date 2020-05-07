@@ -138,16 +138,24 @@
             <tbody class="text-center">
                 <tr>
                     <td height="50" width="100px">
+                        @if ($arrayOfPath['pic'])
                         <img src="{{ public_path( $arrayOfPath['pic'] ) }}">
+                        @endif
                     </td>
                     <td width="100px">
+                        @if ($arrayOfPath['head_dept'])
                         <img src="{{ public_path( $arrayOfPath['head_dept'] ) }}" alt="">
+                        @endif
                     </td>
                     <td width="100px">
+                        @if ($arrayOfPath['verificator'])
                         <img src="{{ public_path( $arrayOfPath['verificator'] ) }}" alt="">
+                        @endif
                     </td>
                     <td width="100px">
+                        @if ($arrayOfPath['cashier'])
                         <img src="{{ public_path( $arrayOfPath['cashier'] ) }}" alt="">
+                        @endif
                     </td>
                 </tr>
             </tbody>
