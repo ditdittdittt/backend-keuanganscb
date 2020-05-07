@@ -138,11 +138,17 @@
             <tbody class="text-center">
                 <tr>
                     <td height="50" width="100px">
-
+                        <img src="{{ public_path( $arrayOfPath['pic'] ) }}">
                     </td>
-                    <td width="100px"></td>
-                    <td width="100px"></td>
-                    <td width="100px"></td>
+                    <td width="100px">
+                        <img src="{{ public_path( $arrayOfPath['head_dept'] ) }}" alt="">
+                    </td>
+                    <td width="100px">
+                        <img src="{{ public_path( $arrayOfPath['verificator'] ) }}" alt="">
+                    </td>
+                    <td width="100px">
+                        <img src="{{ public_path( $arrayOfPath['cashier'] ) }}" alt="">
+                    </td>
                 </tr>
             </tbody>
         </table>

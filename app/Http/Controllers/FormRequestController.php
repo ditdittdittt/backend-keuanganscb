@@ -184,13 +184,22 @@ class FormRequestController extends Controller
             'request' => $request,
             'totalAmount' => $totalAmount
         ])->setPaper('a4', 'landscape');
-        return $pdf->download('Semua Form Request.pdf');
+        return $pdf->stream('Semua Form Request.pdf');
     }
 
     public function exportSinglePdf(FormRequest $formRequest)
     {
         $formRequest->with('users', 'budgetCode');
-        $pdf = PDF::loadview('pdf.form_request_single', ['formRequest' => $formRequest])->setPaper('a4', 'portrait');
+        $substr = env('APP_URL') . "/uploads/";
+        $pathArray = [];
+        foreach ($formRequest->users as $user) {
+            $path = explode($substr, $user->pivot->attachment)[1];
+            $pathPerRole = [
+                $user->pivot->role_name => $path
+            ];
+            $pathArray = array_merge($pathArray, $pathPerRole);
+        }
+        $pdf = PDF::loadview('pdf.form_request_single', ['formRequest' => $formRequest, 'arrayOfPath' => $pathArray])->setPaper('a4', 'portrait');
         return $pdf->stream('Form Request ' . $formRequest->number . ".pdf");
     }
 

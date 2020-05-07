@@ -72,7 +72,7 @@
             @foreach($formRequests as $formRequest)
             <tr>
                 <td>{{ $i++ }}</td>
-                <td>{{$formRequest->user->name}}</td>
+                <td>{{$formRequest->users()->wherePivot('role_name', 'pic')->first()->name}}</td>
                 <td>{{$formRequest->allocation}}</td>
                 <td>{{$formRequest->budgetCode->code}}</td>
                 <td>{{$formRequest->budgetCode->name}}</td>
