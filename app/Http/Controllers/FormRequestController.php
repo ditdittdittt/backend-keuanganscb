@@ -190,7 +190,7 @@ class FormRequestController extends Controller
     public function exportSinglePdf(FormRequest $formRequest)
     {
         $formRequest->with('users', 'budgetCode');
-        $substr = env('APP_URL') . "/uploads/";
+        $substr = env('APP_URL');
         $pathArray = [];
         foreach ($formRequest->users as $user) {
             $path = explode($substr, $user->pivot->attachment)[1];
@@ -199,6 +199,7 @@ class FormRequestController extends Controller
             ];
             $pathArray = array_merge($pathArray, $pathPerRole);
         }
+        dd(public_path($pathArray['pic']));
         $pdf = PDF::loadview('pdf.form_request_single', ['formRequest' => $formRequest, 'arrayOfPath' => $pathArray])->setPaper('a4', 'portrait');
         return $pdf->stream('Form Request ' . $formRequest->number . ".pdf");
     }
