@@ -139,22 +139,22 @@
                 <tr>
                     <td height="50" width="100px">
                         @if (array_key_exists("pic", $arrayOfPath))
-                        <img src="{{ public_path( $arrayOfPath['pic'] ) }}">
+                        <img src="{{ public_path( $arrayOfPath['pic'] ) }}" width="100px">
                         @endif
                     </td>
                     <td width="100px">
                         @if (array_key_exists("head_dept", $arrayOfPath)) <img
-                            src="{{ public_path( $arrayOfPath['head_dept'] ) }}" alt="">
+                            src="{{ public_path( $arrayOfPath['head_dept'] ) }}" width="100px">
                         @endif
                     </td>
                     <td width="100px">
                         @if (array_key_exists("verificator", $arrayOfPath)) <img
-                            src="{{ public_path( $arrayOfPath['verificator'] ) }}" alt="">
+                            src="{{ public_path( $arrayOfPath['verificator'] ) }}" width="100px">
                         @endif
                     </td>
                     <td width="100px">
                         @if (array_key_exists("cashier", $arrayOfPath)) <img
-                            src="{{ public_path( $arrayOfPath['cashier'] ) }}" alt="">
+                            src="{{ public_path( $arrayOfPath['cashier'] ) }}" width="100px">
                         @endif
                     </td>
                 </tr>
