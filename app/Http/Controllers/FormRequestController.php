@@ -46,12 +46,16 @@ class FormRequestController extends Controller
             $formRequest->load('status', 'budgetCode');
             $pic = $formRequest->users()->wherePivot('role_name', 'pic')->get();
             $verificator = $formRequest->users()->wherePivot('role_name', 'verificator')->get();
+            $head_dept = $formRequest->users()->wherePivot('role_name', 'head_dept')->get();
+            $cashier = $formRequest->users()->wherePivot('role_name', 'cashier')->get();
             $formRequest->pic = $pic;
             $formRequest->verificator = $verificator;
+            $formRequest->head_dept = $head_dept;
+            $formRequest->cashier = $cashier;
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,
-                null,
+                "",
                 'success'
             );
         } catch (Exception $err) {
