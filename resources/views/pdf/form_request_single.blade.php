@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Form Request {{ $formRequest->id }}</title>
+    <title>Form Request {{ $formRequest->number }}</title>
     <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
     <style>
         .table th,
@@ -19,7 +19,8 @@
                 <td width="75" class="text-center align-middle">
                     <span class="font-weight-bold">No. Doc</span>
                 </td>
-                <td width="75" class="text-center align-middle" rowspan="2" style="border-top-color:transparent; border-bottom-color:transparent; border-right-color:transparent">
+                <td width="75" class="text-center align-middle" rowspan="2"
+                    style="border-top-color:transparent; border-bottom-color:transparent; border-right-color:transparent">
                     <img src="{{ public_path('images/logo.png') }}" alt="" width="75">
                 </td>
                 <td class="text-center align-middle" rowspan="2" style='border-color:transparent'>
@@ -30,7 +31,7 @@
                 </td>
             </tr>
             <tr>
-                <td class="text-center align-middle">{{ $formRequest->id }}</td>
+                <td class="text-center align-middle">{{ $formRequest->number }}</td>
             </tr>
         </tbody>
     </table>
@@ -47,7 +48,7 @@
         <tbody class="text-center">
             <tr>
                 <td width="25%" class="align-middle">
-                    <!-- @if(strlen($formRequest->user->name) > 10)
+                    <!-- @if(strlen($formRequest->users()->wherePivot('role_name', 'pic')->first()->name) > 10)
                     @php
                     $splittedName = explode(" ", $formRequest->user->name);
                     if(count($splittedName) == 2){
@@ -56,13 +57,13 @@
                     }
                     @endphp
                     @endif -->
-                    {{ $formRequest->user->name }}
+                    {{ $formRequest->users()->wherePivot('role_name', 'pic')->first()->name }}
                 </td>
                 <td width="25%" class="align-middle">
                     {{ $formRequest->method }}
                 </td>
                 <td width="25%" class="align-middle">
-                    {{ $formRequest->user->division }}
+                    {{ $formRequest->users()->wherePivot('role_name', 'pic')->first()->division }}
                 </td>
                 <td class="align-middle" width="25%">
                     {{ $formRequest->date }}
@@ -136,7 +137,9 @@
             </thead>
             <tbody class="text-center">
                 <tr>
-                    <td height="50" width="100px"></td>
+                    <td height="50" width="100px">
+
+                    </td>
                     <td width="100px"></td>
                     <td width="100px"></td>
                     <td width="100px"></td>

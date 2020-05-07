@@ -7,6 +7,8 @@ use App\AdditionalHelper\SeparateException;
 use App\Exports\FormSubmissionExport;
 use App\FormSubmission;
 use App\Http\Requests\ValidateFormSubmission;
+use PDF;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -128,7 +130,51 @@ class FormSubmissionController extends Controller
     }
 
     public function exportExcel()
-	{
-		return Excel::download(new FormSubmissionExport, 'form_submission.xlsx');
-	}
+    {
+        return Excel::download(new FormSubmissionExport, 'form_submission.xlsx');
+    }
+
+    // Print PDF
+    public function exportPdf(Request $request)
+    {
+        switch ($request->frequency) {
+            case 'yearly':
+                $formSubmissions = FormSubmission::whereYear('date', $request->year)->orderBy('date', 'DESC')->get();
+                break;
+            case 'monthly':
+                $formSubmissions = FormSubmission::whereYear('date', $request->year)->whereMonth('date', $request->month)->orderBy('date', 'DESC')->get();
+                break;
+
+            case 'daily':
+                $formSubmissions = FormSubmission::whereDate('date', $request->date)->orderBy('date', 'DESC')->get();
+                break;
+
+            default:
+                $formSubmissions = FormSubmission::orderBy('date', 'DESC')->get();
+                break;
+        }
+        $formSubmissions->load('user');
+        if ($request->date) {
+            $request->date =  Carbon::parse($request->date)->translatedFormat('d F Y');
+        }
+        if ($request->frequency == 'monthly') {
+            $request->month = Carbon::createFromDate($request->year, $request->month, 1)->translatedFormat('F');
+        }
+
+        $totalAmount = $formSubmissions->sum('amount');
+
+        $pdf = PDF::loadview('pdf.form_submissions', [
+            'formSubmissions' => $formSubmissions,
+            'request' => $request,
+            'totalAmount' => $totalAmount
+        ])->setPaper('a4', 'landscape');
+        return $pdf->download('Semua Form Submission.pdf');
+    }
+
+    public function exportSinglePdf(FormSubmission $formSubmission)
+    {
+        $formSubmission->with('user', 'budgetCode');
+        $pdf = PDF::loadview('pdf.form_submission_single', ['formSubmission' => $formSubmission])->setPaper('a4', 'portrait');
+        return $pdf->stream('Form Submission ' . $formSubmission->number . ".pdf");
+    }
 }

@@ -45,7 +45,7 @@ Route::prefix('v1')->group(function () {
         });
     });
 
-    // ROles
+    // Roles
     Route::prefix('roles')->group(function () {
         Route::get('/', 'RoleAndPermissionController@getAllRoles')->name('getAllRoles');
         Route::post('/store', 'RoleAndPermissionController@storeRole')->name('storeRole');
@@ -66,6 +66,7 @@ Route::prefix('v1')->group(function () {
                     Route::get('/', 'FormRequestController@show')->name('showFormRequest');
                     Route::post('/', 'FormRequestController@update')->name('updateFormRequest');
                     Route::delete('/', 'FormRequestController@destroy')->name('deleteFormRequest');
+                    Route::post('/confirm', 'FormRequestController@confirm')->name('confirmFormRequest');
                 });
                 Route::get('/count', 'FormRequestController@countRequestForm')->name('getCountFormRequests');
             });

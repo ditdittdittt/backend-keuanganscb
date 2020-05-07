@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\AdditionalHelper\UploadHelper;
 use App\FormRequest;
+use App\FormRequestUsers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Notifications\FormCreated;
@@ -25,8 +26,6 @@ class FormRequestObserver
      */
     public function creating(FormRequest $formRequest)
     {
-        // User Id based on who's login
-        $formRequest->user_id = auth()->user()->id;
 
         // Attachment file
         if ($this->request->hasFile('attachment')) {
@@ -65,7 +64,23 @@ class FormRequestObserver
      */
     public function created(FormRequest $formRequest)
     {
-        $formRequest->notify(new FormCreated($formRequest));
+        // User pivot and roles
+        $pivot = new FormRequestUsers();
+        $pivot->user_id = auth()->user()->id;
+        $pivot->role_name = 'pic';
+        $pivot->form_request_id = $formRequest->id;
+        if ($this->request->hasFile('signature')) {
+            $uploadHelper = new UploadHelper(
+                $this->request->file('signature'),
+                "signatures"
+            );
+            $filePath = $uploadHelper->insertAttachment();
+            $pivot->attachment = $filePath;
+        }
+        $pivot->save();
+
+        // Notify Telegram
+        // $formRequest->notify(new FormCreated($formRequest));
     }
 
     /**

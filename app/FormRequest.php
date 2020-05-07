@@ -22,9 +22,9 @@ class FormRequest extends Model
         'is_confirmed_cashier'
     ];
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsToMany('App\User', 'form_request_has_users', 'form_request_id', 'user_id')->withPivot(['attachment', 'role_name', 'id']);
     }
 
     public function status()

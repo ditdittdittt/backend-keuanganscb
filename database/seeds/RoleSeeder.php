@@ -32,5 +32,13 @@ class RoleSeeder extends Seeder
             'name' => 'verificator',
             'guard_name' => 'web'
         ]);
+        Role::create([
+            'name' => 'head_dept',
+            'guard_name' => 'web'
+        ]);
+        Role::create([
+            'name' => 'cashier',
+            'guard_name' => 'web'
+        ]);
     }
 }

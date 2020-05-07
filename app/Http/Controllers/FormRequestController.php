@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
+use App\AdditionalHelper\UploadHelper;
+use App\Exceptions\RoleNotSupported;
 use App\Exports\FormRequestExport;
 use App\FormRequest;
+use App\FormRequestUsers;
 use App\Http\Requests\FormRequestRequest;
+use App\Services\FormRequestService;
 use Carbon\Carbon;
 use PDF;
 use Exception;
@@ -22,7 +26,7 @@ class FormRequestController extends Controller
     {
         try {
             $formRequests = FormRequest::all();
-            $formRequests->load('user', 'status', 'budgetCode');
+            $formRequests->load('users', 'status', 'budgetCode');
             return ReturnGoodWay::successReturn(
                 $formRequests,
                 $this->modelName,
@@ -39,7 +43,11 @@ class FormRequestController extends Controller
     public function show(FormRequest $formRequest)
     {
         try {
-            $formRequest->load('user', 'status', 'budgetCode');
+            $formRequest->load('status', 'budgetCode');
+            $pic = $formRequest->users()->wherePivot('role_name', 'pic')->get();
+            $verificator = $formRequest->users()->wherePivot('role_name', 'verificator')->get();
+            $formRequest->pic = $pic;
+            $formRequest->verificator = $verificator;
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,
@@ -157,7 +165,7 @@ class FormRequestController extends Controller
                 $formRequests = FormRequest::orderBy('date', 'DESC')->get();
                 break;
         }
-        $formRequests->load('user');
+        $formRequests->load('users');
         if ($request->date) {
             $request->date =  Carbon::parse($request->date)->translatedFormat('d F Y');
         }
@@ -177,13 +185,59 @@ class FormRequestController extends Controller
 
     public function exportSinglePdf(FormRequest $formRequest)
     {
-        $formRequest->with('user', 'budgetCode');
+        $formRequest->with('users', 'budgetCode');
         $pdf = PDF::loadview('pdf.form_request_single', ['formRequest' => $formRequest])->setPaper('a4', 'portrait');
-        return $pdf->download('Form Request ' . $formRequest->number . ".pdf");
+        return $pdf->stream('Form Request ' . $formRequest->number . ".pdf");
     }
 
     public function exportExcel()
     {
         return Excel::download(new FormRequestExport, 'formrequest.xlsx');
+    }
+
+    public function confirm(FormRequest $formRequest, Request $request)
+    {
+        $user = auth()->user();
+        $service = new FormRequestService($formRequest);
+
+        // Confirm as PIC
+        if ($request->is_confirmed_pic) {
+            $formRequest->is_confirmed_pic = 1;
+            if ($request->hasFile('signature')) {
+                $uploadHelper = new UploadHelper(
+                    $request->file('signature'),
+                    "signatures"
+                );
+                $filePath = $uploadHelper->insertAttachment();
+                $userId = $formRequest->users()->wherePivot('role_name', 'pic')->first()->id;
+                $formRequest->users()->updateExistingPivot($userId, ['attachment' => $filePath]);
+            }
+        }
+
+        // Confirm as Verificator
+        if ($request->is_confirmed_verificator) {
+            $formRequest->is_confirmed_verificator = 1;
+            $service->createFormRequestUsers($request, 'verificator', $user);
+        }
+
+        // Confirm as Head Dept
+        if ($request->is_confirmed_head_dept) {
+            $formRequest->is_confirmed_head_dept = 1;
+            $service->createFormRequestUsers($request, 'head_dept', $user);
+        }
+
+        // Confirm as Cashier
+        if ($request->is_confirmed_cashier) {
+            $formRequest->is_confirmed_cashier = 1;
+            $service->createFormRequestUsers($request, 'cashier', $user);
+        }
+        $formRequest->save();
+        $formRequest->users;
+        return ReturnGoodWay::successReturn(
+            $formRequest,
+            $this->modelName,
+            "Form Request has been successfully confirmed",
+            'success'
+        );
     }
 }
