@@ -199,7 +199,6 @@ class FormRequestController extends Controller
             ];
             $pathArray = array_merge($pathArray, $pathPerRole);
         }
-        dd(public_path($pathArray['pic']));
         $pdf = PDF::loadview('pdf.form_request_single', ['formRequest' => $formRequest, 'arrayOfPath' => $pathArray])->setPaper('a4', 'portrait');
         return $pdf->stream('Form Request ' . $formRequest->number . ".pdf");
     }
