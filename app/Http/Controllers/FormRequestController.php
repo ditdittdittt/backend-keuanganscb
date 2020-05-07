@@ -44,10 +44,10 @@ class FormRequestController extends Controller
     {
         try {
             $formRequest->load('status', 'budgetCode');
-            $pic = $formRequest->users()->wherePivot('role_name', 'pic')->get();
-            $verificator = $formRequest->users()->wherePivot('role_name', 'verificator')->get();
-            $head_dept = $formRequest->users()->wherePivot('role_name', 'head_dept')->get();
-            $cashier = $formRequest->users()->wherePivot('role_name', 'cashier')->get();
+            $pic = $formRequest->users()->wherePivot('role_name', 'pic')->first();
+            $verificator = $formRequest->users()->wherePivot('role_name', 'verificator')->first();
+            $head_dept = $formRequest->users()->wherePivot('role_name', 'head_dept')->first();
+            $cashier = $formRequest->users()->wherePivot('role_name', 'cashier')->first();
             $formRequest->pic = $pic;
             $formRequest->verificator = $verificator;
             $formRequest->head_dept = $head_dept;
