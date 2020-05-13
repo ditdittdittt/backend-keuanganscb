@@ -22,11 +22,15 @@ class FormRequestService
         $pivot->user_id = $user->id;
         $pivot->role_name = $roleName;
         $pivot->form_request_id = $this->formRequest->id;
-        $base64_signature = substr($request->signature, strpos($request->signature, ",")+1);
-        $signature = base64_decode($base64_signature);
+
+        $data = $request->signature;
+        list($type, $data) = explode(';', $data);
+        list(, $data)      = explode(',', $data);
+        $data = base64_decode($data);
+
         // Uploader
         $uploadHelper = new UploadHelper(
-            $signature,
+            $data,
             'signatures'
         );
         $filePath = $uploadHelper->insertAttachment();
