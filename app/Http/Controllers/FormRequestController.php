@@ -26,7 +26,9 @@ class FormRequestController extends Controller
     {
         try {
             $formRequests = FormRequest::all();
-            $formRequests->load('users', 'status', 'budgetCode');
+            foreach ($formRequests as $formRequest) {
+                $formRequest->pic = $formRequest->pic()->first();
+            }
             return ReturnGoodWay::successReturn(
                 $formRequests,
                 $this->modelName,

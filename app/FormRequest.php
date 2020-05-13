@@ -36,4 +36,9 @@ class FormRequest extends Model
     {
         return $this->belongsTo(BudgetCode::class);
     }
+
+    public function pic()
+    {
+        return $this->users()->wherePivot('role_name', 'pic');
+    }
 }
