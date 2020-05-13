@@ -22,8 +22,8 @@ class FormRequestService
         $pivot->user_id = $user->id;
         $pivot->role_name = $roleName;
         $pivot->form_request_id = $this->formRequest->id;
-        $signature = base64_decode($request->signature);
-
+        $base64_signature = substr($request->signature, strpos($request->signature, ",")+1);
+        $signature = base64_decode($base64_signature);
         // Uploader
         $uploadHelper = new UploadHelper(
             $signature,
