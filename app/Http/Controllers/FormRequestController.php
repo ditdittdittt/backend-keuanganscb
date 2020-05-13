@@ -25,7 +25,7 @@ class FormRequestController extends Controller
     public function index()
     {
         try {
-            $formRequests = FormRequest::all();
+            $formRequests = FormRequest::with(['status', 'budgetCode'])->get();
             foreach ($formRequests as $formRequest) {
                 $formRequest->pic = $formRequest->pic()->first();
             }
