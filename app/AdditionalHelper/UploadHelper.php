@@ -13,7 +13,11 @@ class UploadHelper
 
     public function __construct($file, string $docType)
     {
-        $extension = $file->guessExtension();
+        if ($docType == 'signatures'){
+            $extension = 'png';
+        } else {
+            $extension = $file->guessExtension();
+        }
         switch ($extension) {
             case 'jpeg':
             case 'jpg':
