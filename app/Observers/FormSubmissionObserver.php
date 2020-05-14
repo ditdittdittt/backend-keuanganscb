@@ -3,10 +3,18 @@
 namespace App\Observers;
 
 use App\FormSubmission;
+use App\FormSubmissionUsers;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 class FormSubmissionObserver
 {
+    protected $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
     /**
      * Handle the form submission "creating" event.
@@ -16,9 +24,6 @@ class FormSubmissionObserver
      */
     public function creating(FormSubmission $formSubmission)
     {
-        // user id
-        $formSubmission->user_id = auth()->user()->id;
-
         // Form Number
         $day = str_pad(Carbon::now()->day, 2, '0', STR_PAD_LEFT);
         $month = str_pad(Carbon::now()->month, 2, '0', STR_PAD_LEFT);
@@ -38,7 +43,19 @@ class FormSubmissionObserver
      */
     public function created(FormSubmission $formSubmission)
     {
-        //
+        $pivot = new FormSubmissionUsers();
+        $pivot->user_id = auth()->user()->id;
+        $pivot->role_name = 'pic';
+        $pivot->form_submission_id = $formSubmission->id;
+        if ($this->request->hasFile('signature')) {
+            $uploadHelper = new UploadHelper(
+                $this->request->file('signature'),
+                "signatures"
+            );
+            $filePath = $uploadHelper->insertAttachment();
+            $pivot->attachment = $filePath;
+        }
+        $pivot->save();
     }
 
     /**

@@ -50,6 +50,7 @@ Route::prefix('v1')->group(function () {
         Route::get('/', 'RoleAndPermissionController@getAllRoles')->name('getAllRoles');
         Route::post('/', 'RoleAndPermissionController@storeRole')->name('storeRole');
         Route::get('/{role}', 'RoleAndPermissionController@showRole')->name('showRole');
+        Route::delete('/{role}', 'RoleAndPermissionController@destroyRole')->name('showRole');
     });
 
     // Authenticate First
@@ -82,6 +83,7 @@ Route::prefix('v1')->group(function () {
                     Route::get('/', 'FormSubmissionController@show')->name('getFormSubmissionDetail');
                     Route::post('/', 'FormSubmissionController@update')->name('updateFormSubmission');
                     Route::delete('/', 'FormSubmissionController@delete')->name('deleteFormSubmission');
+                    Route::post('/confirm', 'FormSubmissionController@confirm')->name('confirmFormSubmission');
                 });
                 Route::get('/count', 'FormSubmissionController@countSubmissionForm')->name('getCountFormSubmission');
             });

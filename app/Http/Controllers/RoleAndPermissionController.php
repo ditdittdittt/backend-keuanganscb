@@ -74,6 +74,27 @@ class RoleAndPermissionController extends Controller
     }
 
     /**
+     * Destroy a role
+     */
+
+    public function destroyRole($role)
+    {
+        try {
+            $role = Role::findById($role);
+            $role->delete();
+            return ReturnGoodWay::successReturn(
+                $role,
+                $this->role_model_name,
+                "Role has successfully destroyed",
+                'success'
+            );
+        } catch (Exception $err) {
+            $error = new SeparateException($err);
+            $error->checkException($this->role_model_name);
+        }
+    }
+
+    /**
      * Get All Permissions
      */
     public function getAllPermissions()

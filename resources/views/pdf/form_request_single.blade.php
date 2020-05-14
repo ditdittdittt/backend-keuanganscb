@@ -132,7 +132,7 @@
                     <th>PIC</th>
                     <th>Head Dept</th>
                     <th>Verificator</th>
-                    <th>Head Office</th>
+                    <th>Cashier</th>
                 </tr>
             </thead>
             <tbody class="text-center">

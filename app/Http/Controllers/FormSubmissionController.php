@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
+use App\AdditionalHelper\UploadHelper;
 use App\Exports\FormSubmissionExport;
 use App\FormSubmission;
 use App\Http\Requests\ValidateFormSubmission;
+use App\Services\FormSubmissionService;
 use PDF;
 use Carbon\Carbon;
 use Exception;
@@ -20,10 +22,10 @@ class FormSubmissionController extends Controller
     public function index()
     {
         try {
-            $formSubmissions = FormSubmission::all();
-            $formSubmissions->load('user');
-            $formSubmissions->load('formRequest');
-            $formSubmissions->load('status');
+            $formSubmissions = FormSubmission::with(['formRequest', 'status'])->get();
+            foreach ($formSubmissions as $formSubmission) {
+                $formSubmission->pic = $formSubmission->pic()->first();
+            }
             return ReturnGoodWay::successReturn(
                 $formSubmissions,
                 $this->modelName,
@@ -59,12 +61,14 @@ class FormSubmissionController extends Controller
         }
     }
 
-    public function show(FormSubmission $formSubmission, Request $request)
+    public function show(FormSubmission $formSubmission)
     {
         try {
-            $formSubmission->load('user');
-            $formSubmission->load('formRequest');
-            $formSubmission->load('status');
+            $formSubmission->load('formRequest', 'status');
+            $formSubmission->pic = $formSubmission->pic()->first();
+            $formSubmission->head_dept = $formSubmission->head_dept()->first();
+            $formSubmission->verificator = $formSubmission->verificator()->first();
+            $formSubmission->head_office = $formSubmission->head_office()->first();
             return ReturnGoodWay::successReturn(
                 $formSubmission,
                 $this->modelName,
@@ -176,5 +180,52 @@ class FormSubmissionController extends Controller
         $formSubmission->with('user', 'budgetCode');
         $pdf = PDF::loadview('pdf.form_submission_single', ['formSubmission' => $formSubmission])->setPaper('a4', 'portrait');
         return $pdf->stream('Form Submission ' . $formSubmission->number . ".pdf");
+    }
+
+    public function confirm(FormSubmission $formSubmission, Request $request)
+    {
+        $user = auth()->user();
+        $service = new FormSubmissionService($formSubmission);
+
+        // Confirm as PIC
+        if ($request->is_confirmed_pic) {
+            $formSubmission->is_confirmed_pic = 1;
+            if ($request->signature) {
+                $uploadHelper = new UploadHelper(
+                    $request->signature,
+                    "signatures"
+                );
+                $filePath = $uploadHelper->insertAttachment();
+                $userId = $formSubmission->users()->wherePivot('role_name', 'pic')->first()->id;
+                $formSubmission->users()->updateExistingPivot($userId, ['attachment' => $filePath]);
+            }
+        }
+
+        // Confirm as Verificator
+        if ($request->is_confirmed_verificator) {
+            $formSubmission->is_confirmed_verificator = 1;
+            $service->createFormSubmissionUsers($request, 'verificator', $user);
+        }
+
+        // Confirm as Head Dept
+        if ($request->is_confirmed_head_dept) {
+            $formSubmission->is_confirmed_head_dept = 1;
+            $service->createFormSubmissionUsers($request, 'head_dept', $user);
+        }
+
+        // Confirm as Head Office
+        if ($request->is_confirmed_head_office) {
+            $formSubmission->is_confirmed_head_office = 1;
+            $service->createFormSubmissionUsers($request, 'head_office', $user);
+        }
+
+        $formSubmission->save();
+        $formSubmission->users;
+        return ReturnGoodWay::successReturn(
+            $formSubmission,
+            $this->modelName,
+            "Form Request has been successfully confirmed",
+            'success'
+        );
     }
 }

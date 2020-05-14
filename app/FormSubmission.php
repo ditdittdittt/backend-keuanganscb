@@ -21,17 +21,38 @@ class FormSubmission extends Model
         'is_confirmed_head_dept',
         'is_confirmed_head_office'
     ];
-    public function user()
+    public function users()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsToMany('App\User', 'form_submission_has_users', 'form_submission_id', 'user_id')->withPivot(['attachment', 'role_name', 'id']);
     }
 
     public function formRequest()
     {
         return $this->belongsTo('App\FormRequest');
     }
+
     public function status()
     {
         return $this->belongsTo(FormStatus::class);
+    }
+
+    public function pic()
+    {
+        return $this->users()->wherePivot('role_name', 'pic');
+    }
+
+    public function verificator()
+    {
+        return $this->users()->wherePivot('role_name', 'verificator');
+    }
+
+    public function head_dept()
+    {
+        return $this->users()->wherePivot('role_name', 'head_dept');
+    }
+
+    public function head_office()
+    {
+        return $this->users()->wherePivot('role_name', 'head_office');
     }
 }
