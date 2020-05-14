@@ -2,33 +2,60 @@
 <html>
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Daftar Form Fund Request</title>
     <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
+    <style>
+        @font-face {
+            font-family: 'PTSans';
+            src: url('{{ storage_path('fonts/PTSans-Regular.ttf') }}') format("truetype");
+            font-weight: 400;
+            font-style: normal;
+        }
+        * {
+            font-family: 'PTSans', Arial, sans-serif !important;
+        }
+        .font-xl {
+            font-size: 24px;
+        }
+        .font-l {
+            font-size: 20px;
+        }
+        .font-m {
+            font-size: 16px;
+        }
+        .font-sm {
+            font-size: 12px;
+        }
+        .font-xsm {
+            font-size: 8px;
+        }
+    </style>
 </head>
 
-<body style="background-color: #ffffff;">
+<body style="background-color: #ffffff" class="font-sm">
     <table class="table table-borderless">
         <tbody>
             <tr>
-                <td width="200" class="text-center align-middle" style="padding : 0">
-                    <img src="{{ public_path('images/logo.png') }}" alt="" width="100">
+                <td width="200" class="text-center p-0">
+                    <img src="{{ public_path('images/logo.png') }}" alt="" height="80">
                 </td>
-                <td class="text-center align-middle" style="padding : 0">
-                    <h1>Daftar Form Fund Request</h1>
-                    <h5>SMP Cendekia BAZNAS</h5>
+                <td class="text-center text-uppercase p-0">
+                    <div class="font-xl"><strong>Daftar Form Fund Request</strong></div>
+                    <div class="font-l">SMP Cendekia BAZNAS</div>
                 </td>
-                <td width="200" class="text-center align-middle" style="padding : 0">
-                    <img src="{{ public_path('images/logo_baznas.png') }}" alt="" width="125">
+                <td width="200" class="text-center p-0">
+                    <img src="{{ public_path('images/logo_baznas.png') }}" alt="" height="80">
                 </td>
             </tr>
         </tbody>
     </table>
     <hr>
     @if($request->frequency)
-    <table class="table table-borderless">
+    <table class="table">
         <tbody>
-            <tr>
-                <td width="5%" style="padding:0" class="text-left">
+            <tr class="text-left">
+                <td width="5%" class="p-0">
                     @if($request->frequency == 'yearly')
                     Tahun
                     @elseif($request->frequency == 'monthly')
@@ -37,7 +64,7 @@
                     Tanggal
                     @endif
                 </td>
-                <td class="font-weight-bold text-left" style="padding:0" width="15%">
+                <td class="font-weight-bold p-0" width="15%">
                     @if($request->frequency == 'yearly')
                     {{ $request->year }}
                     @elseif($request->frequency == 'monthly')
@@ -53,16 +80,16 @@
         </tbody>
     </table>
     @endif
-    <table class='table table-bordered'>
-        <thead>
-            <tr class='table-success'>
-                <th>No</th>
-                <th>Nama</th>
-                <th>Alokasi</th>
-                <th>Budget Code</th>
-                <th>Budget Name</th>
-                <th>Tanggal</th>
-                <th>Jumlah</th>
+    <table class="table table-bordered table-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">No</th>
+                <th scope="col">Nama</th>
+                <th scope="col">Alokasi</th>
+                <th scope="col">Budget Code</th>
+                <th scope="col">Budget Name</th>
+                <th scope="col">Tanggal</th>
+                <th scope="col">Jumlah</th>
             </tr>
         </thead>
         <tbody>
@@ -71,7 +98,7 @@
             @endphp
             @foreach($formRequests as $formRequest)
             <tr>
-                <td>{{ $i++ }}</td>
+                <th scope="row">{{ $i++ }}</th>
                 <td>{{$formRequest->users()->wherePivot('role_name', 'pic')->first()->name}}</td>
                 <td>{{$formRequest->allocation}}</td>
                 <td>{{$formRequest->budgetCode->code}}</td>
@@ -81,7 +108,7 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="6" class="table-success font-weight-bold">
+                <td colspan="6" class="font-weight-bold">
                     Total
                 </td>
                 <td>

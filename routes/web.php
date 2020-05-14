@@ -14,3 +14,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+// For testing only
+Route::prefix('test')->group(function () {
+    Route::get('/', function () {
+        return view('test.form');
+    });
+});

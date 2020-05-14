@@ -2,27 +2,30 @@
 <html>
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Form Petty Cash {{ $formPettyCash->number }}</title>
     <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
     <style>
-        .table th,
-        .table td {
-            padding: 0.25rem
+        @font-face {
+            font-family: 'PTSerif';
+            src: url('{{ storage_path('fonts/PTSerif-Regular.ttf') }}') format("truetype");
+            font-weight: 400;
+            font-style: normal;
         }
     </style>
 </head>
 
-<body style="background-color: #ffffff">
+<body style="background-color: #eeeeee; font-family: 'PTSerif', Times, serif">
     <table class="table table-borderless">
         <tbody>
             <tr>
-                <td width="25%" class="text-center align-middle">
+                <td width="20%" class="text-center align-middle">
                     <img src="{{ public_path('images/logo.png') }}" alt="" width="75">
                 </td>
-                <td width="75%" class="text-center align-middle">
+                <td width="60%" class="text-center align-middle">
                     <h4>FORM PETTY CASH</h4>
                 </td>
-                <td width="25%" class="text-center align-middle">
+                <td width="20%" class="text-center align-middle">
                     <img src="{{ public_path('images/logo_baznas.png') }}" alt="" width="100">
                 </td>
             </tr>
@@ -30,7 +33,7 @@
     </table>
     <table class="table table-bordered text-center">
         <thead>
-            <tr class="table-success">
+            <tr class="thead-dark">
                 <th width="50%">Payable To</th>
                 <th width="25%">
                     Date

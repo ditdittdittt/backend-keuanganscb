@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Form Submission {{ $formSubmission->number }}</title>
     <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
     <style>
