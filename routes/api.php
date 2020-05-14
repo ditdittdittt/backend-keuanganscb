@@ -48,7 +48,8 @@ Route::prefix('v1')->group(function () {
     // Roles
     Route::prefix('roles')->group(function () {
         Route::get('/', 'RoleAndPermissionController@getAllRoles')->name('getAllRoles');
-        Route::post('/store', 'RoleAndPermissionController@storeRole')->name('storeRole');
+        Route::post('/', 'RoleAndPermissionController@storeRole')->name('storeRole');
+        Route::get('/{role}', 'RoleAndPermissionController@showRole')->name('showRole');
     });
 
     // Authenticate First
@@ -132,6 +133,7 @@ Route::prefix('v1')->group(function () {
             Route::prefix('users')->group(function () {
                 Route::get('/', 'UserController@getAllUserWithAllTheirRolesAndPermissions')->name('getAllUserWithAllTheirRolesAndPermissions');
                 Route::post('/{user}', 'UserController@update')->name('updateUser');
+                Route::delete('/{user}', 'UserController@destroy')->name('deleteUser');
                 Route::get('/count', 'UserController@count')->name('countUser');
                 Route::post('/assign-role', 'UserController@assignRole')->name('assignRoleByUser');
                 Route::post('/change-role', 'UserController@changeRole')->name('changeUserRole');

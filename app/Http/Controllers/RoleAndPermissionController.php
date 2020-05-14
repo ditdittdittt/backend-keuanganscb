@@ -55,6 +55,25 @@ class RoleAndPermissionController extends Controller
     }
 
     /**
+     * Get only one Role
+     */
+    public function showRole($role)
+    {
+        try {
+            $role = Role::findById($role);
+            return ReturnGoodWay::successReturn(
+                $role,
+                $this->role_model_name,
+                "",
+                'success'
+            );
+        } catch (Exception $err) {
+            $error = new SeparateException($err);
+            $error->checkException($this->role_model_name);
+        }
+    }
+
+    /**
      * Get All Permissions
      */
     public function getAllPermissions()

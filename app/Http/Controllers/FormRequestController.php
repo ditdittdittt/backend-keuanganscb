@@ -214,13 +214,12 @@ class FormRequestController extends Controller
     {
         $user = auth()->user();
         $service = new FormRequestService($formRequest);
-
         // Confirm as PIC
         if ($request->is_confirmed_pic) {
             $formRequest->is_confirmed_pic = 1;
-            if ($request->hasFile('signature')) {
+            if ($request->signature) {
                 $uploadHelper = new UploadHelper(
-                    $request->file('signature'),
+                    $request->signature,
                     "signatures"
                 );
                 $filePath = $uploadHelper->insertAttachment();

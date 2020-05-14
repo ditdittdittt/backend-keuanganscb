@@ -37,6 +37,24 @@ class UserController extends Controller
         }
     }
 
+    public function destroy(User $user)
+    {
+        try {
+            if (auth()->user()->id == $user->id || auth()->user()->hasRole('admin')) {
+                $user->delete();
+                return ReturnGoodWay::successReturn(
+                    $user,
+                    $this->modelName,
+                    $this->modelName . " has been deleted",
+                    "success"
+                );
+            }
+        } catch (Exception $err) {
+            $error = new SeparateException($err);
+            return $error->checkException($this->modelName);
+        }
+    }
+
     public function getAllUserWithAllTheirRolesAndPermissions()
     {
         try {

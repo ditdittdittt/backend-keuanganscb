@@ -3,6 +3,7 @@
 
 namespace App\AdditionalHelper;
 
+use App\AdditionalHelper\Uploader\Base64Uploader;
 use App\AdditionalHelper\Uploader\DocumentUploader;
 use App\AdditionalHelper\Uploader\ImageUploader;
 use App\Exceptions\FileNotSupportedException;
@@ -13,8 +14,8 @@ class UploadHelper
 
     public function __construct($file, string $docType)
     {
-        if ($docType == 'signatures'){
-            $extension = 'png';
+        if ($docType == 'signatures') {
+            $extension = 'signatures';
         } else {
             $extension = $file->guessExtension();
         }
@@ -27,6 +28,10 @@ class UploadHelper
 
             case 'pdf':
                 $this->uploader = new DocumentUploader($file, $extension, $docType);
+                break;
+
+            case 'signatures';
+                $this->uploader = new Base64Uploader($file, ".png", "signatures");
                 break;
 
             default:
