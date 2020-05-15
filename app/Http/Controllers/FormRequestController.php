@@ -71,7 +71,6 @@ class FormRequestController extends Controller
     {
         try {
             $formRequest = new FormRequest();
-            $formRequest->date = $request->date;
             $formRequest->method = $request->method;
             $formRequest->allocation = $request->allocation;
             $formRequest->amount = $request->amount;
