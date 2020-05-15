@@ -21,8 +21,10 @@ class FormPettyCashController extends Controller
     public function index()
     {
         try {
-            $formPettyCashes = FormPettyCash::all();
-            $formPettyCashes->load(['user', 'details', 'details.budgetCode', 'status']);
+            $formPettyCashes = FormPettyCash::with(['status'])->get();
+            foreach ($formPettyCashes as $formPettyCash) {
+                $formPettyCash->pic = $formPettyCash->pic()->first();
+            }
             return ReturnGoodWay::successReturn(
                 $formPettyCashes,
                 $this->modelName,
@@ -39,11 +41,14 @@ class FormPettyCashController extends Controller
     public function show(FormPettyCash $formPettyCash)
     {
         try {
-            $formPettyCash->load(['details', 'user', 'details.budgetCode', 'status']);
+            $formPettyCash->load(['details', 'details.budgetCode', 'status']);
+            $formPettyCash->pic = $formPettyCash->pic()->first();
+            $formPettyCash->manager_ops = $formPettyCash->manager_ops()->first();
+            $formPettyCash->cashier = $formPettyCash->cashier()->first();
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
                 $this->modelName,
-                null,
+                "",
                 'success'
             );
         } catch (Exception $err) {
@@ -175,26 +180,41 @@ class FormPettyCashController extends Controller
             $request->month = Carbon::createFromDate($request->year, $request->month, 1)->translatedFormat('F');
         }
 
-        $formPettyCashes->load('user', 'details', 'status');
-        $total = $formPettyCashes->sum('amount');
-        // return response()->json($formPettyCashes);
+        $formPettyCashes->load('details', 'status');
+        $totalAmount = $formPettyCashes->sum('amount');
         $pdf = PDF::loadview('pdf.form_petty_cashes', [
             'formPettyCashes' => $formPettyCashes,
             'request' => $request,
-            'total' => $total
+            'totalAmount' => $totalAmount
         ])->setPaper('a4', 'landscape');
-        return $pdf->download('Semua Form Petty Cash.pdf');
+        return $pdf->stream('Semua Form Petty Cash.pdf');
     }
 
     public function exportSinglePdf(FormPettyCash $formPettyCash)
     {
-        $formPettyCash->load('user', 'details', 'details.budgetCode');
+        $substr = env('APP_URL');
+        $pathArray = [];
+        foreach ($formPettyCash->users as $user) {
+            if ($user->pivot->attachment) {
+                $path = explode($substr, $user->pivot->attachment)[1];
+            } else {
+                $path = NULL;
+            }
+            if ($path) {
+                $pathPerRole = [
+                    $user->pivot->role_name => $path
+                ];
+                $pathArray = array_merge($pathArray, $pathPerRole);
+            }
+        }
+        $formPettyCash->load('details', 'details.budgetCode');
         $pdf = PDF::loadview(
             'pdf.form_petty_cash_single',
             [
-                'formPettyCash' => $formPettyCash
+                'formPettyCash' => $formPettyCash,
+                'pathArray' => $pathArray
             ]
         )->setPaper('a4', 'portrait');
-        return $pdf->download('Form Petty Cash ' . $formPettyCash->number . '.pdf');
+        return $pdf->stream('Form Petty Cash ' . $formPettyCash->number . '.pdf');
     }
 }

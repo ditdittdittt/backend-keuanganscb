@@ -157,7 +157,6 @@ class FormSubmissionController extends Controller
                 $formSubmissions = FormSubmission::orderBy('date', 'DESC')->get();
                 break;
         }
-        $formSubmissions->load('user');
         if ($request->date) {
             $request->date =  Carbon::parse($request->date)->translatedFormat('d F Y');
         }
@@ -165,20 +164,37 @@ class FormSubmissionController extends Controller
             $request->month = Carbon::createFromDate($request->year, $request->month, 1)->translatedFormat('F');
         }
 
-        $totalAmount = $formSubmissions->sum('amount');
+        $totalAmount = $formSubmissions->sum('used');
 
         $pdf = PDF::loadview('pdf.form_submissions', [
             'formSubmissions' => $formSubmissions,
             'request' => $request,
             'totalAmount' => $totalAmount
         ])->setPaper('a4', 'landscape');
-        return $pdf->download('Semua Form Submission.pdf');
+        return $pdf->stream('Semua Form Submission.pdf');
     }
 
     public function exportSinglePdf(FormSubmission $formSubmission)
     {
-        $formSubmission->with('user', 'budgetCode');
-        $pdf = PDF::loadview('pdf.form_submission_single', ['formSubmission' => $formSubmission])->setPaper('a4', 'portrait');
+        $substr = env('APP_URL');
+        $pathArray = [];
+        foreach ($formSubmission->users as $user) {
+            if ($user->pivot->attachment) {
+                $path = explode($substr, $user->pivot->attachment)[1];
+            } else {
+                $path = NULL;
+            }
+            if ($path) {
+                $pathPerRole = [
+                    $user->pivot->role_name => $path
+                ];
+                $pathArray = array_merge($pathArray, $pathPerRole);
+            }
+        }
+        $pdf = PDF::loadview('pdf.form_submission_single', [
+            'formSubmission' => $formSubmission,
+            'pathArray' => $pathArray,
+        ])->setPaper('a4', 'portrait');
         return $pdf->stream('Form Submission ' . $formSubmission->number . ".pdf");
     }
 

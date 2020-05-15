@@ -2,8 +2,10 @@
 
 namespace App\Observers;
 
+use App\AdditionalHelper\UploadHelper;
 use App\FormPettyCash;
 use App\FormPettyCashDetail;
+use App\FormPettyCashUsers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -24,9 +26,6 @@ class FormPettyCashObserver
      */
     public function creating(FormPettyCash $formPettyCash)
     {
-        // User ID
-        $formPettyCash->user_id = auth()->user()->id;
-
         // Form Number
         $day = str_pad(Carbon::now()->day, 2, '0', STR_PAD_LEFT);
         $month = str_pad(Carbon::now()->month, 2, '0', STR_PAD_LEFT);
@@ -46,6 +45,7 @@ class FormPettyCashObserver
      */
     public function created(FormPettyCash $formPettyCash)
     {
+        // Store Details
         foreach ($this->request->details as $detail) {
             $formPettyCashDetail = new FormPettyCashDetail();
             $formPettyCashDetail->form_petty_cash_id = $formPettyCash->id;
@@ -53,6 +53,21 @@ class FormPettyCashObserver
             $formPettyCashDetail->nominal = $detail['nominal'];
             $formPettyCashDetail->save();
         }
+
+        // User pivot and roles
+        $pivot = new FormPettyCashUsers();
+        $pivot->user_id = auth()->user()->id;
+        $pivot->role_name = 'pic';
+        $pivot->form_petty_cash_id = $formPettyCash->id;
+        if ($this->request->hasFile('signature')) {
+            $uploadHelper = new UploadHelper(
+                $this->request->file('signature'),
+                "signatures"
+            );
+            $filePath = $uploadHelper->insertAttachment();
+            $pivot->attachment = $filePath;
+        }
+        $pivot->save();
     }
 
     /**

@@ -2,18 +2,20 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Form Request {{ $formRequest->number }}</title>
     <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
     <style>
-        .table th,
-        .table td {
-            padding: 0.25rem
+        @font-face {
+            font-family: 'PTSerif';
+            src: url('{{ storage_path('fonts/PTSerif-Regular.ttf') }}') format("truetype");
+            font-weight: 400;
+            font-style: normal;
         }
     </style>
 </head>
 
-<body style="background-color: #ffffff">
+<body style="background-color: #ffffff; font-family: 'PTSerif', Times, serif">
     <table class="table table-bordered">
         <tbody>
             <tr>
@@ -140,22 +142,22 @@
                 <tr>
                     <td height="50" width="100px">
                         @if (array_key_exists("pic", $arrayOfPath))
-                        <img src="{{ public_path( $arrayOfPath['pic'] ) }}" width="100px">
+                        <img src="{{ public_path( $arrayOfPath['pic'] ) }}" height="50">
                         @endif
                     </td>
                     <td width="100px">
                         @if (array_key_exists("head_dept", $arrayOfPath)) <img
-                            src="{{ public_path( $arrayOfPath['head_dept'] ) }}" width="100px">
+                            src="{{ public_path( $arrayOfPath['head_dept'] ) }}" height="50">
                         @endif
                     </td>
                     <td width="100px">
                         @if (array_key_exists("verificator", $arrayOfPath)) <img
-                            src="{{ public_path( $arrayOfPath['verificator'] ) }}" width="100px">
+                            src="{{ public_path( $arrayOfPath['verificator'] ) }}" height="50">
                         @endif
                     </td>
                     <td width="100px">
                         @if (array_key_exists("cashier", $arrayOfPath)) <img
-                            src="{{ public_path( $arrayOfPath['cashier'] ) }}" width="100px">
+                            src="{{ public_path( $arrayOfPath['cashier'] ) }}" height="50">
                         @endif
                     </td>
                 </tr>

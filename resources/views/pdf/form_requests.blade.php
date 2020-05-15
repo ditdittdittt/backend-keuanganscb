@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Daftar Form Fund Request</title>
     <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
     <style>
@@ -12,21 +12,27 @@
             font-weight: 400;
             font-style: normal;
         }
+
         * {
             font-family: 'PTSans', Arial, sans-serif !important;
         }
+
         .font-xl {
             font-size: 24px;
         }
+
         .font-l {
             font-size: 20px;
         }
+
         .font-m {
             font-size: 16px;
         }
+
         .font-sm {
             font-size: 12px;
         }
+
         .font-xsm {
             font-size: 8px;
         }
@@ -108,7 +114,7 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="6" class="font-weight-bold">
+                <td colspan="6" class="font-weight-bold table-dark">
                     Total
                 </td>
                 <td>

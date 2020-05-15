@@ -19,9 +19,9 @@ class FormPettyCash extends Model
         'is_paid',
     ];
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsToMany('App\User', 'form_petty_cash_has_users', 'form_petty_cash_id', 'user_id')->withPivot(['attachment', 'role_name', 'id']);
     }
 
     public function details()
@@ -32,5 +32,20 @@ class FormPettyCash extends Model
     public function status()
     {
         return $this->belongsTo(FormStatus::class);
+    }
+
+    public function pic()
+    {
+        return $this->users()->wherePivot('role_name', 'pic');
+    }
+
+    public function manager_ops()
+    {
+        return $this->users()->wherePivot('role_name', 'manager_ops');
+    }
+
+    public function cashier()
+    {
+        return $this->users()->wherePivot('role_name', 'cashier');
     }
 }

@@ -15,7 +15,7 @@ class FormSubmissionService
         $this->formSubmission = $formSubmission;
     }
 
-    // Form Request users pivot
+    // Form Submission users pivot
     public function createFormSubmissionUsers($request, string $roleName, $user)
     {
         $pivot = new FormSubmissionUsers();

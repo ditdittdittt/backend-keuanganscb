@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Form Petty Cash {{ $formPettyCash->number }}</title>
     <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
     <style>
@@ -15,7 +15,7 @@
     </style>
 </head>
 
-<body style="background-color: #eeeeee; font-family: 'PTSerif', Times, serif">
+<body style="background-color: #ffffff; font-family: 'PTSerif', Times, serif">
     <table class="table table-borderless">
         <tbody>
             <tr>
@@ -33,7 +33,7 @@
     </table>
     <table class="table table-bordered text-center">
         <thead>
-            <tr class="thead-dark">
+            <tr class="table-success">
                 <th width="50%">Payable To</th>
                 <th width="25%">
                     Date
@@ -46,7 +46,7 @@
         <tbody>
             <tr>
                 <td>
-                    {{ $formPettyCash->user->name }}
+                    {{ $formPettyCash->pic()->first()->name }}
                 </td>
                 <td class="align-middle">
                     {{ $formPettyCash->date }}
@@ -121,9 +121,21 @@
             </thead>
             <tbody class="text-center">
                 <tr>
-                    <td height="50" width="50%"></td>
-                    <td width="50%"></td>
-                    <td width="50%"></td>
+                    <td height="50" width="100px">
+                        @if (array_key_exists('pic', $pathArray))
+                        <img src="{{public_path($pathArray['pic'])}}" alt="" height="50">
+                        @endif
+                    </td>
+                    <td width="100px">
+                        @if (array_key_exists('manager_ops', $pathArray))
+                        <img src="{{public_path($pathArray['manager_ops'])}}" alt="" height="50">
+                        @endif
+                    </td>
+                    <td width="100px">
+                        @if (array_key_exists('cashier', $pathArray))
+                        <img src="{{public_path($pathArray['cashier'])}}" alt="" height="50">
+                        @endif
+                    </td>
                 </tr>
             </tbody>
         </table>
