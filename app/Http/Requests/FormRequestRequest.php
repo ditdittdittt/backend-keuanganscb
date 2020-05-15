@@ -24,7 +24,6 @@ class FormRequestRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => 'required',
             'method' => 'required',
             'allocation' => 'required',
             'amount' => 'numeric',
