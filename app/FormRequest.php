@@ -27,6 +27,11 @@ class FormRequest extends Model
         return $this->belongsToMany('App\User', 'form_request_has_users', 'form_request_id', 'user_id')->withPivot(['attachment', 'role_name', 'id']);
     }
 
+    public function formSubmission()
+    {
+        return $this->hasOne(FormSubmission::class);
+    }
+
     public function status()
     {
         return $this->belongsTo(FormStatus::class);
@@ -40,5 +45,30 @@ class FormRequest extends Model
     public function pic()
     {
         return $this->users()->wherePivot('role_name', 'pic');
+    }
+
+    public function verificator()
+    {
+        return $this->users()->wherePivot('role_name', 'verificator');
+    }
+
+    public function head_dept()
+    {
+        return $this->users()->wherePivot('role_name', 'head_dept');
+    }
+
+    public function head_office()
+    {
+        return $this->users()->wherePivot('role_name', 'head_office');
+    }
+
+    public function cashier()
+    {
+        return $this->users()->wherePivot('role_name', 'cashier');
+    }
+
+    public function details()
+    {
+        return $this->hasMany(FormRequestDetail::class);
     }
 }

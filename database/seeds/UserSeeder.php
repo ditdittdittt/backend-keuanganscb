@@ -24,8 +24,5 @@ class UserSeeder extends Seeder
         $user->password = $hashedPassword;
         $user->assignRole('admin');
         $user->save();
-
-        // Dummy User
-        factory(App\User::class)->create();
     }
 }

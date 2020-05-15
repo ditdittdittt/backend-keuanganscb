@@ -64,7 +64,7 @@ class FormSubmissionController extends Controller
     public function show(FormSubmission $formSubmission)
     {
         try {
-            $formSubmission->load('formRequest', 'status');
+            $formSubmission->load('formRequest', 'status', 'formRequest');
             $formSubmission->pic = $formSubmission->pic()->first();
             $formSubmission->head_dept = $formSubmission->head_dept()->first();
             $formSubmission->verificator = $formSubmission->verificator()->first();

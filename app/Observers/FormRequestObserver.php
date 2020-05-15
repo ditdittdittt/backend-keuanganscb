@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\AdditionalHelper\UploadHelper;
 use App\FormRequest;
+use App\FormRequestDetail;
 use App\FormRequestUsers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -51,9 +52,9 @@ class FormRequestObserver
         $year = Carbon::now()->year;
         $count = FormRequest::whereDate('created_at', Carbon::now()->toDate())->count() + 1;
         $count = str_pad($count, 2, '0', STR_PAD_LEFT);
-        $code = "UM";
+        $code = "INV";
         $number = $code . "." . $count . "." . $day . $month . $year;
-        $formRequest->number = $number;
+        $formRequest->invoice_number = $number;
     }
 
     /**
@@ -64,6 +65,15 @@ class FormRequestObserver
      */
     public function created(FormRequest $formRequest)
     {
+        // Store Details
+        foreach ($this->request->details as $detail) {
+            $formRequestDetail = new FormRequestDetail();
+            $formRequestDetail->form_request_id = $formRequest->id;
+            $formRequestDetail->budget_code_id = $detail['budget_code_id'];
+            $formRequestDetail->nominal = $detail['nominal'];
+            $formRequestDetail->save();
+        }
+
         // User pivot and roles
         $pivot = new FormRequestUsers();
         $pivot->user_id = auth()->user()->id;
@@ -112,10 +122,31 @@ class FormRequestObserver
         if (
             $formRequest->is_confirmed_verificator && $formRequest->is_confirmed_head_dept &&
             $formRequest->is_confirmed_pic &&
-            $formRequest->is_confirmed_cashier &&
+            $formRequest->is_confirmed_head_office &&
             ($formRequest->status_id == 1)
         ) {
             $formRequest->status_id = 2;
+            $formRequest->save();
+        }
+
+        if ($formRequest->is_confirmed_cashier) {
+
+            // Form Number
+            $day = str_pad(Carbon::now()->day, 2, '0', STR_PAD_LEFT);
+            $month = str_pad(Carbon::now()->month, 2, '0', STR_PAD_LEFT);
+            $year = Carbon::now()->year;
+            // Count form request which confirmed by cashier in that day
+            $count = FormRequest::where(function ($query) {
+                $query->where('is_confirmed_cashier', 1);
+                $query->whereDate('created_at', Carbon::now()->toDate());
+            })->count() + 1;
+            $count = str_pad($count, 2, '0', STR_PAD_LEFT);
+            $code = "UM";
+            $number = $code . "." . $count . "." . $day . $month . $year;
+            $formRequest->number = $number;
+
+            // Status
+            $formRequest->status_id = 3;
             $formRequest->save();
         }
     }

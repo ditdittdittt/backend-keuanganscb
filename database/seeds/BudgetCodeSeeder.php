@@ -14,6 +14,7 @@ class BudgetCodeSeeder extends Seeder
     {
         $budgetCode = new BudgetCode();
         $budgetCode->code = "A612.2";
+        $budgetCode->balance = 900000000;
         $budgetCode->name = "Makan";
         $budgetCode->save();
     }

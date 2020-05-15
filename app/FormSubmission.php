@@ -55,4 +55,9 @@ class FormSubmission extends Model
     {
         return $this->users()->wherePivot('role_name', 'head_office');
     }
+
+    public function details()
+    {
+        return $this->hasMany(FormSubmissionDetail::class);
+    }
 }

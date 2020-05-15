@@ -14,13 +14,13 @@ class CreateFormsNumber extends Migration
     public function up()
     {
         Schema::table('form_requests', function (Blueprint $table) {
-            $table->string('number');
+            $table->string('number')->nullable();
         });
         Schema::table('form_submissions', function (Blueprint $table) {
-            $table->string('number');
+            $table->string('number')->nullable();
         });
         Schema::table('form_petty_cashes', function (Blueprint $table) {
-            $table->string('number');
+            $table->string('number')->nullable();
         });
     }
 

@@ -45,15 +45,15 @@ class FormRequestController extends Controller
     public function show(FormRequest $formRequest)
     {
         try {
-            $formRequest->load('status', 'budgetCode');
-            $pic = $formRequest->users()->wherePivot('role_name', 'pic')->first();
-            $verificator = $formRequest->users()->wherePivot('role_name', 'verificator')->first();
-            $head_dept = $formRequest->users()->wherePivot('role_name', 'head_dept')->first();
-            $cashier = $formRequest->users()->wherePivot('role_name', 'cashier')->first();
+            $formRequest->load('status', 'budgetCode', 'formSubmission', 'details');
+            $pic = $formRequest->pic()->first();
+            $verificator = $formRequest->verificator()->first();
+            $head_dept = $formRequest->head_dept()->first();
+            $head_office = $formRequest->head_office()->first();
             $formRequest->pic = $pic;
             $formRequest->verificator = $verificator;
             $formRequest->head_dept = $head_dept;
-            $formRequest->cashier = $cashier;
+            $formRequest->head_office = $head_office;
             return ReturnGoodWay::successReturn(
                 $formRequest,
                 $this->modelName,
@@ -75,7 +75,6 @@ class FormRequestController extends Controller
             $formRequest->method = $request->method;
             $formRequest->allocation = $request->allocation;
             $formRequest->amount = $request->amount;
-            $formRequest->budget_code_id = $request->budget_code_id;
             $formRequest->notes = $request->notes;
             $formRequest->save();
             return ReturnGoodWay::successReturn(
@@ -246,11 +245,18 @@ class FormRequestController extends Controller
             $service->createFormRequestUsers($request, 'head_dept', $user);
         }
 
+        // Confirm as Head Dept
+        if ($request->is_confirmed_head_office) {
+            $formRequest->is_confirmed_head_office = 1;
+            $service->createFormRequestUsers($request, 'head_office', $user);
+        }
+
         // Confirm as Cashier
         if ($request->is_confirmed_cashier) {
             $formRequest->is_confirmed_cashier = 1;
             $service->createFormRequestUsers($request, 'cashier', $user);
         }
+
         $formRequest->save();
         $formRequest->users;
         return ReturnGoodWay::successReturn(
