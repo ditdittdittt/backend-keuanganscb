@@ -15,16 +15,13 @@ class NullableDateAttribute extends Migration
     {
         //
         Schema::table('form_requests', function (Blueprint $table) {
-            $table->dropColumn('date');
-            $table->string('date')->nullable();
+            $table->string('date')->nullable()->change();
         });
         Schema::table('form_submissions', function (Blueprint $table) {
-            $table->dropColumn('date');
-            $table->string('date')->nullable();
+            $table->string('date')->nullable()->change();
         });
         Schema::table('form_petty_cashes', function (Blueprint $table) {
-            $table->dropColumn('date');
-            $table->string('date')->nullable();
+            $table->string('date')->nullable()->change();
         });
     }
 
