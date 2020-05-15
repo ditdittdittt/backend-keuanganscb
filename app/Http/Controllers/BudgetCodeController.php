@@ -44,6 +44,7 @@ class BudgetCodeController extends Controller
             $budgetCode = new BudgetCode();
             $budgetCode->code = $request->code;
             $budgetCode->name = $request->name;
+            $budgetCode->balance = $request->balance;
             $budgetCode->save();
             return ReturnGoodWay::successReturn(
                 $budgetCode,
@@ -91,6 +92,7 @@ class BudgetCodeController extends Controller
         try {
             if ($request->code) $budgetCode->code = $request->code;
             if ($request->name) $budgetCode->name = $request->name;
+            if ($request->balance) $budgetCode->balance = $request->balance;
             $budgetCode->save();
             return ReturnGoodWay::successReturn(
                 $budgetCode,
