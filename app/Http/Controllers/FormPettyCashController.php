@@ -84,6 +84,8 @@ class FormPettyCashController extends Controller
     {
         try {
             $formPettyCash->update($request->all());
+            if ($request->status_id) $formPettyCash->status_id = $request->status_id;
+            $formPettyCash->save();
             return ReturnGoodWay::successReturn(
                 $formPettyCash,
                 $this->modelName,
