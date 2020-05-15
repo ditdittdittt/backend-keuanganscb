@@ -78,6 +78,6 @@
     'normal' => $rootDir . '/lib/fonts/DejaVuSerif',
   ),
   'ptsans' => array(
-    'normal' => $fontDir . '/ptsans-normal_c41c5be0f759e7589fcf268bf0e40dc5',
+    'normal' => $fontDir . '/ptsans-normal_a3e9f031110103b78f30a9bf85ad5479',
   ),
 ) ?>
