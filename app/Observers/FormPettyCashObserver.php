@@ -79,10 +79,16 @@ class FormPettyCashObserver
     public function updated(FormPettyCash $formPettyCash)
     {
         if (
-            $formPettyCash->is_confirmed_pic && $formPettyCash->is_confirmed_manager_ops && $formPettyCash->is_confirmed_cashier &&
+            $formPettyCash->is_confirmed_pic && $formPettyCash->is_confirmed_manager_ops &&
             ($formPettyCash->status_id == 1)
         ) {
             $formPettyCash->status_id = 2;
+            $formPettyCash->save();
+        }
+        if (
+            $formPettyCash->is_confirmed_cashier
+        ) {
+            $formPettyCash->status_id = 3;
             $formPettyCash->save();
         }
     }
