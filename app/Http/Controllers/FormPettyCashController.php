@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\AdditionalHelper\ReturnGoodWay;
 use App\AdditionalHelper\SeparateException;
+use App\AdditionalHelper\UploadHelper;
 use App\Exports\FormPettyCashExport;
 use App\FormPettyCash;
 use App\Http\Requests\FormPettyCashRequest;
+use App\Services\FormPettyCashService;
 use Carbon\Carbon;
 use PDF;
 use Exception;
@@ -216,5 +218,46 @@ class FormPettyCashController extends Controller
             ]
         )->setPaper('a4', 'portrait');
         return $pdf->stream('Form Petty Cash ' . $formPettyCash->number . '.pdf');
+    }
+
+    public function confirm(FormPettyCash $formPettyCash, Request $request)
+    {
+        $user = auth()->user();
+        $service = new FormPettyCashService($formPettyCash);
+
+        // Confirm as PIC
+        if ($request->is_confirmed_pic) {
+            $formPettyCash->is_confirmed_pic = 1;
+            if ($request->signature) {
+                $uploadHelper = new UploadHelper(
+                    $request->signature,
+                    "signatures"
+                );
+                $filePath = $uploadHelper->insertAttachment();
+                $userId = $formPettyCash->users()->wherePivot('role_name', 'pic')->first()->id;
+                $formPettyCash->users()->updateExistingPivot($userId, ['attachment' => $filePath]);
+            }
+        }
+
+        // Confirm as Manager Ops
+        if ($request->is_confirmed_manager_ops) {
+            $formPettyCash->is_confirmed_manager_ops = 1;
+            $service->createFormPettyCashUsers($request, 'manager_ops', $user);
+        }
+
+        // Confirm as Cashier
+        if ($request->is_confirmed_cashier) {
+            $formPettyCash->is_confirmed_cashier = 1;
+            $service->createFormPettyCashUsers($request, 'cashier', $user);
+        }
+
+        $formPettyCash->save();
+        $formPettyCash->users;
+        return ReturnGoodWay::successReturn(
+            $formPettyCash,
+            $this->modelName,
+            "Form Petty Cash has been successfully confirmed",
+            'success'
+        );
     }
 }

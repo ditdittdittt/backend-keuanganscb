@@ -99,6 +99,7 @@ Route::prefix('v1')->group(function () {
                     Route::get('/', 'FormPettyCashController@show')->name('getFormPettyCash');
                     Route::post('/', 'FormPettyCashController@update')->name('updateFormPettyCash');
                     Route::delete('/', 'FormPettyCashController@destroy')->name('deleteFormPettyCash');
+                    Route::post('/confirm', 'FormPettyCashController@confirm')->name('confirmFormPettyCash');
                     // Form PettyCash Detail
                     Route::prefix('/detail')->group(function () {
                         Route::get('/', 'FormPettyCashDetailController@index')->name('getAllPettyCashDetails');
