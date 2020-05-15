@@ -74,17 +74,41 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered">
-        <thead class="text-center table-success">
+    <table class="table table-bordered budget">
+        <thead class="text-center table-secondary">
             <tr>
-                <th>Budget Code</th>
-                <th>Budget Name</th>
+                <th width="25%">
+                    Budget Code
+                </th>
+                <th width="50%">
+                    Budget Name
+                </th>
+                <th>
+                    Nominal
+                </th>
             </tr>
         </thead>
-        <tbody class="text-center">
+        <tbody>
+            @foreach($formRequest->details as $detail)
             <tr>
-                <td width="50%">{{ $formRequest->budgetCode->code }}</td>
-                <td width="50%">{{ $formRequest->budgetCode->name }}</td>
+                <td>
+                    {{ $detail->budgetCode->code }}
+                </td>
+                <td>
+                    {{ $detail->budgetCode->name }}
+                </td>
+                <td class="text-right">
+                    {{ number_format($detail->nominal,2) }}
+                </td>
+            </tr>
+            @endforeach
+            <tr>
+                <td colspan="2" class="table-secondary font-weight-bold">
+                    Total
+                </td>
+                <td class="text-right">
+                    {{ "Rp. " . number_format($formRequest->amount, 2) }}
+                </td>
             </tr>
         </tbody>
     </table>
