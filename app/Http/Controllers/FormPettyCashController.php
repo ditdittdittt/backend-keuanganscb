@@ -64,7 +64,6 @@ class FormPettyCashController extends Controller
     {
         try {
             $formPettyCash = new FormPettyCash();
-            $formPettyCash->date = $request['date'];
             $formPettyCash->allocation = $request['allocation'];
             $formPettyCash->amount = $request['amount'];
             $formPettyCash->save();
