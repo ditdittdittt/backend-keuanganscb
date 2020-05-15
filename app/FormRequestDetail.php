@@ -13,4 +13,14 @@ class FormRequestDetail extends Model
         'budget_code_id',
         'nominal'
     ];
+
+    public function formRequest()
+    {
+        return $this->belongsTo('App\FormRequest');
+    }
+
+    public function budgetCode()
+    {
+        return $this->belongsTo(BudgetCode::class);
+    }
 }

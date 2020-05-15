@@ -45,7 +45,7 @@ class FormRequestController extends Controller
     public function show(FormRequest $formRequest)
     {
         try {
-            $formRequest->load('status', 'budgetCode', 'formSubmission', 'details');
+            $formRequest->load('status', 'budgetCode', 'formSubmission', 'details', 'details.budgetCode');
             $pic = $formRequest->pic()->first();
             $verificator = $formRequest->verificator()->first();
             $head_dept = $formRequest->head_dept()->first();
