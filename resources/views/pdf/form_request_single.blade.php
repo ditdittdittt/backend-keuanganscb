@@ -12,35 +12,52 @@
             font-weight: 400;
             font-style: normal;
         }
+        * {
+            font-family: 'PTSans', Arial, sans-serif !important;
+        }
+
+        .font-xl {
+            font-size: 24px;
+        }
+
+        .font-l {
+            font-size: 20px;
+        }
+
+        .font-m {
+            font-size: 16px;
+        }
+
+        .font-sm {
+            font-size: 12px;
+        }
+
+        .font-xsm {
+            font-size: 8px;
+        }
     </style>
 </head>
 
-<body style="background-color: #ffffff; font-family: 'PTSerif', Times, serif">
-    <table class="table table-bordered">
+<body style="background-color: #ffffff; font-family: 'PTSerif', Times, serif" class="font-sm">
+    <table class="table table-sm taber-borderless">
         <tbody>
             <tr>
-                <td width="75" class="text-center align-middle">
-                    <span class="font-weight-bold">No. Doc</span>
-                </td>
-                <td width="75" class="text-center align-middle" rowspan="2"
+                <td width="70" class="text-center align-middle p-0" rowspan="2"
                     style="border-top-color:transparent; border-bottom-color:transparent; border-right-color:transparent">
                     <img src="{{ public_path('images/logo.png') }}" alt="" width="75">
                 </td>
-                <td class="text-center align-middle" rowspan="2" style='border-color:transparent'>
-                    <h4>FORM FUND REQUEST</h4>
+                <td class="text-center align-middle p-0" rowspan="2" style='border-color:transparent'>
+                    <span class="font-l"><strong>FORM FUND REQUEST</strong></span>
                 </td>
-                <td width="100" class="text-center align-middle" rowspan="2" style='border-color:transparent'>
+                <td width="70" class="text-center align-middle p-0" rowspan="2" style='border-color:transparent'>
                     <img src="{{ public_path('images/logo_baznas.png') }}" alt="" width="100">
                 </td>
             </tr>
-            <tr>
-                <td class="text-center align-middle">{{ $formRequest->number }}</td>
-            </tr>
         </tbody>
     </table>
-    <hr style="border: 0.5px black solid">
-    <table class="table table-bordered">
-        <thead class="text-center table-success">
+    <hr style="border: 0.5px #444444 solid">
+    <table class="table table-sm">
+        <thead class="thead-dark">
             <tr>
                 <th>PIC</th>
                 <th>Metode Pembayaran</th>
@@ -48,9 +65,9 @@
                 <th>Date</th>
             </tr>
         </thead>
-        <tbody class="text-center">
+        <tbody>
             <tr>
-                <td width="25%" class="align-middle">
+                <td width="25%">
                     <!-- @if(strlen($formRequest->users()->wherePivot('role_name', 'pic')->first()->name) > 10)
                     @php
                     $splittedName = explode(" ", $formRequest->user->name);
@@ -62,20 +79,20 @@
                     @endif -->
                     {{ $formRequest->users()->wherePivot('role_name', 'pic')->first()->name }}
                 </td>
-                <td width="25%" class="align-middle">
+                <td width="25%">
                     {{ $formRequest->method }}
                 </td>
-                <td width="25%" class="align-middle">
+                <td width="25%">
                     {{ $formRequest->users()->wherePivot('role_name', 'pic')->first()->division }}
                 </td>
-                <td class="align-middle" width="25%">
+                <td width="25%">
                     {{ $formRequest->date }}
                 </td>
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered budget">
-        <thead class="text-center table-secondary">
+    <table class="table table-sm budget">
+        <thead class="thead-dark">
             <tr>
                 <th width="25%">
                     Budget Code
@@ -103,7 +120,7 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="2" class="table-secondary font-weight-bold">
+                <td colspan="2" class="thead-light font-weight-bold">
                     Total
                 </td>
                 <td class="text-right">
@@ -112,8 +129,8 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered text-center">
-        <thead class="table-success">
+    <table class="table table-sm">
+        <thead class="thead-dark">
             <tr>
                 <th>Allocation</th>
             </tr>
@@ -124,8 +141,8 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered text-center">
-        <thead class="table-success">
+    <table class="table table-sm">
+        <thead class="thead-dark">
             <tr>
                 <th>Jumlah</th>
                 <th>Saldo Anggaran</th>
@@ -138,8 +155,8 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered">
-        <thead class="text-center table-success">
+    <table class="table table-sm">
+        <thead class="text-center thead-dark">
             <tr>
                 <th>Attachment</th>
                 <th>Notes</th>
@@ -147,14 +164,14 @@
         </thead>
         <tbody class="text-center">
             <tr>
-                <td width="50%" class="align-middle">{{ $formRequest->attachment }}</td>
-                <td width="50%" class="align-middle">{{ $formRequest->notes }}</td>
+                <td width="50%">{{ $formRequest->attachment }}</td>
+                <td width="50%">{{ $formRequest->notes }}</td>
             </tr>
         </tbody>
     </table>
-    <div class="container mt-5">
+    <div class="container">
         <table class="table table-bordered mt-5">
-            <thead class="text-center">
+            <thead class="thead-light text-center">
                 <tr>
                     <th>PIC</th>
                     <th>Head Dept</th>
