@@ -66,7 +66,8 @@ class AuthController extends Controller
     public function getUser()
     {
         $user = auth()->user();
-        $user->roles;
+        $user->roles_list = $user->getRoleNames();
+        $user->makeHidden('roles');
         //        $roles = User::find(auth()->user()->id)->getRoleNames();
         //        $user->roles = $roles;
         // $user->roles;
