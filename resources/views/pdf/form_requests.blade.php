@@ -56,7 +56,7 @@
             </tr>
         </tbody>
     </table>
-    <hr>
+    <hr style="border: 0.5px #444444 solid">
     @if($request->frequency)
     <table class="table">
         <tbody>

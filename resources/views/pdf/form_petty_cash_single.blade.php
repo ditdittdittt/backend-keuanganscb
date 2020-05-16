@@ -7,32 +7,58 @@
     <link href="{{ public_path('css/app.css') }}" rel="stylesheet">
     <style>
         @font-face {
-            font-family: 'PTSerif';
-            src: url('{{ storage_path('fonts/PTSerif-Regular.ttf') }}') format("truetype");
+            font-family: 'PTSans';
+            src: url('{{ storage_path('fonts/PTSans-Regular.ttf') }}') format("truetype");
             font-weight: 400;
             font-style: normal;
+        }
+
+        * {
+            font-family: 'PTSans', Arial, sans-serif !important;
+        }
+
+        .font-xl {
+            font-size: 24px;
+        }
+
+        .font-l {
+            font-size: 20px;
+        }
+
+        .font-m {
+            font-size: 16px;
+        }
+
+        .font-sm {
+            font-size: 12px;
+        }
+
+        .font-xsm {
+            font-size: 8px;
         }
     </style>
 </head>
 
-<body style="background-color: #ffffff; font-family: 'PTSerif', Times, serif">
+<body style="background-color: #ffffff" class="font-sm">
     <table class="table table-borderless">
         <tbody>
             <tr>
-                <td width="20%" class="text-center align-middle">
-                    <img src="{{ public_path('images/logo.png') }}" alt="" width="75">
+                <td width="200" class="text-center p-0">
+                    <img src="{{ public_path('images/logo.png') }}" alt="" height="80">
                 </td>
-                <td width="60%" class="text-center align-middle">
-                    <span class="font-l"><strong>FORM PETTY CASH</strong></span>
+                <td class="text-center text-uppercase p-0">
+                    <div class="font-xl"><strong>Daftar Form Fund Request</strong></div>
+                    <div class="font-l">SMP Cendekia BAZNAS</div>
                 </td>
-                <td width="20%" class="text-center align-middle">
-                    <img src="{{ public_path('images/logo_baznas.png') }}" alt="" width="100">
+                <td width="200" class="text-center p-0">
+                    <img src="{{ public_path('images/logo_baznas.png') }}" alt="" height="80">
                 </td>
             </tr>
         </tbody>
     </table>
+    <hr style="border: 0.5px #444444 solid">
     <table class="table table-bordered table-sm">
-        <thead class="thead-dark"
+        <thead class="thead-dark">
             <tr>
                 <th width="50%">Payable To</th>
                 <th width="25%">
@@ -59,7 +85,7 @@
     </table>
 
     <table class="table table-bordered table-sm budget">
-        <thead class="thead-light">
+        <thead class="thead-dark">
             <tr>
                 <th width="25%">
                     Budget Code
@@ -87,7 +113,7 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="2" class="thead-light font-weight-bold">
+                <td colspan="2" class="font-weight-bold">
                     Total
                 </td>
                 <td class="text-right">
@@ -98,13 +124,13 @@
     </table>
     <table class="table table-bordered table-sm">
         <thead class="thead-dark">
-            <tr class="text-center">
+            <tr>
                 <th>Allocation</th>
                 <th>Notes</th>
             </tr>
         </thead>
         <tbody>
-            <tr class="text-center">
+            <tr>
                 <td width="50%">{{ $formPettyCash->allocation }}</td>
                 <td width="50%">{{ $formPettyCash->notes }}</td>
             </tr>
@@ -112,7 +138,7 @@
     </table>
     <div class="container">
         <table class="table table-bordered table-sm">
-            <thead class="text-center">
+            <thead class="thead-light text-center">
                 <tr>
                     <th>PIC</th>
                     <th>Manager Ops</th>
