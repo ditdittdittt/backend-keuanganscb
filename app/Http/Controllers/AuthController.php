@@ -66,6 +66,7 @@ class AuthController extends Controller
     public function getUser()
     {
         $user = auth()->user();
+        $user->roles;
         //        $roles = User::find(auth()->user()->id)->getRoleNames();
         //        $user->roles = $roles;
         // $user->roles;
