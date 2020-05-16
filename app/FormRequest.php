@@ -71,4 +71,11 @@ class FormRequest extends Model
     {
         return $this->hasMany(FormRequestDetail::class);
     }
+
+    public function saveWithoutEvents(array $options = [])
+    {
+        return static::withoutEvents(function () use ($options) {
+            return $this->save($options);
+        });
+    }
 }
