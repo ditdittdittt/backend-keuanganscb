@@ -31,9 +31,9 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered text-center">
-        <thead>
-            <tr class="table-success">
+    <table class="table table-sm">
+        <thead class="thead-dark"
+            <tr>
                 <th width="50%">Payable To</th>
                 <th width="25%">
                     Date
@@ -58,8 +58,8 @@
         </tbody>
     </table>
 
-    <table class="table table-bordered budget">
-        <thead class="text-center table-secondary">
+    <table class="table table-sm budget">
+        <thead class="thead-light">
             <tr>
                 <th width="25%">
                     Budget Code
@@ -96,8 +96,8 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-bordered">
-        <thead class="table-success">
+    <table class="table table-sm">
+        <thead class="thead-dark">
             <tr class="text-center">
                 <th>Allocation</th>
                 <th>Notes</th>
@@ -110,8 +110,8 @@
             </tr>
         </tbody>
     </table>
-    <div class="container mt-5">
-        <table class="table table-bordered mt-5">
+    <div class="container">
+        <table class="table table-sm">
             <thead class="text-center">
                 <tr>
                     <th>PIC</th>

@@ -105,12 +105,14 @@
             @foreach($formRequests as $formRequest)
             <tr>
                 <th scope="row">{{ $i++ }}</th>
-                <td>{{$formRequest->users()->wherePivot('role_name', 'pic')->first()->name}}</td>
+                <td colspan="{{count($formRequest->details)}}">{{$formRequest->users()->wherePivot('role_name', 'pic')->first()->name}}</td>
                 <td>{{$formRequest->allocation}}</td>
-                <td>{{$formRequest->budgetCode->code}}</td>
-                <td>{{$formRequest->budgetCode->name}}</td>
-                <td>{{$formRequest->date}}</td>
-                <td>{{"Rp. " . number_format($formRequest->amount, 2)}}</td>
+                @foreach ($formRequest->details as $details)
+                <td>{{$details->budgetCode->code}}</td>
+                <td>{{$details->budgetCode->name}}</td>
+                @endforeach
+                <td colspan="{{count($formRequest->details)}}">{{$formRequest->date}}</td>
+                <td colspan="{{count($formRequest->details)}}">{{"Rp. " . number_format($formRequest->amount, 2)}}</td>
             </tr>
             @endforeach
             <tr>
