@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\AdditionalHelper\UploadHelper;
+use App\BudgetCode;
 use App\FormRequest;
 use App\FormRequestDetail;
 use App\FormRequestUsers;
@@ -126,12 +127,23 @@ class FormRequestObserver
             ($formRequest->status_id == 1)
         ) {
             $formRequest->status_id = 2;
-            $formRequest->save();
+            $formRequest->saveWithoutEvents();
         }
 
-        if ($formRequest->is_confirmed_cashier) {
+        if ($formRequest->isDirty('is_confirmed_cashier')) {
+            // Update tanggal 
+            $formRequest->date = Carbon::now();
 
-            // Form Number
+            // Reduce budget code balance
+            foreach ($formRequest->details as $detail) {
+                $budgetCode = BudgetCode::find($detail->budgetCode->id);
+                $budgetCode->balance = $budgetCode->balance - $detail->nominal;
+                $budgetCode->save();
+            }
+
+            /**
+             * Update form number every cashier confirmed
+             */
             $day = str_pad(Carbon::now()->day, 2, '0', STR_PAD_LEFT);
             $month = str_pad(Carbon::now()->month, 2, '0', STR_PAD_LEFT);
             $year = Carbon::now()->year;
@@ -145,9 +157,13 @@ class FormRequestObserver
             $number = $code . "." . $count . "." . $day . $month . $year;
             $formRequest->number = $number;
 
-            // Status
+            /**
+             * After cashier confirm, update status to 3 ( Terbayarkan )
+             */
             $formRequest->status_id = 3;
-            $formRequest->save();
+
+            // Save without event triggered
+            $formRequest->saveWithoutEvents();
         }
     }
 

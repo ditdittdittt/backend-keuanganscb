@@ -69,7 +69,7 @@ class FormSubmissionObserver
         if (
             $formSubmission->is_confirmed_verificator && $formSubmission->is_confirmed_head_dept &&
             $formSubmission->is_confirmed_pic &&
-            $formSubmission->is_confirmed_cashier &&
+            $formSubmission->is_confirmed_head_office &&
             ($formSubmission->status_id == 1)
         ) {
             $formSubmission->status_id = 2;
