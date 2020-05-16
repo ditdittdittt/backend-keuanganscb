@@ -56,7 +56,7 @@
         </tbody>
     </table>
     <hr style="border: 0.5px #444444 solid">
-    <table class="table table-sm">
+    <table class="table table-bordered table-sm">
         <thead class="thead-dark">
             <tr>
                 <th>PIC</th>
@@ -91,7 +91,7 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-sm budget">
+    <table class="table table-bordered table-sm budget">
         <thead class="thead-dark">
             <tr>
                 <th width="25%">
@@ -129,7 +129,7 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-sm">
+    <table class="table table-bordered table-sm">
         <thead class="thead-dark">
             <tr>
                 <th>Allocation</th>
@@ -141,7 +141,7 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-sm">
+    <table class="table table-bordered table-sm">
         <thead class="thead-dark">
             <tr>
                 <th>Jumlah</th>
@@ -155,7 +155,7 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-sm">
+    <table class="table table-bordered table-sm">
         <thead class="text-center thead-dark">
             <tr>
                 <th>Attachment</th>

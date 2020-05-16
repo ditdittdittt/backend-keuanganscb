@@ -23,7 +23,7 @@
                     <img src="{{ public_path('images/logo.png') }}" alt="" width="75">
                 </td>
                 <td width="60%" class="text-center align-middle">
-                    <h4>FORM PETTY CASH</h4>
+                    <span class="font-l"><strong>FORM PETTY CASH</strong></span>
                 </td>
                 <td width="20%" class="text-center align-middle">
                     <img src="{{ public_path('images/logo_baznas.png') }}" alt="" width="100">
@@ -31,7 +31,7 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-sm">
+    <table class="table table-bordered table-sm">
         <thead class="thead-dark"
             <tr>
                 <th width="50%">Payable To</th>
@@ -58,7 +58,7 @@
         </tbody>
     </table>
 
-    <table class="table table-sm budget">
+    <table class="table table-bordered table-sm budget">
         <thead class="thead-light">
             <tr>
                 <th width="25%">
@@ -87,7 +87,7 @@
             </tr>
             @endforeach
             <tr>
-                <td colspan="2" class="table-secondary font-weight-bold">
+                <td colspan="2" class="thead-light font-weight-bold">
                     Total
                 </td>
                 <td class="text-right">
@@ -96,7 +96,7 @@
             </tr>
         </tbody>
     </table>
-    <table class="table table-sm">
+    <table class="table table-bordered table-sm">
         <thead class="thead-dark">
             <tr class="text-center">
                 <th>Allocation</th>
@@ -111,7 +111,7 @@
         </tbody>
     </table>
     <div class="container">
-        <table class="table table-sm">
+        <table class="table table-bordered table-sm">
             <thead class="text-center">
                 <tr>
                     <th>PIC</th>
