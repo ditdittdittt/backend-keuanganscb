@@ -127,4 +127,19 @@ class BudgetCodeController extends Controller
             return $error->checkException($this->modelName);
         }
     }
+
+    /**
+     * Top up or decreasing Budget Code balance
+     */
+    public function topUpBalance(BudgetCode $budgetCode, Request $request)
+    {
+        $budgetCode->balance = $budgetCode->balance + $request->nominal;
+        $budgetCode->save();
+        return ReturnGoodWay::successReturn(
+            $budgetCode,
+            $this->modelName,
+            "Budget balance update was successfully done",
+            'success'
+        );
+    }
 }

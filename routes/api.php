@@ -127,6 +127,7 @@ Route::prefix('v1')->group(function () {
                 Route::get('/', 'BudgetCodeController@show');
                 Route::post('/', 'BudgetCodeController@update');
                 Route::delete('/', 'BudgetCodeController@destroy');
+                Route::post('/topUp', 'BudgetCodeController@topUpBalance');
             });
         });
 
