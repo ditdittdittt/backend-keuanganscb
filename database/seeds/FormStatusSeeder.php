@@ -12,7 +12,7 @@ class FormStatusSeeder extends Seeder
      */
     public function run()
     {
-        $listStatus = ['Menunggu Persetujuan', 'Menunggu Pembayaran', 'Terbayarkan', 'Menunggu Submisi', 'Verifikasi Submisi', 'Selesai', 'Ditolak'];
+        $listStatus = ['Menunggu Persetujuan', 'Menunggu Pembayaran', 'Terbayarkan', 'Menunggu Submisi', 'Verifikasi Submisi', 'Selesai', 'Ditolak', 'Dibatalkan'];
         foreach ($listStatus as $status) {
             $newStatus = new FormStatus();
             $newStatus->status = $status;

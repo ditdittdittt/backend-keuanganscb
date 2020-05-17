@@ -12,163 +12,196 @@
             font-weight: 400;
             font-style: normal;
         }
+
+        * {
+            font-family: 'PTSans', Arial, sans-serif !important;
+        }
+
+        .font-xl {
+            font-size: 24px;
+        }
+
+        .font-l {
+            font-size: 20px;
+        }
+
+        .font-m {
+            font-size: 16px;
+        }
+
+        .font-sm {
+            font-size: 12px;
+        }
+
+        .font-xsm {
+            font-size: 8px;
+        }
     </style>
 </head>
 
-<body style="background-color: #ffffff; font-family: 'PTSerif', Times, serif">
-    {{-- HEADER --}}
-    <table class=" table table-bordered">
+<body style="background-color: #ffffff; font-family: 'PTSerif', Times, serif" class="font-sm">
+    <table class="table table-sm taber-borderless">
         <tbody>
             <tr>
-                <td width="75" class="text-center align-middle" style="padding:0.25rem">
-                    <span class="font-weight-bold">No. Doc</span>
-                </td>
-                <td width="75" class="text-center align-middle" rowspan="2"
-                    style="border-top-color:transparent; border-bottom-color:transparent; border-right-color:transparent; padding:0.25rem">
+                <td width="70" class="text-center align-middle p-0" rowspan="2"
+                    style="border-top-color:transparent; border-bottom-color:transparent; border-right-color:transparent">
                     <img src="{{ public_path('images/logo.png') }}" alt="" width="75">
                 </td>
-                <td class="text-center align-middle" rowspan="2" style='border-color:transparent; padding:0.25rem'>
-                    <h4>FORM FUND SUBMISSION</h4>
+                <td class="text-center align-middle p-0" rowspan="2" style='border-color:transparent'>
+                    <span class="font-l"><strong>FORM SUBMISSION</strong></span>
                 </td>
-                <td width="100" class="text-center align-middle" rowspan="2"
-                    style='border-color:transparent; padding:0.25rem'>
+                <td width="70" class="text-center align-middle p-0" rowspan="2" style='border-color:transparent'>
                     <img src="{{ public_path('images/logo_baznas.png') }}" alt="" width="100">
                 </td>
             </tr>
+        </tbody>
+    </table>
+    <hr style="border: 0.5px #444444 solid">
+    <table class="table table-bordered table-sm">
+        <thead class="thead-dark">
             <tr>
-                <td class="text-center align-middle" style="padding:0.25rem">{{ $formSubmission->number }}</td>
+                <th>PIC</th>
+                <th>Divisi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="25%">
+                    {{ $formSubmission->pic()->first()->name }}
+                </td>
+                <td width="25%">
+                    {{ $formSubmission->pic()->first()->division }}
+                </td>
             </tr>
         </tbody>
     </table>
-
-    {{-- BODY --}}
-    {{-- PIC Information --}}
-    <table class="table table-bordered ">
-        <thead class="text-center table-success">
+    <table class="table table-bordered table-sm">
+        <thead class="thead-dark">
             <tr>
-                <th width="50%">
-                    PIC
+                <th>No. Doc. Form Fund Request</th>
+                <th>Date Form Fund Request</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td width="50%">{{ $formSubmission->formRequest->number }}</td>
+                <td width="50%">{{ $formSubmission->formRequest->date }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered table-sm budget">
+        <thead class="thead-dark">
+            <tr>
+                <th width="25%">
+                    Budget Code
+                </th>
+                <th width="25%">
+                    Budget Name
                 </th>
                 <th>
-                    Division
-                </th>
-            </tr>
-        </thead>
-        <tbody class="text-center">
-            <tr>
-                <td>{{$formSubmission->pic()->first()->name}}</td>
-                <td>{{$formSubmission->pic()->first()->division}}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    {{-- Fund Req Information --}}
-    <table class="table table-bordered">
-        <thead class="text-center table-success">
-            <tr>
-                <th width="50%">
-                    No. Doc Form Request
+                    Used
                 </th>
                 <th>
-                    Date Form Request
+                    Balance
                 </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($formSubmission->details as $detail)
+            <tr>
+                <td>
+                    {{ $detail->budgetCode->code }}
+                </td>
+                <td>
+                    {{ $detail->budgetCode->name }}
+                </td>
+                <td class="text-right">
+                    {{ number_format($detail->used,2) }}
+                </td>
+                <td class="text-right">
+                    {{ number_format($detail->balance,2) }}
+                </td>
+            </tr>
+            @endforeach
+            <tr>
+                <td colspan="2" class="thead-light font-weight-bold">
+                    Total
+                </td>
+                <td class="text-right">
+                    {{ "Rp. " . number_format($formSubmission->used, 2) }}
+                </td>
+                <td class="text-right">
+                    {{ "Rp. " . number_format($formSubmission->balance, 2) }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered table-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th>Allocation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ $formSubmission->allocation }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-bordered table-sm">
+        <thead class="text-center thead-dark">
+            <tr>
+                <th>Attachment</th>
+                <th>Notes</th>
             </tr>
         </thead>
         <tbody class="text-center">
             <tr>
-                <td>{{$formSubmission->formRequest->number}}</td>
-                <td>{{$formSubmission->formRequest->date}}</td>
+                <td width="50%">{{ $formSubmission->attachment }}</td>
+                <td width="50%">{{ $formSubmission->notes }}</td>
             </tr>
         </tbody>
     </table>
-
-    {{-- Amount, Use and Balance --}}
-    <table class="table table-bordered">
-        <thead class="text-center table-success">
+    <table class="table table-bordered mt-5">
+        <thead class="thead-light text-center">
             <tr>
-                <th width="30%">
-                    Fund Req
-                    <br>
-                    ( permohonan dana )
-                </th>
-                <th width="30%">
-                    Use
-                    <br>
-                    ( penggunaan dana )
-                </th>
-                <th width="30%">
-                    Balancing
-                    <br>
-                    ( sisa dana )
-                </th>
+                <th>PIC</th>
+                <th>Head Dept</th>
+                <th>Verificator</th>
+                <th>Head Office</th>
+                <th>Cashier</th>
             </tr>
         </thead>
         <tbody class="text-center">
             <tr>
-                <td>{{"Rp. " . number_format($formSubmission->formRequest->amount, 2)}}</td>
-                <td>{{"Rp. " . number_format($formSubmission->used, 2)}}</td>
-                <td>{{"Rp. " . number_format($formSubmission->balance, 2)}}</td>
+                <td height="50" width="100px">
+                    @if (array_key_exists("pic", $arrayOfPath))
+                    <img src="{{ public_path( $arrayOfPath['pic'] ) }}" height="50">
+                    @endif
+                </td>
+                <td width="100px">
+                    @if (array_key_exists("head_dept", $arrayOfPath)) <img
+                        src="{{ public_path( $arrayOfPath['head_dept'] ) }}" height="50">
+                    @endif
+                </td>
+                <td width="100px">
+                    @if (array_key_exists("verificator", $arrayOfPath)) <img
+                        src="{{ public_path( $arrayOfPath['verificator'] ) }}" height="50">
+                    @endif
+                </td>
+                <td width="100px">
+                    @if (array_key_exists("head_office", $arrayOfPath)) <img
+                        src="{{ public_path( $arrayOfPath['head_office'] ) }}" height="50">
+                    @endif
+                </td>
+                <td width="100px">
+                    @if (array_key_exists("cashier", $arrayOfPath)) <img
+                        src="{{ public_path( $arrayOfPath['cashier'] ) }}" height="50">
+                    @endif
+                </td>
             </tr>
         </tbody>
     </table>
-
-    {{-- Allocation and notes --}}
-    <table class="table table-bordered">
-        <thead class="text-center table-success">
-            <tr>
-                <th width="50%">
-                    Allocation
-                </th>
-                <th>
-                    Notes
-                </th>
-            </tr>
-        </thead>
-        <tbody class="text-center">
-            <tr>
-                <td>{{$formSubmission->allocation}}</td>
-                <td>{{$formSubmission->notes}}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    {{-- SIGNATURE --}}
-    <div class="container mt-5">
-        <table class="table table-bordered mt-3">
-            <thead class="text-center">
-                <tr>
-                    <th>PIC</th>
-                    <th>Head Dept</th>
-                    <th>Verificator</th>
-                    <th>Cashier</th>
-                </tr>
-            </thead>
-            <tbody class="text-center">
-                <tr>
-                    <td height="50" width="100px">
-                        @if (array_key_exists('pic', $pathArray))
-                        <img src="{{public_path($pathArray['pic'])}}" alt="" height="50">
-                        @endif
-                    </td>
-                    <td width="100px">
-                        @if (array_key_exists('head_dept', $pathArray))
-                        <img src="{{public_path($pathArray['head_dept'])}}" alt="" height="50">
-                        @endif
-                    </td>
-                    <td width="100px">
-                        @if (array_key_exists('verificator', $pathArray))
-                        <img src="{{public_path($pathArray['verificator'])}}" alt="" height="50">
-                        @endif
-                    </td>
-                    <td width="100px">
-                        @if (array_key_exists('cashier', $pathArray))
-                        <img src="{{public_path($pathArray['cashier'])}}" alt="" height="50">
-                        @endif
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 </body>
 
 </html>

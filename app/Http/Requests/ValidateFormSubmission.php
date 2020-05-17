@@ -23,11 +23,6 @@ class ValidateFormSubmission extends FormRequest
      */
     public function rules()
     {
-        return [
-            'date' => 'required',
-            'used' => 'required',
-            'allocation' => 'required',
-            'balanced' => 'numeric',
-        ];
+        return [];
     }
 }

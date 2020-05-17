@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\FormSubmission;
+use App\FormSubmissionDetail;
 use App\FormSubmissionUsers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -43,6 +44,17 @@ class FormSubmissionObserver
      */
     public function created(FormSubmission $formSubmission)
     {
+        // Store Details
+        foreach ($this->request->details as $detail) {
+            $formSubmissionDetail = new FormSubmissionDetail();
+            $formSubmissionDetail->form_submission_id = $formSubmission->id;
+            $formSubmissionDetail->budget_code_id = $detail['budget_code_id'];
+            $formSubmissionDetail->used = $detail['used'];
+            $formSubmissionDetail->balance = $detail['balance'];
+            $formSubmissionDetail->save();
+        }
+
+        // Users pivot
         $pivot = new FormSubmissionUsers();
         $pivot->user_id = auth()->user()->id;
         $pivot->role_name = 'pic';

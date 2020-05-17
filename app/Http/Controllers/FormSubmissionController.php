@@ -43,7 +43,6 @@ class FormSubmissionController extends Controller
         try {
             $formSubmission = new FormSubmission();
             $formSubmission->form_request_id = $request->input('form_request_id');
-            $formSubmission->date = $request->input('date');
             $formSubmission->used = $request->input('used');
             $formSubmission->balance = $request->input('balance');
             $formSubmission->allocation = $request->input('allocation');
@@ -193,7 +192,7 @@ class FormSubmissionController extends Controller
         }
         $pdf = PDF::loadview('pdf.form_submission_single', [
             'formSubmission' => $formSubmission,
-            'pathArray' => $pathArray,
+            'arrayOfPath' => $pathArray,
         ])->setPaper('a4', 'portrait');
         return $pdf->stream('Form Submission ' . $formSubmission->number . ".pdf");
     }

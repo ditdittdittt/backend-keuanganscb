@@ -14,4 +14,9 @@ class FormSubmissionDetail extends Model
         'used',
         'balance'
     ];
+
+    public function budgetCode()
+    {
+        return $this->belongsTo(BudgetCode::class);
+    }
 }

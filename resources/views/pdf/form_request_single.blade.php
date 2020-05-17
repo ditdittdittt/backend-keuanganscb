@@ -12,6 +12,7 @@
             font-weight: 400;
             font-style: normal;
         }
+
         * {
             font-family: 'PTSans', Arial, sans-serif !important;
         }
@@ -169,42 +170,46 @@
             </tr>
         </tbody>
     </table>
-    <div class="container">
-        <table class="table table-bordered mt-5">
-            <thead class="thead-light text-center">
-                <tr>
-                    <th>PIC</th>
-                    <th>Head Dept</th>
-                    <th>Verificator</th>
-                    <th>Cashier</th>
-                </tr>
-            </thead>
-            <tbody class="text-center">
-                <tr>
-                    <td height="50" width="100px">
-                        @if (array_key_exists("pic", $arrayOfPath))
-                        <img src="{{ public_path( $arrayOfPath['pic'] ) }}" height="50">
-                        @endif
-                    </td>
-                    <td width="100px">
-                        @if (array_key_exists("head_dept", $arrayOfPath)) <img
-                            src="{{ public_path( $arrayOfPath['head_dept'] ) }}" height="50">
-                        @endif
-                    </td>
-                    <td width="100px">
-                        @if (array_key_exists("verificator", $arrayOfPath)) <img
-                            src="{{ public_path( $arrayOfPath['verificator'] ) }}" height="50">
-                        @endif
-                    </td>
-                    <td width="100px">
-                        @if (array_key_exists("cashier", $arrayOfPath)) <img
-                            src="{{ public_path( $arrayOfPath['cashier'] ) }}" height="50">
-                        @endif
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <table class="table table-bordered mt-5">
+        <thead class="thead-light text-center">
+            <tr>
+                <th>PIC</th>
+                <th>Head Dept</th>
+                <th>Verificator</th>
+                <th>Head Office</th>
+                <th>Cashier</th>
+            </tr>
+        </thead>
+        <tbody class="text-center">
+            <tr>
+                <td height="50" width="100px">
+                    @if (array_key_exists("pic", $arrayOfPath))
+                    <img src="{{ public_path( $arrayOfPath['pic'] ) }}" height="50">
+                    @endif
+                </td>
+                <td width="100px">
+                    @if (array_key_exists("head_dept", $arrayOfPath)) <img
+                        src="{{ public_path( $arrayOfPath['head_dept'] ) }}" height="50">
+                    @endif
+                </td>
+                <td width="100px">
+                    @if (array_key_exists("verificator", $arrayOfPath)) <img
+                        src="{{ public_path( $arrayOfPath['verificator'] ) }}" height="50">
+                    @endif
+                </td>
+                <td width="100px">
+                    @if (array_key_exists("head_office", $arrayOfPath)) <img
+                        src="{{ public_path( $arrayOfPath['head_office'] ) }}" height="50">
+                    @endif
+                </td>
+                <td width="100px">
+                    @if (array_key_exists("cashier", $arrayOfPath)) <img
+                        src="{{ public_path( $arrayOfPath['cashier'] ) }}" height="50">
+                    @endif
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 
 </html>
