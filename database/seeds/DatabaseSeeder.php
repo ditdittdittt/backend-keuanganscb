@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
         $this->call(FormStatusSeeder::class);
         $this->call(BudgetCodeSeeder::class);
         $this->call(RoleSeeder::class);
+        $this->call(RekeningSeeder::class);
         $this->call(UserSeeder::class);
     }
 }

@@ -116,6 +116,7 @@ Route::prefix('v1')->group(function () {
             });
         });
 
+        // Budget Code
         Route::prefix('budget-code')->group(function () {
             Route::get('/', 'BudgetCodeController@index')->name('getAllBudgetCode');
             Route::post('/', 'BudgetCodeController@store')->name('storeBudgetCode');
@@ -126,6 +127,18 @@ Route::prefix('v1')->group(function () {
                 Route::get('/', 'BudgetCodeController@show');
                 Route::post('/', 'BudgetCodeController@update');
                 Route::delete('/', 'BudgetCodeController@destroy');
+            });
+        });
+
+        // Rekening
+        Route::prefix('rekening')->group(function () {
+            Route::get('/', 'RekeningController@index')->name('getAllRekening');
+            Route::post('/', 'RekeningController@store')->name('storeRekening');
+            Route::group([
+                'prefix' => '{rekening}',
+                'where' => ['rekening' => '[0-9]+']
+            ], function () {
+                Route::delete('/', 'RekeningController@destroy')->name('deleteRekening');
             });
         });
 
