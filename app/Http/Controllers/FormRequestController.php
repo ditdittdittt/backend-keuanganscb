@@ -25,7 +25,84 @@ class FormRequestController extends Controller
     public function index()
     {
         try {
-            $formRequests = FormRequest::with(['status', 'budgetCode'])->get();
+            $user = auth()->user();
+            switch ($user) {
+
+                    // Admin
+                case $user->hasRole('admin'):
+                    $formRequests = FormRequest::with(['status', 'details.budgetCode'])
+                        ->get();
+                    break;
+
+                case $user->hasAllRoles(['head_dept', 'pic']):
+                    $formRequests = FormRequest::with(['status'])
+                        ->whereHas('users', function ($query) use ($user) {
+                            $query->where('users.id', $user->id);
+                        })
+                        ->orWhere(function ($query) {
+                            $query->where('is_confirmed_pic', 1);
+                            $query->where('is_confirmed_head_dept', 0);
+                        })
+                        ->get();
+                    break;
+
+                    // PIC
+                case $user->hasRole('pic'):
+                    $formRequests = FormRequest::with(['status'])
+                        ->whereHas('users', function ($query) use ($user) {
+                            $query->where('users.id', $user->id);
+                        })
+                        ->get();
+                    break;
+
+                    // Head Dept
+                case $user->hasRole('head_dept'):
+                    $formRequests = FormRequest::with(['status'])
+                        ->where(function ($query) {
+                            $query->where('is_confirmed_pic', 1);
+                            $query->where('is_confirmed_head_dept', 0);
+                        })
+                        ->get();
+                    break;
+
+                    // Verificator
+                case $user->hasRole('verificator'):
+                    $formRequests = FormRequest::with(['status'])
+                        ->where(function ($query) {
+                            $query->where('is_confirmed_pic', 1);
+                            $query->where('is_confirmed_head_dept', 1);
+                            $query->where('is_confirmed_verificator', 0);
+                        })
+                        ->get();
+                    break;
+
+                    // Head Office
+                case $user->hasRole('head_office'):
+                    $formRequests = FormRequest::with(['status'])
+                        ->where(function ($query) {
+                            $query->where('is_confirmed_pic', 1);
+                            $query->where('is_confirmed_head_dept', 1);
+                            $query->where('is_confirmed_verificator', 1);
+                            $query->where('is_confirmed_head_office', 0);
+                        })
+                        ->get();
+                    break;
+
+                    // Cashier
+                case $user->hasRole('cashier'):
+                    $formRequests = FormRequest::with(['status'])
+                        ->where(function ($query) {
+                            $query->where('is_confirmed_pic', 1);
+                            $query->where('is_confirmed_head_dept', 1);
+                            $query->where('is_confirmed_verificator', 1);
+                            $query->where('is_confirmed_head_office', 1);
+                            $query->where('is_confirmed_cashier', 0);
+                        })
+                        ->get();
+                    break;
+            }
+
+
             foreach ($formRequests as $formRequest) {
                 $formRequest->pic = $formRequest->pic()->first();
             }
@@ -45,7 +122,7 @@ class FormRequestController extends Controller
     public function show(FormRequest $formRequest)
     {
         try {
-            $formRequest->load('status', 'budgetCode', 'formSubmission', 'details', 'details.budgetCode');
+            $formRequest->load('status', 'formSubmission', 'details', 'details.budgetCode');
             $pic = $formRequest->pic()->first();
             $verificator = $formRequest->verificator()->first();
             $head_dept = $formRequest->head_dept()->first();

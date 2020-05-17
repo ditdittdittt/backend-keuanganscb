@@ -53,7 +53,7 @@ class FormRequestObserver
         $year = Carbon::now()->year;
         $count = FormRequest::whereDate('created_at', Carbon::now()->toDate())->count() + 1;
         $count = str_pad($count, 2, '0', STR_PAD_LEFT);
-        $code = "INV";
+        $code = "INV.UM";
         $number = $code . "." . $count . "." . $day . $month . $year;
         $formRequest->invoice_number = $number;
     }
@@ -132,11 +132,11 @@ class FormRequestObserver
 
         if ($formRequest->isDirty('is_confirmed_cashier')) {
             // Update tanggal 
-            $formRequest->date = Carbon::now();
+            $formRequest->date = Carbon::now()->toDateString();
 
             // Reduce budget code balance
             foreach ($formRequest->details as $detail) {
-                $budgetCode = BudgetCode::find($detail->budgetCode->id);
+                $budgetCode = $detail->budgetCode;
                 $budgetCode->balance = $budgetCode->balance - $detail->nominal;
                 $budgetCode->save();
             }
@@ -150,7 +150,7 @@ class FormRequestObserver
             // Count form request which confirmed by cashier in that day
             $count = FormRequest::where(function ($query) {
                 $query->where('is_confirmed_cashier', 1);
-                $query->whereDate('created_at', Carbon::now()->toDate());
+                $query->whereDate('date', Carbon::now()->toDate());
             })->count() + 1;
             $count = str_pad($count, 2, '0', STR_PAD_LEFT);
             $code = "UM";

@@ -48,4 +48,11 @@ class FormPettyCash extends Model
     {
         return $this->users()->wherePivot('role_name', 'cashier');
     }
+
+    public function saveWithoutEvents(array $options = [])
+    {
+        return static::withoutEvents(function () use ($options) {
+            return $this->save($options);
+        });
+    }
 }

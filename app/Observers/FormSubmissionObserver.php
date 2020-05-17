@@ -30,9 +30,9 @@ class FormSubmissionObserver
         $year = Carbon::now()->year;
         $count = FormSubmission::whereDate('created_at', Carbon::now()->toDate())->count() + 1;
         $count = str_pad($count, 2, '0', STR_PAD_LEFT);
-        $code = "FS";
+        $code = "INV.FS";
         $number = $code . "." . $count . "." . $day . $month . $year;
-        $formSubmission->number = $number;
+        $formSubmission->invoice_number = $number;
     }
 
     /**
@@ -73,7 +73,37 @@ class FormSubmissionObserver
             ($formSubmission->status_id == 1)
         ) {
             $formSubmission->status_id = 2;
-            $formSubmission->save();
+            $formSubmission->saveWithoutEvents();
+        }
+
+        if ($formSubmission->isDirty('is_confirmed_cashier')) {
+            // Decrease budget code balance
+            foreach ($formSubmission->details as $detail) {
+                $budgetCode = $detail->budgetCode;
+                $budgetCode->balance = $budgetCode->balance + $detail->balance;
+                $budgetCode->save();
+            }
+
+            // Update status to "Selesai"
+            $formSubmission->status_id = 6;
+
+            // Update date to now
+            $formSubmission->date = Carbon::now()->toDateString();
+
+            // Update number
+            $day = str_pad(Carbon::now()->day, 2, '0', STR_PAD_LEFT);
+            $month = str_pad(Carbon::now()->month, 2, '0', STR_PAD_LEFT);
+            $year = Carbon::now()->year;
+            $count = FormSubmission::where(function ($query) {
+                $query->where('is_confirmed_cashier', 1);
+                $query->whereDate('date', Carbon::now()->toDate());
+            })->count() + 1;
+            $count = str_pad($count, 2, '0', STR_PAD_LEFT);
+            $code = "FS";
+            $number = $code . "." . $count . "." . $day . $month . $year;
+            $formSubmission->number = $number;
+
+            $formSubmission->saveWithoutEvents();
         }
     }
 

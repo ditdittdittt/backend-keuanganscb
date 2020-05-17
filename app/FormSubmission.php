@@ -60,4 +60,11 @@ class FormSubmission extends Model
     {
         return $this->hasMany(FormSubmissionDetail::class);
     }
+
+    public function saveWithoutEvents(array $options = [])
+    {
+        return static::withoutEvents(function () use ($options) {
+            return $this->save($options);
+        });
+    }
 }

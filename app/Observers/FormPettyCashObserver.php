@@ -32,9 +32,9 @@ class FormPettyCashObserver
         $year = Carbon::now()->year;
         $count = FormPettyCash::whereDate('created_at', Carbon::now()->toDate())->count() + 1;
         $count = str_pad($count, 2, '0', STR_PAD_LEFT);
-        $code = "KK";
+        $code = "INV.KK";
         $number = $code . "." . $count . "." . $day . $month . $year;
-        $formPettyCash->number = $number;
+        $formPettyCash->invoice_number = $number;
     }
 
     /**
@@ -84,12 +84,38 @@ class FormPettyCashObserver
         ) {
             $formPettyCash->status_id = 2;
             $formPettyCash->save();
-        } else if (
-            $formPettyCash->is_confirmed_pic && $formPettyCash->is_confirmed_manager_ops && $formPettyCash->is_confirmed_cashier &&
-            ($formPettyCash->status_id == 2)
+        }
+
+        if (
+            $formPettyCash->isDirty('is_confirmed_cashier')
         ) {
+            // Decrease budget code balance
+            foreach ($formPettyCash->details as $detail) {
+                $budgetCode = $detail->budgetCode;
+                $budgetCode->balance = $budgetCode->balance - $detail->nominal;
+                $budgetCode->save();
+            }
+
+            // Update status to "Terbayarkan"
             $formPettyCash->status_id = 3;
-            $formPettyCash->save();
+
+            // Update date to now
+            $formPettyCash->date = Carbon::now()->toDateString();
+
+            // Update number
+            $day = str_pad(Carbon::now()->day, 2, '0', STR_PAD_LEFT);
+            $month = str_pad(Carbon::now()->month, 2, '0', STR_PAD_LEFT);
+            $year = Carbon::now()->year;
+            $count = FormPettyCash::where(function ($query) {
+                $query->where('is_confirmed_cashier', 1);
+                $query->whereDate('date', Carbon::now()->toDate());
+            })->count() + 1;
+            $count = str_pad($count, 2, '0', STR_PAD_LEFT);
+            $code = "KK";
+            $number = $code . "." . $count . "." . $day . $month . $year;
+            $formPettyCash->number = $number;
+
+            $formPettyCash->saveWithoutEvents();
         }
     }
 
