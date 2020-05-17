@@ -3,7 +3,7 @@
 namespace App\AdditionalHelper\Uploader;
 
 use Carbon\Carbon;
-use UploaderInterface;
+use App\AdditionalHelper\Uploader\UploaderInterface;
 
 class DocumentUploader implements UploaderInterface
 {
