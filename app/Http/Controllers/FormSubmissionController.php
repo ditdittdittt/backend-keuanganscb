@@ -234,6 +234,12 @@ class FormSubmissionController extends Controller
             $service->createFormSubmissionUsers($request, 'head_office', $user);
         }
 
+        // Confirm as Cashier
+        if ($request->is_confirmed_cashier) {
+            $formSubmission->is_confirmed_cashier = 1;
+            $service->createFormSubmissionUsers($request, 'cashier', $user);
+        }
+
         $formSubmission->save();
         $formSubmission->users;
         return ReturnGoodWay::successReturn(
