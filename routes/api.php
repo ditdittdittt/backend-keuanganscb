@@ -128,6 +128,7 @@ Route::prefix('v1')->group(function () {
                 Route::post('/', 'BudgetCodeController@update');
                 Route::delete('/', 'BudgetCodeController@destroy');
                 Route::post('/topUp', 'BudgetCodeController@topUpBalance');
+                Route::get('/logs', 'BudgetCodeLogController@index');
             });
         });
 
