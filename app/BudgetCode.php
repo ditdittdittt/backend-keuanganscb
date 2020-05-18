@@ -17,4 +17,9 @@ class BudgetCode extends Model
     {
         return $this->hasMany(FormPettyCashDetail::class);
     }
+
+    public function logs()
+    {
+        return $this->hasMany(BudgetCodeLog::class);
+    }
 }

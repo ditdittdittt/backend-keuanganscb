@@ -10,6 +10,7 @@ use App\FormRequestUsers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Notifications\FormCreated;
+use App\Services\BudgetCodeService;
 
 class FormRequestObserver
 {
@@ -134,13 +135,6 @@ class FormRequestObserver
             // Update tanggal 
             $formRequest->date = Carbon::now()->toDateString();
 
-            // Reduce budget code balance
-            foreach ($formRequest->details as $detail) {
-                $budgetCode = $detail->budgetCode;
-                $budgetCode->balance = $budgetCode->balance - $detail->nominal;
-                $budgetCode->save();
-            }
-
             /**
              * Update form number every cashier confirmed
              */
@@ -156,6 +150,15 @@ class FormRequestObserver
             $code = "UM";
             $number = $code . "." . $count . "." . $day . $month . $year;
             $formRequest->number = $number;
+
+            // Reduce budget code balance
+            foreach ($formRequest->details as $detail) {
+                $budgetCode = $detail->budgetCode;
+                $budgetCode->balance = $budgetCode->balance - $detail->nominal;
+                $budgetCode->save();
+                $budgetCodeService = new BudgetCodeService($budgetCode);
+                $budgetCodeService->createLog($number, "kredit", $detail->nominal, $formRequest->pic()->first()->id);
+            }
 
             /**
              * After cashier confirm, update status to 3 ( Terbayarkan )
