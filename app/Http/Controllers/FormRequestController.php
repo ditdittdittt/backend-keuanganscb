@@ -172,12 +172,12 @@ class FormRequestController extends Controller
             if ($request->budget_code_id) {
                 $formRequest->budget_code_id = $request->budget_code_id;
             }
-            if ($formRequest->method == "Transfer") {
+            if ($formRequest->method == "transfer") {
                 $formRequest->bank_name = $request->bank_name;
                 $formRequest->bank_code = $request->bank_code;
                 $formRequest->account_number = $request->account_number;
                 $formRequest->account_owner = $request->account_owner;
-            } else if ($formRequest->method == "Cash") {
+            } else if ($formRequest->method == "cash") {
                 $formRequest->bank_name = null;
                 $formRequest->bank_code = null;
                 $formRequest->account_number = null;

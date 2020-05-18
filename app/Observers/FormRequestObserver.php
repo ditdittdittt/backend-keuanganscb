@@ -41,7 +41,7 @@ class FormRequestObserver
         }
 
         // Transfer method needs detail
-        if ($formRequest->method == "Transfer") {
+        if ($formRequest->method == "transfer") {
             $formRequest->bank_name = $this->request->bank_name;
             $formRequest->bank_code = $this->request->bank_code;
             $formRequest->account_number = $this->request->account_number;
@@ -132,7 +132,7 @@ class FormRequestObserver
         }
 
         if ($formRequest->isDirty('is_confirmed_cashier')) {
-            // Update tanggal 
+            // Update tanggal
             $formRequest->date = Carbon::now()->toDateString();
 
             /**
