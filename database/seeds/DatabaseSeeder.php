@@ -12,9 +12,9 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(FormStatusSeeder::class);
-        $this->call(BudgetCodeSeeder::class);
         $this->call(RoleSeeder::class);
         $this->call(RekeningSeeder::class);
         $this->call(UserSeeder::class);
+        $this->call(BudgetCodeSeeder::class);
     }
 }

@@ -6,6 +6,7 @@ use App\AdditionalHelper\UploadHelper;
 use App\FormPettyCash;
 use App\FormPettyCashDetail;
 use App\FormPettyCashUsers;
+use App\Services\BudgetCodeService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -89,19 +90,6 @@ class FormPettyCashObserver
         if (
             $formPettyCash->isDirty('is_confirmed_cashier')
         ) {
-            // Decrease budget code balance
-            foreach ($formPettyCash->details as $detail) {
-                $budgetCode = $detail->budgetCode;
-                $budgetCode->balance = $budgetCode->balance - $detail->nominal;
-                $budgetCode->save();
-            }
-
-            // Update status to "Terbayarkan"
-            $formPettyCash->status_id = 3;
-
-            // Update date to now
-            $formPettyCash->date = Carbon::now()->toDateString();
-
             // Update number
             $day = str_pad(Carbon::now()->day, 2, '0', STR_PAD_LEFT);
             $month = str_pad(Carbon::now()->month, 2, '0', STR_PAD_LEFT);
@@ -114,6 +102,21 @@ class FormPettyCashObserver
             $code = "KK";
             $number = $code . "." . $count . "." . $day . $month . $year;
             $formPettyCash->number = $number;
+
+            // Decrease budget code balance
+            foreach ($formPettyCash->details as $detail) {
+                $budgetCode = $detail->budgetCode;
+                $budgetCode->balance = $budgetCode->balance - $detail->nominal;
+                $budgetCode->save();
+                $budgetCodeService = new BudgetCodeService($budgetCode);
+                $budgetCodeService->createLog($number, 'kredit', $detail->nominal, $formPettyCash->pic()->first()->id);
+            }
+
+            // Update status to "Terbayarkan"
+            $formPettyCash->status_id = 3;
+
+            // Update date to now
+            $formPettyCash->date = Carbon::now()->toDateString();
 
             $formPettyCash->saveWithoutEvents();
         }

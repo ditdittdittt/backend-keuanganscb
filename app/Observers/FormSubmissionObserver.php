@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\FormSubmission;
 use App\FormSubmissionDetail;
 use App\FormSubmissionUsers;
+use App\Services\BudgetCodeService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -89,18 +90,6 @@ class FormSubmissionObserver
         }
 
         if ($formSubmission->isDirty('is_confirmed_cashier')) {
-            // Decrease budget code balance
-            foreach ($formSubmission->details as $detail) {
-                $budgetCode = $detail->budgetCode;
-                $budgetCode->balance = $budgetCode->balance + $detail->balance;
-                $budgetCode->save();
-            }
-
-            // Update status to "Selesai"
-            $formSubmission->status_id = 6;
-
-            // Update date to now
-            $formSubmission->date = Carbon::now()->toDateString();
 
             // Update number
             $day = str_pad(Carbon::now()->day, 2, '0', STR_PAD_LEFT);
@@ -114,6 +103,26 @@ class FormSubmissionObserver
             $code = "FS";
             $number = $code . "." . $count . "." . $day . $month . $year;
             $formSubmission->number = $number;
+
+            // Increase or decrease budget code balance
+            foreach ($formSubmission->details as $detail) {
+                $budgetCode = $detail->budgetCode;
+                $budgetCode->balance = $budgetCode->balance + $detail->balance;
+                $budgetCode->save();
+                if ($detail->balance > 0) {
+                    $logType = 'debit';
+                } else if ($detail->balance < 0) {
+                    $logType = 'kredit';
+                }
+                $budgetCodeService = new BudgetCodeService($budgetCode);
+                $budgetCodeService->createLog($number, $logType, $detail->balance, $formSubmission->pic()->first()->id);
+            }
+
+            // Update status to "Selesai"
+            $formSubmission->status_id = 6;
+
+            // Update date to now
+            $formSubmission->date = Carbon::now()->toDateString();
 
             $formSubmission->saveWithoutEvents();
         }

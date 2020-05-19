@@ -7,6 +7,7 @@ use App\BudgetCode;
 use Exception;
 use Illuminate\Http\Request;
 use App\AdditionalHelper\SeparateException;
+use App\Services\BudgetCodeService;
 
 class BudgetCodeController extends Controller
 {
@@ -19,7 +20,15 @@ class BudgetCodeController extends Controller
     public function index()
     {
         try {
-            $budgetCodes = BudgetCode::all();
+            $user = auth()->user();
+            switch ($user) {
+                case $user->hasAnyRole(['admin', 'head_office']):
+                    $budgetCodes = BudgetCode::all();
+                    break;
+                case $user->hasRole('head_dept'):
+                    $budgetCodes = BudgetCode::where('user_id', auth()->user()->getAuthIdentifier());
+                    break;
+            }
             return ReturnGoodWay::successReturn(
                 $budgetCodes,
                 $this->modelName,
@@ -67,6 +76,7 @@ class BudgetCodeController extends Controller
     public function show(BudgetCode $budgetCode)
     {
         try {
+            $budgetCode->load('logs');
             return ReturnGoodWay::successReturn(
                 $budgetCode,
                 $this->modelName,
@@ -90,10 +100,19 @@ class BudgetCodeController extends Controller
     public function update(Request $request, BudgetCode $budgetCode)
     {
         try {
-            if ($request->code) $budgetCode->code = $request->code;
-            if ($request->name) $budgetCode->name = $request->name;
-            if ($request->balance) $budgetCode->balance = $request->balance;
-            $budgetCode->save();
+            if ($request->balance) {
+                if ($request->balance > $budgetCode->balance) {
+                    $difference = $request->balance - $budgetCode->balance;
+                    $logType = 'debit';
+                } else {
+                    $difference = $budgetCode->balance - $request->balance;
+                    $logType = 'kredit';
+                }
+                $budgetCode->balance = $request->balance;
+                $budgetCode->save();
+                $budgetCodeService = new BudgetCodeService($budgetCode);
+                $budgetCodeService->createLog("Balance adjustment", $logType, $difference, auth()->user()->getAuthIdentifier());
+            }
             return ReturnGoodWay::successReturn(
                 $budgetCode,
                 $this->modelName,
@@ -135,6 +154,13 @@ class BudgetCodeController extends Controller
     {
         $budgetCode->balance = $budgetCode->balance + $request->nominal;
         $budgetCode->save();
+        if ($request->nominal > 0) {
+            $budgetCodeService = new BudgetCodeService($budgetCode);
+            $budgetCodeService->createLog("Top Up Balance", 'debit', $request->nominal, auth()->user()->getAuthIdentifier());
+        } else if ($request->nominal < 0) {
+            $budgetCodeService = new BudgetCodeService($budgetCode);
+            $budgetCodeService->createLog("Reduce Balance", 'kredit', $request->nominal * (-1), auth()->user()->getAuthIdentifier());
+        }
         return ReturnGoodWay::successReturn(
             $budgetCode,
             $this->modelName,

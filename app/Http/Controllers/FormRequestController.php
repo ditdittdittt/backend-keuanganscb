@@ -30,9 +30,10 @@ class FormRequestController extends Controller
 
                     // Admin
                 case $user->hasRole('admin'):
-                    $formRequests = FormRequest::with(['status', 'details.budgetCode'])->orderByRaw("CASE WHEN status_id = 4 THEN 1 ELSE 2 END")->get();
+                    $formRequests = FormRequest::with(['status', 'details.budgetCode'])->get();
                     break;
 
+                    // Head dept but also pic
                 case $user->hasAllRoles(['head_dept', 'pic']):
                     $formRequests = FormRequest::with(['status'])
                         ->whereHas('users', function ($query) use ($user) {
@@ -58,7 +59,7 @@ class FormRequestController extends Controller
                         ->where(function ($query) {
                             $query->where('is_confirmed_pic', 1);
                             $query->where('is_confirmed_head_dept', 0);
-                        })->orderByRaw("CASE WHEN status_id = 4 THEN 1 ELSE 2 END")->get();
+                        })->get();
                     break;
 
                     // Verificator
@@ -68,7 +69,7 @@ class FormRequestController extends Controller
                             $query->where('is_confirmed_pic', 1);
                             $query->where('is_confirmed_head_dept', 1);
                             $query->where('is_confirmed_verificator', 0);
-                        })->orderByRaw("CASE WHEN status_id = 4 THEN 1 ELSE 2 END")->get();
+                        })->get();
                     break;
 
                     // Head Office
@@ -79,7 +80,7 @@ class FormRequestController extends Controller
                             $query->where('is_confirmed_head_dept', 1);
                             $query->where('is_confirmed_verificator', 1);
                             $query->where('is_confirmed_head_office', 0);
-                        })->orderByRaw("CASE WHEN status_id = 4 THEN 1 ELSE 2 END")->get();
+                        })->get();
                     break;
 
                     // Cashier
@@ -90,8 +91,8 @@ class FormRequestController extends Controller
                             $query->where('is_confirmed_head_dept', 1);
                             $query->where('is_confirmed_verificator', 1);
                             $query->where('is_confirmed_head_office', 1);
-                            $query->where('is_confirmed_cashier', 0);
-                        })->orderByRaw("CASE WHEN status_id = 4 THEN 1 ELSE 2 END")->get();
+                        })->orderByRaw("CASE WHEN status_id = 2 THEN 1 ELSE 2 END, created_at ASC")
+                        ->get();
                     break;
             }
 

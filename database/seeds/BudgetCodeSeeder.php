@@ -1,6 +1,7 @@
 <?php
 
 use App\BudgetCode;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class BudgetCodeSeeder extends Seeder
@@ -16,6 +17,7 @@ class BudgetCodeSeeder extends Seeder
         $budgetCode->code = "A612.2";
         $budgetCode->balance = 900000000;
         $budgetCode->name = "Makan";
+        $budgetCode->user_id = User::role('admin')->first()->id;
         $budgetCode->save();
     }
 }
