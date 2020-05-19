@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\FormRequest;
 use App\FormSubmission;
 use App\FormSubmissionDetail;
 use App\FormSubmissionUsers;
@@ -54,6 +55,11 @@ class FormSubmissionObserver
             $formSubmissionDetail->balance = $detail['balance'];
             $formSubmissionDetail->save();
         }
+
+        // Update status form request
+        $formRequest = FormRequest::find($formSubmission->form_request_id);
+        $formRequest->status_id = 5;
+        $formRequest->save();
 
         // Users pivot
         $pivot = new FormSubmissionUsers();
