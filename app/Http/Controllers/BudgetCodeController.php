@@ -54,6 +54,7 @@ class BudgetCodeController extends Controller
             $budgetCode->code = $request->code;
             $budgetCode->name = $request->name;
             $budgetCode->balance = $request->balance;
+            $budgetCode->user_id = auth()->user()->getAuthIdentifier();
             $budgetCode->save();
             return ReturnGoodWay::successReturn(
                 $budgetCode,
