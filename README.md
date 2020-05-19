@@ -1,78 +1,138 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# Sistem Keuangan SMP Cendekia Baznas
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+## Nama Sistem
+SCB Keuangan
 
-## About Laravel
+## Deskripsi Singkat
+Dalam mata kuliah Pengembangan Sistem Berorientasi Objek semester ini kami berkesempatan mendapat _client_ dari divisi keuangan SMP Cendekia Baznas. Badan Keuangan SMP Cendekia Baznas memiliki fungsi utama sebagai verificator dalam pengajuan dana dan memonitor aliran keluar-masuk keuangan secara menyeluruh. Dalam teknis pelaksanaannya saat ini divisi keuangan SMP Cendekia Baznas masih menggunakan form tertulis yang terbagi menjadi tiga form yaitu **Fund Request**, **Submission**, dan **Petty Cash** serta input manual menggunakan Microsoft Excel dalam manajemen keuangannya sehingga kami membuat sistem untuk mempermudah hal tersebut.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Sistem kami berbasis website di mana user terkait harus mendaftar akun terlebih dahulu untuk mengelola dan mengajukan dana,  dalam sistem kami telah kami sediakan tiga form pengajuan dana sesuai dengan kebutuhan SMP Cendekia Baznas yaitu **Fund Request**, **Submission**, dan **Petty Cash** di mana setiap form sudah memiliki halaman masing-masing untuk pengajuannya. Setiap detail dari keseluruhan status form pengajuan dana dapat memonitor dan mengatur secara langsung melalui halaman **All Request**, **All Submission**, dan **All Petty** yang selalu terupdate, dalam halaman tersebut juga terdapat pilihan untuk export data secara otomatis menjadi format PDF dan Excel untuk diolah. Agar pengajuan dana dapat disetujui diperlukannya verifikasi dari beberapa stakeholder terkait, stakeholder tersebut memverifikasi menggunakan akun khusus dan menginput tanda tangan online yang sudah difasilitasi oleh sistem dengan _online signature_.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Ruang Lingkup Pengembangan
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Software
+* Visual Studio Code
+* PhpStorm
+* WebStorm
+* PhpMyAdmin
 
-## Learning Laravel
+### Hardware
+* Intel Core i3
+* 4GB RAM
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Tech Stack
+* Nuxt.js (Front-end)
+* Laravel (Back-end)
+* MySQL (DBMS)
+* Amazon AMI Linux/Ubuntu EC2 AWS (Server)
+* NGINX (Server)
+* Apache (Server)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Diagram (Use Case, Activity, Class)
 
-## Laravel Sponsors
+### Use Case Diagram
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+### Activity Diagram
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+### Class Diagram
 
-## Contributing
+## Fitur Umum
+* Monitoring dan manajemen Form Fund Request
+* Monitoring dan manajemen Form Submission
+* Monitoring dan manajemen Form Petty Cash
+* Monitoring Budget
+* Form Verification dengan Online Signature
+* Export form dalam format PDF dan Excel
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Konsep OOP yang Digunakan
+* Class
+* Object
+* Abstraction
+* Encapsulation
+* Inheritance
 
-## Code of Conduct
+## Tipe Desain Pengembangan yang Digunakan (Pattern/Anti-Pattern)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Pattern
+1. Abstract Factory
 
-## Security Vulnerabilities
+Pada Abstract Factory Pattern, abstract factory akan mengartikan factory konkret mana yang diperlukan untuk membuat sebuah object. Factory yang konkret juga perlu memastikan bahwa objek yang dibuat sudah tetap sesuai dengan yang dibutuhkan.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Sebagai contoh, `DatabaseSeeder` akan dianggap sebagai abstract factory, kemudian `DatabaseSeeder` akan memanggil concrete factory yaitu `FormRequestSeeder`, concrete factory akan membuat objek dari class yang sudah ditentukan yaitu model `FormRequest`.
 
-## License
+2. Observer
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Observer pattern akan membuat sebuah class yang akan mengawasi setiap perubahan dari suatu object. Class observer akan melakukan sesuatu permintaan klien setiap suatu object yang diawasi melakukan perubahan. 
+
+Observer akan melakukan pengawasan terhadap objek Form Request. Jika Form Request telah berhasil diperbarui, Observer akan memeriksa atribut `is_confirmed_pic`, `is_confirmed_head_dept`, dan sebagainya dari objek tersebut. Jika semua atribut sudah bernilai `1`, maka otomatis observer akan merubah atribut status pada form request menjadi Menunggu Pembayaran ditandai dengan `status_id` bernilai `2`.
+
+3. Facade
+
+Facade design pattern bertujuan untuk menyembunyikan sebuah kompleksitas dari suatu subsystem dimana pemanggilan class terjadi sangat banyak. Dengan menggunakan facade design pattern, sebuah class facade akan menyembunyikan pemanggilan class-class lain yang dibutuhkan oleh subsystem tersebut.
+
+Contoh diambil pada fungsi export PDF dari Form Request. Pada fungsi tersebut terdapat pemanggilan class PDF, sebuah package untuk export PDF pada Laravel yaitu `laravel/barryvdh-dompdf`. Pada class PDF hanya terdapat Facade class berupa fungsi  `_callStatic` yang akan memanggil class-class lain sesuai kebutuhan pengguna.
+
+
+4. Strategy
+
+Pada Design Pattern Strategy sebuah class melakukan fungsi berdasarkan fungsi pada class lainnya. Hal ini bergantung pada penggunaan oleh klien, class akan diinisiasi berdasarkan kebutuhan yang diperlukan oleh klien.
+
+Pada contoh di atas dapat dilihat bahwa `UploadHelper` akan memilih class `Uploader` lainnya berdasarkan ekstensi dari file yang diupload. Penempatan folder juga berbeda berdasarkan dari ekstensi file nya.
+
+
+### Anti-Pattern
+
+## Developer dan Job Description
+
+### Project Manager
+Yudit Yudiarto
+
+### Front-End
+Muhammad Hilmy Haidar
+* Page Design and Layout
+* Theming
+* i18n International Localization
+* Validation
+* API Integration
+* E-Signature
+
+Yudit Yudiarto
+* Business Logic
+* E-Signature
+* Alert
+* API Integration
+
+Fahreza Ikhsan Hafiz
+* i18n International Localization
+
+Alfian Hamam Akbar
+* i18n International Localization
+
+Intan Aida Rahmani
+* Page Design and Layout
+* Theming
+* API Integration
+
+Muhammad Naufal Shidqi
+
+Ahmad Al-Banjaran Couer D'Alene
+
+Bob Yuwono
+
+### Back-end
+Muhammad Zulkifli
+* Form Request
+* User
+* Budget Code
+* Export PDF
+
+Reyhan Widyatna Harwenda
+* Form Submission
+* Export Excel
+
+Yudit Yudiarto
+* Form Petty Cash
+
+Muhammad Hilmy Haidar
+* Rekening
+* Layouting Export PDF
