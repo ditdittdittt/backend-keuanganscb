@@ -18,6 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
 // v1
 Route::prefix('v1')->group(function () {
 
@@ -173,6 +174,7 @@ Route::prefix('v1')->group(function () {
     Route::get('/roles', 'RoleAndPermissionController@getAllRoles')->name('getAllRoles');
 
 
+    //Export
     Route::prefix('export')->group(function () {
         Route::prefix('form-request')->group(function () {
             Route::get('{formRequest}/pdf', 'FormRequestController@exportSinglePdf')->name('exportSingleFormRequestPdf');
