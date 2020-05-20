@@ -83,7 +83,11 @@ class FormSubmissionController extends Controller
     public function update(FormSubmission $formSubmission, Request $request)
     {
         try {
-            $formSubmission->update($request->all());
+            $formSubmission->update($request->except('status_id'));
+            if ($request->status_id) {
+                $formSubmission->status_id = $request->status_id;
+            }
+            $formSubmission->save();
             return ReturnGoodWay::successReturn(
                 $formSubmission,
                 $this->modelName,
