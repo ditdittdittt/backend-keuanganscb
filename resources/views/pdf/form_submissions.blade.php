@@ -90,10 +90,11 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">No</th>
+                <th scope="col">Number</th>
                 <th scope="col">Nama PIC</th>
                 <th scope="col">No. Doc Form Request</th>
-                <th scope="col">Tanggal Form Request</th>
-                <th scope="col">Tanggal Submisi</th>
+                <th scope="col">Tanggal Form Request Dibayarkan</th>
+                <th scope="col">Tanggal Submisi Diterima</th>
                 <th scope="col">Permohonan Dana</th>
                 <th scope="col">Penggunaan Dana</th>
                 <th scope="col">Sisa Dana</th>
@@ -106,21 +107,40 @@
             @foreach($formSubmissions as $formSubmission)
             <tr>
                 <th scope="row">{{ $i++ }}</th>
-                <td>{{$formSubmission->pic()->first()->name}}</td>
+                <td style="word-wrap: break-word">
+                    @if ($formSubmission->number)
+                    {{$formSubmission->number}}
+                    @else
+                    Belum Diterima
+                    @endif
+                </td>
+                <td style="word-wrap: break-word">{{$formSubmission->pic()->first()->name}}</td>
                 <td>{{$formSubmission->formRequest->number}}</td>
                 <td>{{$formSubmission->formRequest->date}}</td>
-                <td>{{$formSubmission->date}}</td>
+                <td>
+                    @if ($formSubmission->date)
+                    {{$formSubmission->date}}
+                    @else
+                    Belum Diterima
+                    @endif
+                </td>
                 <td>{{"Rp. " . number_format($formSubmission->formRequest->amount, 2)}}</td>
                 <td>{{"Rp. " . number_format($formSubmission->used, 2)}}</td>
                 <td>{{"Rp. " . number_format($formSubmission->balance, 2)}}</td>
             </tr>
             @endforeach
             <tr>
-                <td colspan="7" class="font-weight-bold table-dark">
+                <td colspan="6" class="font-weight-bold table-dark">
                     Total
                 </td>
                 <td>
-                    {{"Rp. " . number_format($totalAmount, 2)}}
+                    {{"Rp. " . number_format($totalAmount['request'], 2)}}
+                </td>
+                <td>
+                    {{"Rp. " . number_format($totalAmount['used'], 2)}}
+                </td>
+                <td>
+                    {{"Rp. " . number_format($totalAmount['balance'], 2)}}
                 </td>
             </tr>
         </tbody>

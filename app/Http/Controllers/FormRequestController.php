@@ -283,9 +283,9 @@ class FormRequestController extends Controller
         return $pdf->stream('Form Request ' . $formRequest->number . ".pdf");
     }
 
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
-        return Excel::download(new FormRequestExport, 'formrequest.xlsx');
+        return Excel::download(new FormRequestExport($request), 'formrequest.xlsx');
     }
 
     public function confirm(FormRequest $formRequest, Request $request)

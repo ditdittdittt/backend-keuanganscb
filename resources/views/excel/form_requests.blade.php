@@ -40,52 +40,6 @@
 </head>
 
 <body style="background-color: #ffffff" class="font-sm">
-    <table class="table table-borderless">
-        <tbody>
-            <tr>
-                <td width="200" class="text-center p-0">
-                    <img src="{{ public_path('images/logo.png') }}" alt="" height="80">
-                </td>
-                <td class="text-center text-uppercase p-0">
-                    <div class="font-xl"><strong>Daftar Form Fund Request</strong></div>
-                    <div class="font-l">SMP Cendekia BAZNAS</div>
-                </td>
-                <td width="200" class="text-center p-0">
-                    <img src="{{ public_path('images/logo_baznas.png') }}" alt="" height="80">
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <hr style="border: 0.5px #444444 solid">
-    @if($request->frequency)
-    <table class="table">
-        <tbody>
-            <tr class="text-left">
-                <td width="5%" class="p-0">
-                    @if($request->frequency == 'yearly')
-                    Tahun
-                    @elseif($request->frequency == 'monthly')
-                    Bulan
-                    @elseif($request->frequency == 'daily')
-                    Tanggal
-                    @endif
-                </td>
-                <td class="font-weight-bold p-0" width="15%">
-                    @if($request->frequency == 'yearly')
-                    {{ $request->year }}
-                    @elseif($request->frequency == 'monthly')
-                    {{ $request->month }} {{ $request->year }}
-                    @elseif($request->frequency == 'daily')
-                    {{ $request->date }}
-                    @endif
-                </td>
-                <td width="80%">
-
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    @endif
     <table class="table table-bordered table-sm">
         <thead class="thead-dark">
             <tr>
@@ -115,7 +69,7 @@
                 </th>
                 @endif
                 @if ($j == 1)
-                <td rowspan="{{count($formRequest->details)}}" class="align-middle" style="word-wrap: break-word">
+                <td rowspan="{{count($formRequest->details)}}" class="align-middle ">
                     @if ($formRequest->number)
                     {{$formRequest->number}}
                     @else
@@ -124,12 +78,12 @@
                 </td>
                 @endif
                 @if ($j == 1)
-                <td rowspan=" {{count($formRequest->details)}}" class="align-middle" style="word-wrap: break-word">
+                <td rowspan=" {{count($formRequest->details)}}" class="align-middle">
                     {{$formRequest->pic()->first()->name}}
                 </td>
                 @endif
                 @if ($j == 1)
-                <td rowspan=" {{count($formRequest->details)}}" class="align-middle" style="word-wrap: break-word">
+                <td rowspan=" {{count($formRequest->details)}}" class="align-middle">
                     {{$formRequest->allocation}}
                 </td>
                 @endif
@@ -157,14 +111,14 @@
             @endphp
             @endforeach
             @endforeach
-            <tr>
-                <td colspan="7" class="font-weight-bold table-dark">
+            {{-- <tr>
+                <td colspan="6" class="font-weight-bold table-dark">
                     Total
                 </td>
                 <td>
                     {{"Rp. " . number_format($totalAmount, 2)}}
-                </td>
-            </tr>
+            </td>
+            </tr> --}}
         </tbody>
     </table>
 </body>

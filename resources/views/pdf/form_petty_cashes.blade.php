@@ -90,11 +90,14 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">No</th>
+                <th scope="col">Number</th>
                 <th scope="col">Nama</th>
                 <th scope="col">Alokasi</th>
-                <th scope="col">Status</th>
-                <th scope="col">Tanggal</th>
+                <th scope="col">Budget Code</th>
+                <th scope="col">Budget Name</th>
                 <th scope="col">Jumlah</th>
+                <th scope="col">Tanggal</th>
+                <th scope="col">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -102,23 +105,80 @@
             $i=1;
             @endphp
             @foreach($formPettyCashes as $formPettyCash)
+            @php
+            $j = 1;
+            @endphp
+            @foreach ($formPettyCash->details as $detail)
             <tr>
-                <th scope="row">{{ $i++ }}</th>
-                <td>{{$formPettyCash->pic()->first()->name}}</td>
-                <td>{{$formPettyCash->allocation}}</td>
-                <td>{{$formPettyCash->status->status}}</td>
-                <td>{{$formPettyCash->date}}</td>
-                <td>{{"Rp. " . number_format($formPettyCash->amount, 2)}}</td>
+                @if ($j == 1)
+                <th class="align-middle" rowspan="{{count($formPettyCash->details)}}" style="word-wrap: break-word">
+                    {{ $i++ }}
+                </th>
+                @endif
+
+                @if ($j==1)
+                <td class="align-middle" rowspan="{{count($formPettyCash->details)}}" style="word-wrap: break-word">
+                    @if ($formPettyCash->number)
+                    {{$formPettyCash->number}}
+                    @else
+                    Belum Terbayarkan
+                    @endif
+                </td>
+                @endif
+
+                @if ($j==1)
+                <td class="align-middle" rowspan="{{count($formPettyCash->details)}}" style="word-wrap: break-word">
+                    {{$formPettyCash->pic()->first()->name}}
+                </td>
+                @endif
+
+                @if ($j==1)
+                <td class="align-middle" rowspan="{{count($formPettyCash->details)}}" style="word-wrap: break-word">
+                    {{$formPettyCash->allocation}}
+                </td>
+                @endif
+
+                <td>
+                    {{$detail->budgetCode->code}}
+                </td>
+
+                <td>
+                    {{$detail->budgetCode->name}}
+                </td>
+
+                <td>
+                    {{$detail->nominal}}
+                </td>
+
+                @if ($j==1)
+                <td class="align-middle" rowspan="{{count($formPettyCash->details)}}" style="word-wrap: break-word">
+                    @if ($formPettyCash->date)
+                    {{$formPettyCash->date}}
+                    @else
+                    Belum Terbayarkan
+                    @endif
+                </td>
+                @endif
+
+                @if ($j==1)
+                <td class="align-middle" rowspan="{{count($formPettyCash->details)}}">
+                    {{"Rp. " . number_format($formPettyCash->amount, 2)}}
+                </td>
+                @endif
             </tr>
+            @php
+            $j++;
+            @endphp
             @endforeach
-            <tr>
+            @endforeach
+            {{-- <tr>
                 <td colspan="5" class="font-weight-bold table-dark">
                     Total
                 </td>
                 <td>
                     {{"Rp. " . number_format($totalAmount, 2)}}
-                </td>
-            </tr>
+            </td>
+            </tr> --}}
         </tbody>
     </table>
 </body>

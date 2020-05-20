@@ -118,6 +118,7 @@ class FormSubmissionObserver
                 if ($detail->balance > 0) {
                     $logType = 'debit';
                 } else if ($detail->balance < 0) {
+                    $detail->balance *= -1;
                     $logType = 'kredit';
                 }
                 $budgetCodeService = new BudgetCodeService($budgetCode);

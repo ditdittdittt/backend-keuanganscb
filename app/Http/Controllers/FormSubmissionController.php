@@ -142,18 +142,26 @@ class FormSubmissionController extends Controller
     {
         switch ($request->frequency) {
             case 'yearly':
-                $formSubmissions = FormSubmission::whereYear('date', $request->year)->orderBy('date', 'DESC')->get();
+                $formSubmissions = FormSubmission::whereYear('date', $request->year)
+                    ->orderBy('date', 'DESC')
+                    ->get();
                 break;
             case 'monthly':
-                $formSubmissions = FormSubmission::whereYear('date', $request->year)->whereMonth('date', $request->month)->orderBy('date', 'DESC')->get();
+                $formSubmissions = FormSubmission::whereYear('date', $request->year)->whereMonth('date', $request->month)
+                    ->orderBy('date', 'DESC')
+                    ->get();
                 break;
 
             case 'daily':
-                $formSubmissions = FormSubmission::whereDate('date', $request->date)->orderBy('date', 'DESC')->get();
+                $formSubmissions = FormSubmission::whereDate('date', $request->date)
+                    ->orderBy('date', 'DESC')
+                    ->get();
                 break;
 
             default:
-                $formSubmissions = FormSubmission::orderBy('date', 'DESC')->get();
+                $formSubmissions = FormSubmission::orderBy('date', 'DESC')
+                    ->orderByRaw("CASE WHEN number IS NOT NULL THEN 1 ELSE 2 END")
+                    ->get();
                 break;
         }
         if ($request->date) {
@@ -163,7 +171,17 @@ class FormSubmissionController extends Controller
             $request->month = Carbon::createFromDate($request->year, $request->month, 1)->translatedFormat('F');
         }
 
-        $totalAmount = $formSubmissions->sum('used');
+        $sumRequestAmount = 0;
+
+        foreach ($formSubmissions as $submission) {
+            $sumRequestAmount += $submission->formRequest->amount;
+        }
+
+        $totalAmount = [
+            'used' => $formSubmissions->sum('used'),
+            'request' => $sumRequestAmount,
+            'balance' => $formSubmissions->sum('balance')
+        ];
 
         $pdf = PDF::loadview('pdf.form_submissions', [
             'formSubmissions' => $formSubmissions,
