@@ -109,61 +109,69 @@ Yudit Yudiarto
 
 ### Front-End
 
-Muhammad Hilmy Haidar
+-   Muhammad Hilmy Haidar
 
--   Page Design and Layout
--   Theming
--   i18n International Localization
--   Validation
--   API Integration
--   E-Signature
+    -   Page Design and Layout
 
-Yudit Yudiarto
+    -   Theming
+    -   i18n International Localization
+    -   Validation
+    -   API Integration
+    -   E-Signature
 
--   Business Logic
--   E-Signature
--   Alert
--   API Integration
+-   Yudit Yudiarto
 
-Fahreza Ikhsan Hafiz
+    -   Business Logic
+    -   E-Signature
+    -   Alert
+    -   API Integration
 
--   i18n International Localization
+-   Fahreza Ikhsan Hafiz
 
-Alfian Hamam Akbar
+    -   i18n International Localization
 
--   i18n International Localization
+-   Alfian Hamam Akbar
 
-Intan Aida Rahmani
+    -   i18n International Localization
 
--   Page Design and Layout
--   Theming
--   API Integration
+-   Intan Aida Rahmani
 
-Muhammad Naufal Shidqi
+    -   Page Design and Layout
+    -   Theming
+    -   API Integration
 
-Ahmad Al-Banjaran Couer D'Alene
+-   Muhammad Naufal Shidqi
 
-Bob Yuwono
+-   Ahmad Al-Banjaran Couer D'Alene
+
+-   Bob Yuwono
 
 ### Back-end
 
-Muhammad Zulkifli
+-   Muhammad Zulkifli
 
--   Form Request
--   User
--   Budget Code
--   Export PDF
+    -   Form Request
+    -   User
+    -   Budget Code
+    -   Export PDF
 
-Reyhan Widyatna Harwenda
+-   Reyhan Widyatna Harwenda
 
--   Form Submission
--   Export Excel
+    -   Form Submission
+    -   Export Excel
 
-Yudit Yudiarto
+-   Yudit Yudiarto
 
--   Form Petty Cash
+    -   Form Petty Cash
 
-Muhammad Hilmy Haidar
+-   Muhammad Hilmy Haidar
 
--   Rekening
--   Layouting Export PDF
+    -   Rekening
+    -   Layouting Export PDF
+
+### DevOps
+
+-   Yudit Yudiarto
+
+        -   Dockerization
+        -   Deployment
