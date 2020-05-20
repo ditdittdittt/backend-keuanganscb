@@ -1,5 +1,5 @@
 # Sistem Keuangan SMP Cendekia Baznas
-
+[![Build Status](https://travis-ci.com/ditdittdittt/backend-keuanganscb.svg?branch=master)](https://travis-ci.com/ditdittdittt/backend-keuanganscb)
 ## Nama Sistem
 
 SCB Keuangan
