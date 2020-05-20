@@ -154,6 +154,7 @@ Yudit Yudiarto
     -   User
     -   Budget Code
     -   Export PDF
+    -   Uploader
 
 -   Reyhan Widyatna Harwenda
 
@@ -163,6 +164,7 @@ Yudit Yudiarto
 -   Yudit Yudiarto
 
     -   Form Petty Cash
+    -   Uploader
 
 -   Muhammad Hilmy Haidar
 
@@ -172,5 +174,6 @@ Yudit Yudiarto
 ### DevOps
 
 -   Yudit Yudiarto
+
     -   Dockerization
     -   Deployment
