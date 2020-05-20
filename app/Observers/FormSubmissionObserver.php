@@ -59,7 +59,7 @@ class FormSubmissionObserver
         // Update status form request
         $formRequest = FormRequest::find($formSubmission->form_request_id);
         $formRequest->status_id = 5;
-        $formRequest->save();
+        $formRequest->saveWithoutEvents();
 
         // Users pivot
         $pivot = new FormSubmissionUsers();
@@ -115,23 +115,36 @@ class FormSubmissionObserver
                 $budgetCode = $detail->budgetCode;
                 $budgetCode->balance = $budgetCode->balance + $detail->balance;
                 $budgetCode->save();
+                $logType = NULL;
                 if ($detail->balance > 0) {
                     $logType = 'debit';
                 } else if ($detail->balance < 0) {
                     $detail->balance *= -1;
                     $logType = 'kredit';
                 }
-                $budgetCodeService = new BudgetCodeService($budgetCode);
-                $budgetCodeService->createLog($number, $logType, $detail->balance, $formSubmission->pic()->first()->id);
+                if ($logType) {
+                    $budgetCodeService = new BudgetCodeService($budgetCode);
+                    $budgetCodeService->createLog($number, $logType, $detail->balance, $formSubmission->pic()->first()->id);
+                }
             }
 
-            // Update status to "Selesai"
-            $formSubmission->status_id = 6;
 
             // Update date to now
             $formSubmission->date = Carbon::now()->toDateString();
 
             $formSubmission->saveWithoutEvents();
+
+            // Update status to "Selesai"
+            $formSubmission->status_id = 6;
+            $formSubmission->save();
+        }
+
+        if ($formSubmission->isDirty('status_id')) {
+            if ($formSubmission->status_id == 6) {
+                $formRequest = FormRequest::find($formSubmission->form_request_id);
+                $formRequest->status_id = 6;
+                $formRequest->saveWithoutEvents();
+            }
         }
     }
 
