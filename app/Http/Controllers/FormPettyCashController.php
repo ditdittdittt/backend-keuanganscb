@@ -151,9 +151,9 @@ class FormPettyCashController extends Controller
         }
     }
 
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
-        return Excel::download(new FormPettyCashExport, 'formpettycash.xlsx');
+        return Excel::download(new FormPettyCashExport($request), 'formpettycash.xlsx');
     }
 
     public function exportPdf(Request $request)
