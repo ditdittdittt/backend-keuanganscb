@@ -3,25 +3,70 @@
 namespace App\Exports;
 
 use App\FormSubmission;
-use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\FromView;
+use Illuminate\Contracts\View\View;
+use Carbon\Carbon;
 
-class FormSubmissionExport implements FromCollection, WithHeadings
+class FormSubmissionExport implements FromView
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-    public function collection()
+    protected $request;
+    public function __construct($request)
     {
-        return FormSubmission::all();
+        $this->request = $request;
     }
 
-    public function headings(): array
+    public function view(): View
     {
-        return [
-            "id", "form_request_id","user_id", "date", "used", "balance",
-            "allocation", "notes", "is_confirmed_pic", "is_confirmed_verificator",
-            "is_confirmed_head_dept", "is_confirmed_head_office", "number", "status_id"
+        switch ($this->request->frequency) {
+            case 'yearly':
+                $formSubmissions = FormSubmission::whereYear('date', $this->request->year)
+                    ->orderBy('date', 'DESC')
+                    ->get();
+                break;
+            case 'monthly':
+                $formSubmissions = FormSubmission::whereYear('date', $this->request->year)->whereMonth('date', $this->request->month)
+                    ->orderBy('date', 'DESC')
+                    ->get();
+                break;
+
+            case 'daily':
+                $formSubmissions = FormSubmission::whereDate('date', $this->request->date)
+                    ->orderBy('date', 'DESC')
+                    ->get();
+                break;
+
+            default:
+                $formSubmissions = FormSubmission::orderBy('date', 'DESC')
+                    ->orderByRaw("CASE WHEN number IS NOT NULL THEN 1 ELSE 2 END")
+                    ->get();
+                break;
+        }
+        if ($this->request->date) {
+            $this->request->date =  Carbon::parse($this->request->date)->translatedFormat('d F Y');
+        }
+        if ($this->request->frequency == 'monthly') {
+            $this->request->month = Carbon::createFromDate($this->request->year, $this->request->month, 1)->translatedFormat('F');
+        }
+
+        $sumRequestAmount = 0;
+
+        foreach ($formSubmissions as $submission) {
+            $sumRequestAmount += $submission->formRequest->amount;
+        }
+
+        $totalAmount = [
+            'used' => $formSubmissions->sum('used'),
+            'request' => $sumRequestAmount,
+            'balance' => $formSubmissions->sum('balance')
         ];
+
+        return view(
+            'excel.form_submissions',
+            [
+                'formSubmissions' => $formSubmissions,
+                'request' => $this->request,
+                'totalAmount' => $totalAmount
+            ]
+        );
     }
 }

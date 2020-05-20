@@ -132,9 +132,9 @@ class FormSubmissionController extends Controller
         return response()->json(['form_submission_count' => $count]);
     }
 
-    public function exportExcel()
+    public function exportExcel(Request $request)
     {
-        return Excel::download(new FormSubmissionExport, 'form_submission.xlsx');
+        return Excel::download(new FormSubmissionExport($request), 'formsubmission.xlsx');
     }
 
     // Print PDF
