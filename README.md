@@ -172,6 +172,5 @@ Yudit Yudiarto
 ### DevOps
 
 -   Yudit Yudiarto
-
-        -   Dockerization
-        -   Deployment
+    -   Dockerization
+    -   Deployment
