@@ -20,15 +20,16 @@ class BudgetCodeController extends Controller
     public function index()
     {
         try {
-            $user = auth()->user();
-            switch ($user) {
-                case $user->hasAnyRole(['admin', 'head_office']):
-                    $budgetCodes = BudgetCode::all();
-                    break;
-                case $user->hasRole('head_dept'):
-                    $budgetCodes = BudgetCode::where('user_id', auth()->user()->getAuthIdentifier());
-                    break;
-            }
+            // $user = auth()->user();
+            // switch ($user) {
+            //     case $user->hasAnyRole(['admin', 'head_office']):
+            //         $budgetCodes = BudgetCode::all();
+            //         break;
+            //     case $user->hasRole('head_dept'):
+            //         $budgetCodes = BudgetCode::where('user_id', auth()->user()->getAuthIdentifier());
+            //         break;
+            // }
+            $budgetCodes = BudgetCode::all();
             return ReturnGoodWay::successReturn(
                 $budgetCodes,
                 $this->modelName,
