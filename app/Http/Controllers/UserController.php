@@ -98,11 +98,11 @@ class UserController extends Controller
     {
         try {
             $user = User::findOrFail($request['user_id']);
-            $user->assignRole($request['role_name']);
+            $user->syncRoles($request['role_name']);
             return ReturnGoodWay::successReturn(
                 $user,
                 $this->modelName,
-                "User " . $user->id . " has successfully assigned as " . $request['role_name'],
+                "Role has successfully assigned to User " . $user->id,
                 'success'
             );
         } catch (Exception $err) {
