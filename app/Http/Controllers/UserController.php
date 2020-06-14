@@ -9,6 +9,7 @@ use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -17,6 +18,16 @@ class UserController extends Controller
     public function update(User $user, Request $request)
     {
         try {
+            $validator = Validator::make($request->all(), [
+                'email' => 'email|unique:users',
+                'username' => 'unique:users|alpha_dash'
+            ]);
+            if ($validator->fails()) {
+                return ReturnGoodWay::failedReturn(
+                    $validator->errors()->first(),
+                    "bad request"
+                );
+            };
             $fieldArray = $request->except('password');
             if (auth()->user()->id == $user->id || auth()->user()->hasRole('admin')) {
                 if ($request->has('password')) {
