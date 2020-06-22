@@ -43,15 +43,15 @@
     <table class="table table-borderless">
         <tbody>
             <tr>
-                <td width="200" class="text-center p-0">
-                    <img src="{{ public_path('images/logo.png') }}" alt="" height="80">
+                <td width="70" class="text-center align-middle p-0" rowspan="2"
+                    style="border-top-color:transparent; border-bottom-color:transparent; border-right-color:transparent">
+                    <img src="{{ public_path('images/logo.png') }}" alt="" width="75">
                 </td>
-                <td class="text-center text-uppercase p-0">
-                    <div class="font-xl"><strong>Daftar Form Fund Request</strong></div>
-                    <div class="font-l">SMP Cendekia BAZNAS</div>
+                <td class="text-center align-middle p-0" rowspan="2" style='border-color:transparent'>
+                    <span class="font-l"><strong>FORM PETTY CASH</strong></span>
                 </td>
-                <td width="200" class="text-center p-0">
-                    <img src="{{ public_path('images/logo_baznas.png') }}" alt="" height="80">
+                <td width="70" class="text-center align-middle p-0" rowspan="2" style='border-color:transparent'>
+                    <img src="{{ public_path('images/logo_baznas.png') }}" alt="" width="100">
                 </td>
             </tr>
         </tbody>
